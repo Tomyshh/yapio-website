@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Contact() {
@@ -16,6 +16,7 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -28,29 +29,59 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setSubmitMessage('');
 
     try {
-      // Ici on intégrera Supabase plus tard
-      // Pour l'instant, on simule l'envoi
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Envoyer un email via mailto en attendant l'intégration
-      const mailtoLink = `mailto:tomyyapp@gmail.com?subject=Demande de devis - ${formData.projectType}&body=${encodeURIComponent(
-        `Nom: ${formData.name}\nEmail: ${formData.email}\nTéléphone: ${formData.phone}\nEntreprise: ${formData.company}\nType de projet: ${formData.projectType}\n\nMessage:\n${formData.message}`
-      )}`;
-      window.open(mailtoLink);
-      
-      setSubmitStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        company: '',
-        projectType: '',
-        message: '',
+      // Soumettre via l'API route Next.js (plus sécurisé)
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          projectType: formData.projectType,
+          message: formData.message,
+        }),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus('success');
+        setSubmitMessage(result.message);
+        
+        // Réinitialiser le formulaire en cas de succès
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          projectType: '',
+          message: '',
+        });
+
+        // Optionnel: Envoyer aussi un email de notification (backup)
+        const mailtoLink = `mailto:tomyyapp@gmail.com?subject=Nouveau contact YAPIO - ${formData.projectType}&body=${encodeURIComponent(
+          `Nouveau message reçu via le site YAPIO:\n\nNom: ${formData.name}\nEmail: ${formData.email}\nTéléphone: ${formData.phone}\nEntreprise: ${formData.company}\nType de projet: ${formData.projectType}\n\nMessage:\n${formData.message}\n\n---\nCe message a été automatiquement sauvegardé dans Supabase.`
+        )}`;
+        
+        // Ouvrir le client email en arrière-plan (optionnel)
+        setTimeout(() => {
+          window.open(mailtoLink);
+        }, 1000);
+        
+      } else {
+        setSubmitStatus('error');
+        setSubmitMessage(result.message);
+      }
     } catch (error) {
+      console.error('Erreur lors de la soumission:', error);
       setSubmitStatus('error');
+      setSubmitMessage('Une erreur inattendue est survenue. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -216,15 +247,18 @@ export default function Contact() {
                 />
               </div>
               
+              {/* Messages de retour */}
               {submitStatus === 'success' && (
-                <div className="p-4 bg-green-500/20 border border-green-500 rounded-lg text-green-400">
-                  {t.contact.form.success}
+                <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-300 flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  <span>{submitMessage || t.contact.form.success}</span>
                 </div>
               )}
               
               {submitStatus === 'error' && (
-                <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400">
-                  {t.contact.form.error}
+                <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 flex items-center space-x-3">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <span>{submitMessage || t.contact.form.error}</span>
                 </div>
               )}
               
