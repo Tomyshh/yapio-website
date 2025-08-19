@@ -229,24 +229,7 @@ export default function Portfolio() {
               ))}
             </div>
             
-            {/* Auto-play indicator modernisé */}
-            <div className="flex items-center justify-center">
-              <div className="flex items-center space-x-3 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
-                <div className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  isAutoPlaying 
-                    ? 'bg-green-400 animate-pulse shadow-lg shadow-green-400/50' 
-                    : 'bg-gray-500'
-                }`} />
-                <span className="text-sm text-gray-300 font-medium">
-                  {isAutoPlaying ? 'Défilement automatique' : 'Pause'}
-                </span>
-                {isAutoPlaying && (
-                  <div className="w-8 h-1 bg-white/20 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-pulse" />
-                  </div>
-                )}
-              </div>
-            </div>
+      
           </div>
         </div>
 
@@ -271,7 +254,7 @@ export default function Portfolio() {
                 <div className="group">
                   <div className="relative p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-400/20 backdrop-blur-sm hover:from-blue-500/20 hover:to-cyan-500/20 transition-all duration-300">
                     <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3 animate-pulse-slow">
-                      5+
+                      20+
                     </div>
                     <div className="text-gray-300 font-medium">{t.clients.trustSection.stats.clients}</div>
                   </div>
