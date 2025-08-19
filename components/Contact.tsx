@@ -58,17 +58,6 @@ export default function Contact() {
           projectType: '',
           message: '',
         });
-
-        // Optionnel: Envoyer aussi un email de notification (backup)
-        const mailtoLink = `mailto:tomyyapp@gmail.com?subject=Nouveau contact YAPIO - ${formData.projectType}&body=${encodeURIComponent(
-          `Nouveau message reçu via le site YAPIO:\n\nNom: ${formData.name}\nEmail: ${formData.email}\nTéléphone: ${formData.phone}\nEntreprise: ${formData.company}\nType de projet: ${formData.projectType}\n\nMessage:\n${formData.message}\n\n---\nCe message a été automatiquement sauvegardé dans Supabase.`
-        )}`;
-        
-        // Ouvrir le client email en arrière-plan (optionnel)
-        setTimeout(() => {
-          window.open(mailtoLink);
-        }, 1000);
-        
       } else {
         setSubmitStatus('error');
         setSubmitMessage(result.message);
