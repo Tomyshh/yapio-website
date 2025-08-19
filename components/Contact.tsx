@@ -32,23 +32,18 @@ export default function Contact() {
     setSubmitMessage('');
 
     try {
-      // Soumettre via l'API route Next.js (plus sécurisé)
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          projectType: formData.projectType,
-          message: formData.message,
-        }),
+      // Import dynamique pour éviter les erreurs SSR
+      const { submitContactForm } = await import('@/lib/supabase');
+      
+      // Appel direct à Supabase (compatible avec le site statique)
+      const result = await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        project_type: formData.projectType,
+        message: formData.message,
       });
-
-      const result = await response.json();
 
       if (result.success) {
         setSubmitStatus('success');
