@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ModernBackground from './ModernBackground';
 
 export default function Portfolio() {
   const { t } = useLanguage();
@@ -82,8 +83,11 @@ export default function Portfolio() {
   };
 
   return (
-    <section id="portfolio" className="py-20 relative">
-      <div className="max-w-7xl mx-auto section-padding">
+    <section id="portfolio" className="py-20 relative overflow-hidden">
+      {/* Arrière-plan moderne unifié */}
+      <ModernBackground />
+      
+      <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">

@@ -5,6 +5,9 @@
 :root {
   --background: #0A0A0A;
   --foreground: #FFFFFF;
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 300ms ease-out;
+  --transition-slow: 500ms ease-out;
 }
 
 * {
@@ -15,6 +18,15 @@
 
 html {
   scroll-behavior: smooth;
+  /* Optimisations de performance */
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Améliorer la fluidité des animations */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 body {
@@ -25,6 +37,9 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Optimisations pour la fluidité */
+  will-change: auto;
+  contain: layout style paint;
 }
 
 /* Custom scrollbar */
@@ -51,24 +66,24 @@ body {
   color: white;
 }
 
-/* Custom animations */
+/* Custom animations optimisées pour la performance */
 @keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
   }
   50% {
     opacity: 0.8;
-    transform: scale(1.02);
+    transform: scale3d(1.02, 1.02, 1);
   }
 }
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translate3d(0, -10px, 0);
   }
 }
 
@@ -84,11 +99,92 @@ body {
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translate3d(0, 30px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-blur {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale3d(0.8, 0.8, 1);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes scale-in-blur {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale3d(0.9, 0.9, 1);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes slide-up-blur {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -101,7 +197,141 @@ body {
   }
 }
 
-/* Utility classes */
+@keyframes shimmer {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes modern-flow {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate3d(100px, -50px, 0) rotate(45deg) scale(1.2);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(-50px, 100px, 0) rotate(90deg) scale(0.9);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate3d(50px, 50px, 0) rotate(180deg) scale(1.1);
+    opacity: 0.35;
+  }
+}
+
+@keyframes modern-flow-reverse {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate3d(-100px, 50px, 0) rotate(-45deg) scale(1.1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(50px, -100px, 0) rotate(-90deg) scale(1.2);
+    opacity: 0.45;
+  }
+  75% {
+    transform: translate3d(-50px, -50px, 0) rotate(-180deg) scale(0.95);
+    opacity: 0.4;
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(calc(100vw + 100%), 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-left {
+  0% {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(calc(-100vw - 100%), 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate3d(0, 100%, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(30px, -30px, 0) rotate(5deg);
+  }
+  66% {
+    transform: translate3d(-20px, 20px, 0) rotate(-5deg);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes gentle-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(119, 55, 233, 0.1), 0 0 40px rgba(119, 55, 233, 0.05);
+    filter: blur(0px);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(119, 55, 233, 0.2), 0 0 60px rgba(119, 55, 233, 0.1);
+    filter: blur(0.5px);
+  }
+}
+
+@keyframes text-focus {
+  from {
+    filter: blur(4px);
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    filter: blur(0px);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Utility classes optimisées */
 @layer utilities {
   .gradient-primary {
     background: linear-gradient(135deg, #7737E9 0%, #5E1FD4 100%);
@@ -119,24 +349,65 @@ body {
     @apply px-4 sm:px-6 lg:px-8;
   }
   
+  /* Animations avec optimisations de performance */
   .animate-pulse-slow {
     animation: pulse-slow 4s ease-in-out infinite;
+    will-change: transform, opacity;
   }
   
   .animate-float {
     animation: float 3s ease-in-out infinite;
+    will-change: transform;
   }
   
   .animate-glow {
     animation: glow 2s ease-in-out infinite;
+    will-change: box-shadow;
   }
   
   .animate-slide-up {
-    animation: slide-up 0.6s ease-out forwards;
+    animation: slide-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity;
+  }
+  
+  .animate-slide-in-left {
+    animation: slide-in-left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity;
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+    will-change: opacity;
+  }
+  
+  .animate-fade-in-blur {
+    animation: fade-in-blur 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: opacity, filter;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity;
+  }
+  
+  .animate-scale-in-blur {
+    animation: scale-in-blur 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity, filter;
+  }
+  
+  .animate-slide-up-blur {
+    animation: slide-up-blur 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: transform, opacity, filter;
   }
   
   .animate-logo-glow {
     animation: logo-glow 3s ease-in-out infinite;
+    will-change: filter;
   }
   
   .animate-carousel-shine {
@@ -145,6 +416,74 @@ body {
   
   .animate-progress-bar {
     animation: progress-bar 4s linear infinite;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+    will-change: transform;
+  }
+  
+  .animate-modern-flow {
+    animation: modern-flow 20s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  
+  .animate-modern-flow-reverse {
+    animation: modern-flow-reverse 25s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  
+  .animate-slide-right {
+    animation: slide-right 15s linear infinite;
+    will-change: transform, opacity;
+  }
+  
+  .animate-slide-left {
+    animation: slide-left 18s linear infinite;
+    will-change: transform, opacity;
+  }
+  
+  .animate-slide-down {
+    animation: slide-down 20s linear infinite;
+    will-change: transform, opacity;
+  }
+  
+  .animate-float-slow {
+    animation: float-slow 15s ease-in-out infinite;
+    will-change: transform;
+  }
+  
+  .animate-gradient-shift {
+    animation: gradient-shift 8s ease infinite;
+    background-size: 200% 200%;
+  }
+  
+  .animate-gentle-glow {
+    animation: gentle-glow 4s ease-in-out infinite;
+    will-change: box-shadow, filter;
+  }
+  
+  .animate-text-focus {
+    animation: text-focus 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    will-change: filter, opacity, transform;
+  }
+  
+  /* États de chargement */
+  .loading-skeleton {
+    @apply bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-[length:200%_100%] animate-shimmer rounded;
+  }
+  
+  /* Transitions fluides pour les changements d'état */
+  .smooth-transition {
+    transition: all var(--transition-normal);
+  }
+  
+  .smooth-transition-fast {
+    transition: all var(--transition-fast);
+  }
+  
+  .smooth-transition-slow {
+    transition: all var(--transition-slow);
   }
 }
 

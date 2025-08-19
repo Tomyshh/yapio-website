@@ -3,6 +3,7 @@
 import React from 'react';
 import { Smartphone, Monitor, Globe, Lightbulb } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import ModernBackground from './ModernBackground';
 
 export default function Services() {
   const { t } = useLanguage();
@@ -35,8 +36,11 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className="py-20 relative">
-      <div className="max-w-7xl mx-auto section-padding">
+    <section id="services" className="py-20 relative overflow-hidden">
+      {/* Arrière-plan moderne unifié */}
+      <ModernBackground />
+      
+      <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">

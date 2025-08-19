@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Logo from './Logo';
 import Link from 'next/link';
+import ModernBackground from './ModernBackground';
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -14,8 +15,11 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-dark-100 border-t border-dark-300 py-8">
-      <div className="max-w-7xl mx-auto section-padding">
+    <footer className="relative py-8 overflow-hidden">
+      {/* Arrière-plan moderne unifié */}
+      <ModernBackground />
+      
+      <div className="max-w-7xl mx-auto section-padding relative z-10">
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           {/* Logo and copyright */}
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">

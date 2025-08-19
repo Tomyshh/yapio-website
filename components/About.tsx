@@ -3,6 +3,7 @@
 import React from 'react';
 import { Users, Trophy, Clock, Heart, Target, Lightbulb, Handshake, Shield } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import ModernBackground from './ModernBackground';
 
 export default function About() {
   const { t } = useLanguage();
@@ -16,11 +17,8 @@ export default function About() {
 
   return (
     <section id="about" className="py-20 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      </div>
+      {/* Arrière-plan moderne unifié */}
+      <ModernBackground />
 
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Header */}
