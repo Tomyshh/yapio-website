@@ -14,8 +14,12 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('fr');
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    // Marquer que nous sommes côté client
+    setIsClient(true);
+    
     // Récupérer la langue sauvegardée ou utiliser la langue du navigateur
     const savedLang = localStorage.getItem('language') as Language;
     if (savedLang && ['fr', 'en', 'he'].includes(savedLang)) {
@@ -30,13 +34,17 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
-    localStorage.setItem('language', lang);
-    document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', lang);
+      document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+    }
   };
 
   useEffect(() => {
-    document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
-  }, [language]);
+    if (isClient && typeof document !== 'undefined') {
+      document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
+    }
+  }, [language, isClient]);
 
   const value: LanguageContextType = {
     language,

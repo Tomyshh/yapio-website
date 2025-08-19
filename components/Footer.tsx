@@ -1,11 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import Logo from './Logo';
+import Link from 'next/link';
 
 export default function Footer() {
   const { t } = useLanguage();
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="bg-dark-100 border-t border-dark-300 py-8">
@@ -13,20 +19,20 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           {/* Logo and copyright */}
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-            <span className="text-2xl font-bold gradient-text">YAPIO</span>
+            <Logo variant="full" size="sm" theme="white" />
             <span className="text-gray-400 text-sm">
-              © {currentYear} YAPIO. {t.footer.rights}
+              © {currentYear || new Date().getFullYear()} YAPIO. {t.footer.rights}
             </span>
           </div>
           
           {/* Links */}
           <div className="flex space-x-6">
-            <a href="/privacy-policy" className="text-gray-400 hover:text-primary transition-colors text-sm">
+            <Link href="/privacy-policy" className="text-gray-400 hover:text-primary transition-colors text-sm">
               {t.footer.privacy}
-            </a>
-            <a href="/terms-of-service" className="text-gray-400 hover:text-primary transition-colors text-sm">
+            </Link>
+            <Link href="/terms-of-service" className="text-gray-400 hover:text-primary transition-colors text-sm">
               {t.footer.terms}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

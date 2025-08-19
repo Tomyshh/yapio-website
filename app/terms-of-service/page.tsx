@@ -1,13 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 
 export default function TermsOfServicePage() {
   const { t } = useLanguage();
-  const currentDate = new Date().toLocaleDateString('fr-FR');
+  const [currentDate, setCurrentDate] = useState<string>('');
+
+  useEffect(() => {
+    setCurrentDate(new Date().toLocaleDateString('fr-FR'));
+  }, []);
 
   return (
     <div className="min-h-screen bg-dark-200">
@@ -21,7 +25,7 @@ export default function TermsOfServicePage() {
               {t.termsOfService.title}
             </h1>
             <p className="text-gray-400 text-lg">
-              {t.termsOfService.lastUpdated}: {currentDate}
+              {t.termsOfService.lastUpdated}: {currentDate || new Date().toLocaleDateString('fr-FR')}
             </p>
           </div>
 

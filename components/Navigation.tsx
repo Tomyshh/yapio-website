@@ -4,12 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Globe } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/lib/translations';
+import { ResponsiveLogo } from './Logo';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,12 +29,35 @@ export default function Navigation() {
     { code: 'he', name: 'עברית', flag: '🇮🇱' },
   ];
 
+  // Déterminer si nous sommes sur la page d'accueil
+  const isHomePage = pathname === '/';
+  
   const navItems = [
-    { href: '#home', label: t.nav.home },
-    { href: '#services', label: t.nav.services },
-    { href: '#portfolio', label: t.nav.portfolio },
-    { href: '#about', label: t.nav.about },
-    { href: '#contact', label: t.nav.contact },
+    { 
+      href: isHomePage ? '#home' : '/#home', 
+      label: t.nav.home,
+      isHome: true
+    },
+    { 
+      href: isHomePage ? '#services' : '/#services', 
+      label: t.nav.services,
+      isHome: false
+    },
+    { 
+      href: isHomePage ? '#portfolio' : '/#portfolio', 
+      label: t.nav.portfolio,
+      isHome: false
+    },
+    { 
+      href: isHomePage ? '#about' : '/#about', 
+      label: t.nav.about,
+      isHome: false
+    },
+    { 
+      href: isHomePage ? '#contact' : '/#contact', 
+      label: t.nav.contact,
+      isHome: false
+    },
   ];
 
   return (
@@ -41,21 +68,21 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="#home" className="text-2xl font-bold gradient-text">
-              YAPIO
-            </a>
+            <Link href={isHomePage ? "#home" : "/"} className="flex items-center hover:opacity-80 transition-opacity">
+              <ResponsiveLogo />
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className="text-gray-300 hover:text-primary transition-colors duration-200"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             
             {/* Language Selector */}
@@ -89,12 +116,12 @@ export default function Navigation() {
               )}
             </div>
 
-            <a
-              href="#contact"
+            <Link
+              href={isHomePage ? "#contact" : "/#contact"}
               className="gradient-primary text-white px-6 py-2 rounded-full hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
             >
               {t.nav.getQuote}
-            </a>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -113,14 +140,14 @@ export default function Navigation() {
           <div className="md:hidden glass mt-2 rounded-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
                   className="block px-3 py-2 text-gray-300 hover:text-primary transition-colors"
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
               
               <div className="px-3 py-2">
@@ -144,13 +171,13 @@ export default function Navigation() {
                 </div>
               </div>
               
-              <a
-                href="#contact"
+              <Link
+                href={isHomePage ? "#contact" : "/#contact"}
                 onClick={() => setIsOpen(false)}
                 className="block mx-3 text-center gradient-primary text-white px-6 py-2 rounded-full"
               >
                 {t.nav.getQuote}
-              </a>
+              </Link>
             </div>
           </div>
         )}
