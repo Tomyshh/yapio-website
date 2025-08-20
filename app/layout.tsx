@@ -90,6 +90,19 @@ export default function RootLayout({
             100% { background-position: -200% 0; }
           }
         `}</style>
+        
+        {/* Google tag (gtag.js) pour Google Ads */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17494474378"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-17494474378');
+            `,
+          }}
+        />
       </head>
       <body suppressHydrationWarning className="transition-all duration-300">
         <SEOOptimizer>
