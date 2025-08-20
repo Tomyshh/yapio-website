@@ -39,7 +39,7 @@ export default function Features() {
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 font-overcame-bold">
             <span className="gradient-text">{t.features.title}</span>
           </h2>
         </div>

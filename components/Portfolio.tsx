@@ -13,43 +13,43 @@ export default function Portfolio() {
   const clients = [
     {
       name: 'Aerilux',
-      logo: '/logo/aerilux_logo.jpg',
+      logo: '/logo/aerilux_logo.png',
       alt: 'Logo Aerilux',
-      color: 'from-blue-400 to-cyan-400',
-      bgColor: 'bg-blue-500/10',
-      borderColor: 'border-blue-400/20',
+      color: 'from-white to-gray-200',
+      bgColor: 'bg-white/10',
+      borderColor: 'border-white/20',
     },
     {
       name: 'DTAI',
-      logo: '/logo/dtai_logo.jpg',
+      logo: '/logo/dtai_logo.png',
       alt: 'Logo DTAI',
-      color: 'from-purple-400 to-pink-400',
-      bgColor: 'bg-purple-500/10',
-      borderColor: 'border-purple-400/20',
+      color: 'from-red-400 to-pink-400',
+      bgColor: 'bg-red-500/10',
+      borderColor: 'border-red-400/20',
     },
     {
       name: 'Havrouta',
-      logo: '/logo/havrouta_logo.jpg',
+      logo: '/logo/havrouta_logo.png',
       alt: 'Logo Havrouta',
-      color: 'from-green-400 to-emerald-400',
-      bgColor: 'bg-green-500/10',
-      borderColor: 'border-green-400/20',
+      color: 'from-[#C2A765] to-[#D4B876]',
+      bgColor: 'bg-[#C2A765]/10',
+      borderColor: 'border-[#C2A765]/20',
     },
     {
       name: 'Olim',
       logo: '/logo/olim_logo.png',
       alt: 'Logo Olim',
-      color: 'from-orange-400 to-red-400',
-      bgColor: 'bg-orange-500/10',
-      borderColor: 'border-orange-400/20',
+      color: 'from-[#0E78FE] to-[#3B8FFF]',
+      bgColor: 'bg-[#0E78FE]/10',
+      borderColor: 'border-[#0E78FE]/20',
     },
     {
       name: 'Taim',
-      logo: '/logo/taim_logo.jpg',
+      logo: '/logo/taim_logo.png',
       alt: 'Logo Taim',
-      color: 'from-indigo-400 to-blue-400',
-      bgColor: 'bg-indigo-500/10',
-      borderColor: 'border-indigo-400/20',
+      color: 'from-green-400 to-teal-400',
+      bgColor: 'bg-green-500/10',
+      borderColor: 'border-green-400/20',
     },
   ];
 
@@ -90,7 +90,7 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 font-overcame-bold">
             <span className="gradient-text">{t.clients.title}</span>
           </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
@@ -112,48 +112,24 @@ export default function Portfolio() {
                   className="w-full flex-shrink-0 flex items-center justify-center"
                 >
                   <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
-                    {/* Client logo avec angles clippés */}
-                    <div className="relative group">
-                      {/* Glow effect background */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${client.color} blur-3xl opacity-20 group-hover:opacity-40 transition-all duration-700 scale-150`} />
-                      
-                      {/* Image avec clip-path moderne */}
-                      <div className="relative w-72 h-72 md:w-80 md:h-80">
-                        <div 
-                          className="w-full h-full relative overflow-hidden transition-all duration-700 group-hover:scale-105"
-                          style={{
-                            clipPath: 'polygon(20% 0%, 100% 0%, 100% 80%, 80% 100%, 0% 100%, 0% 20%)'
-                          }}
-                        >
-                          <Image
-                            src={client.logo}
-                            alt={client.alt}
-                            fill
-                            className="object-cover transition-all duration-700 group-hover:scale-110 brightness-90 group-hover:brightness-100"
-                            sizes="(max-width: 768px) 288px, 320px"
-                            priority={index === 0}
-                          />
-                          
-                          {/* Overlay avec gradient coloré */}
-                          <div className={`absolute inset-0 bg-gradient-to-br ${client.color} opacity-20 group-hover:opacity-10 transition-opacity duration-500`} />
-                          
-                          {/* Effet de brillance au hover */}
-                          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -skew-x-12 translate-x-full group-hover:translate-x-0" />
-                        </div>
-                        
-                        {/* Particules flottantes */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                          <div className={`absolute top-8 right-8 w-3 h-3 rounded-full bg-gradient-to-r ${client.color} animate-ping`} />
-                          <div 
-                            className={`absolute bottom-12 left-8 w-2 h-2 rounded-full bg-gradient-to-r ${client.color} animate-ping`} 
-                            style={{ animationDelay: '500ms' }} 
-                          />
-                          <div 
-                            className={`absolute top-1/2 right-4 w-1.5 h-1.5 rounded-full bg-gradient-to-r ${client.color} animate-ping`} 
-                            style={{ animationDelay: '1000ms' }} 
-                          />
-                        </div>
-                      </div>
+                    {/* Client logo simple */}
+                    <div className={`relative ${
+                      client.name === 'Havrouta' ? 'w-56 h-56 md:w-64 md:h-64' :
+                      client.name === 'Olim' ? 'w-60 h-60 md:w-72 md:h-72' :
+                      'w-72 h-72 md:w-80 md:h-80'
+                    }`}>
+                      <Image
+                        src={client.logo}
+                        alt={client.alt}
+                        fill
+                        className="object-contain"
+                        sizes={
+                          client.name === 'Havrouta' ? "(max-width: 768px) 224px, 256px" :
+                          client.name === 'Olim' ? "(max-width: 768px) 240px, 288px" :
+                          "(max-width: 768px) 288px, 320px"
+                        }
+                        priority={index === 0}
+                      />
                     </div>
                     
                     {/* Client info modernisée */}
@@ -178,63 +154,42 @@ export default function Portfolio() {
             </div>
           </div>
             
-          {/* Navigation arrows modernisées */}
+          {/* Navigation arrows ultra-modernes */}
           <button
             onClick={goToPrevious}
-            className="absolute left-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/20 flex items-center justify-center hover:from-primary/20 hover:to-primary/10 hover:border-primary/30 transition-all duration-500 group hover:scale-110 hover:-translate-x-1"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 group"
             aria-label="Previous client"
           >
-            <ChevronLeft className="w-7 h-7 text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative">
+              {/* Cercle principal avec effet glassmorphism */}
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/20 backdrop-blur-xl border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-black/30 group-hover:border-white/20 group-hover:scale-110">
+                <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white/70 group-hover:text-white transition-all duration-300 group-hover:-translate-x-0.5" />
+              </div>
+              {/* Effet de glow au hover */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-blue-500/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10" />
+              {/* Ring animé */}
+              <div className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-primary/30 to-blue-500/30 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-spin-slow" style={{maskImage: 'conic-gradient(transparent 270deg, white 360deg)', WebkitMaskImage: 'conic-gradient(transparent 270deg, white 360deg)'}} />
+            </div>
           </button>
           
           <button
             onClick={goToNext}
-            className="absolute right-8 top-1/2 -translate-y-1/2 w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/20 flex items-center justify-center hover:from-primary/20 hover:to-primary/10 hover:border-primary/30 transition-all duration-500 group hover:scale-110 hover:translate-x-1"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 group"
             aria-label="Next client"
           >
-            <ChevronRight className="w-7 h-7 text-white/80 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative">
+              {/* Cercle principal avec effet glassmorphism */}
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/20 backdrop-blur-xl border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-black/30 group-hover:border-white/20 group-hover:scale-110">
+                <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white/70 group-hover:text-white transition-all duration-300 group-hover:translate-x-0.5" />
+              </div>
+              {/* Effet de glow au hover */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500/20 to-primary/20 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500 -z-10" />
+              {/* Ring animé */}
+              <div className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-500/30 to-primary/30 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-spin-slow" style={{maskImage: 'conic-gradient(transparent 270deg, white 360deg)', WebkitMaskImage: 'conic-gradient(transparent 270deg, white 360deg)'}} />
+            </div>
           </button>
           
-          {/* Indicateurs modernisés */}
-          <div className="flex flex-col items-center mt-12 space-y-6">
-            {/* Dots indicator avec design moderne */}
-            <div className="flex justify-center space-x-4">
-              {clients.map((client, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`relative group transition-all duration-500 ${
-                    index === currentIndex
-                      ? 'scale-110'
-                      : 'hover:scale-105'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                >
-                  <div className={`w-4 h-4 rounded-full border-2 transition-all duration-500 ${
-                    index === currentIndex
-                      ? `bg-gradient-to-r ${client.color} border-transparent shadow-lg`
-                      : 'bg-transparent border-white/40 hover:border-white/60'
-                  }`} />
-                  
-                  {/* Glow effect pour l'indicateur actif */}
-                  {index === currentIndex && (
-                    <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${client.color} blur-md opacity-50 animate-pulse`} />
-                  )}
-                  
-                  {/* Nom du client au hover */}
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <div className="px-3 py-1 rounded-lg bg-black/80 backdrop-blur-sm border border-white/20 text-white text-xs whitespace-nowrap">
-                      {client.name}
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            
-      
-          </div>
+
         </div>
 
         {/* Trust section */}

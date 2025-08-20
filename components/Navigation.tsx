@@ -13,10 +13,12 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -31,31 +33,32 @@ export default function Navigation() {
   ];
 
   // Déterminer si nous sommes sur la page d'accueil
-  const isHomePage = pathname === '/';
+  // Toujours utiliser '/' pendant le SSR pour éviter les problèmes d'hydratation
+  const isHomePage = mounted ? pathname === '/' : false;
   
   const navItems = [
     { 
-      href: isHomePage ? '#home' : '/#home', 
+      href: mounted ? (isHomePage ? '#home' : '/#home') : '#home', 
       label: t.nav.home,
       isHome: true
     },
     { 
-      href: isHomePage ? '#services' : '/#services', 
+      href: mounted ? (isHomePage ? '#services' : '/#services') : '#services', 
       label: t.nav.services,
       isHome: false
     },
     { 
-      href: isHomePage ? '#portfolio' : '/#portfolio', 
+      href: mounted ? (isHomePage ? '#portfolio' : '/#portfolio') : '#portfolio', 
       label: t.nav.portfolio,
       isHome: false
     },
     { 
-      href: isHomePage ? '#about' : '/#about', 
+      href: mounted ? (isHomePage ? '#about' : '/#about') : '#about', 
       label: t.nav.about,
       isHome: false
     },
     { 
-      href: isHomePage ? '#contact' : '/#contact', 
+      href: mounted ? (isHomePage ? '#contact' : '/#contact') : '#contact', 
       label: t.nav.contact,
       isHome: false
     },
@@ -63,13 +66,13 @@ export default function Navigation() {
 
   return (
     <nav className={`fixed top-0 w-full z-50 smooth-transition ${
-      isScrolled ? 'glass shadow-lg' : 'bg-transparent'
+      isScrolled ? 'backdrop-blur-lg bg-black/30 shadow-lg' : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto section-padding">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href={isHomePage ? "#home" : "/"} className="flex items-center hover:opacity-80 smooth-transition">
+            <Link href={mounted ? (isHomePage ? "#home" : "/") : "#home"} className="flex items-center hover:opacity-80 smooth-transition">
               <ResponsiveLogo />
             </Link>
           </div>
@@ -81,7 +84,6 @@ export default function Navigation() {
                 key={item.href}
                 delay={index * 50}
                 animationType="fade-blur"
-                preserveSpace={true}
               >
                 <Link
                   href={item.href}
@@ -96,7 +98,6 @@ export default function Navigation() {
             <LoadingWrapper 
               delay={250}
               animationType="scale-blur"
-              preserveSpace={true}
             >
               <div className="relative">
                 <button
@@ -108,7 +109,7 @@ export default function Navigation() {
                 </button>
                 
                 {showLangMenu && (
-                  <div className="absolute top-full mt-2 right-0 bg-dark-200 rounded-lg shadow-xl py-2 min-w-[150px] animate-scale-in-blur">
+                  <div className="absolute top-full mt-2 right-0 backdrop-blur-lg bg-black/40 border border-white/5 rounded-lg shadow-xl py-2 min-w-[150px] animate-scale-in-blur">
                     {languages.map((lang) => (
                       <button
                         key={lang.code}
@@ -135,7 +136,7 @@ export default function Navigation() {
               preserveSpace={true}
             >
               <Link
-                href={isHomePage ? "#contact" : "/#contact"}
+                href={mounted ? (isHomePage ? "#contact" : "/#contact") : "#contact"}
                 className="gradient-primary text-white px-6 py-2 rounded-full hover:shadow-lg hover:shadow-primary/25 smooth-transition"
               >
                 {t.nav.getQuote}
@@ -156,7 +157,7 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden glass mt-2 rounded-lg animate-scale-in-blur">
+          <div className="md:hidden backdrop-blur-lg bg-black/30 border border-white/5 mt-2 rounded-lg animate-scale-in-blur">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item, index) => (
                 <div key={item.href} className="animate-fade-in-blur" style={{ animationDelay: `${index * 80}ms` }}>
@@ -194,7 +195,7 @@ export default function Navigation() {
               
               <div className="animate-scale-in-blur" style={{ animationDelay: '600ms' }}>
                 <Link
-                  href={isHomePage ? "#contact" : "/#contact"}
+                  href={mounted ? (isHomePage ? "#contact" : "/#contact") : "#contact"}
                   onClick={() => setIsOpen(false)}
                   className="block mx-3 text-center gradient-primary text-white px-6 py-2 rounded-full smooth-transition hover:shadow-lg hover:shadow-primary/25"
                 >

@@ -19,16 +19,16 @@ export default function Hero() {
   }, [isLoading]);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden py-8 md:py-16">
       {/* Ultra modern abstract background */}
       <ModernBackground />
 
-      <div className="max-w-7xl mx-auto section-padding relative z-10">
-        <div className="text-center">
+      <div className="max-w-7xl mx-auto section-padding relative z-10 flex flex-col justify-center min-h-[90vh]">
+        <div className="text-center space-y-8 md:space-y-12">
           {/* Logo avec effet brillant */}
           <LoadingWrapper 
             delay={0}
-            className="mb-8 flex justify-center"
+            className="flex justify-center mb-8 md:mb-12"
             animationType="scale-blur"
             preserveSpace={true}
           >
@@ -43,11 +43,11 @@ export default function Hero() {
           {/* Main title */}
           <LoadingWrapper 
             delay={200}
-            className=""
+            className="mb-8 md:mb-12"
             animationType="fade-blur"
             preserveSpace={true}
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-overcame-bold leading-tight">
               <span className="gradient-text smooth-transition">{t.hero.title}</span>
             </h1>
           </LoadingWrapper>
@@ -55,11 +55,11 @@ export default function Hero() {
           {/* Subtitle */}
           <LoadingWrapper 
             delay={400}
-            className=""
+            className="mb-8 md:mb-12"
             animationType="slide-up-blur"
             preserveSpace={true}
           >
-            <h2 className="text-2xl md:text-4xl text-gray-300 mb-8 smooth-transition">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl text-gray-300 smooth-transition leading-relaxed">
               {t.hero.subtitle}
             </h2>
           </LoadingWrapper>
@@ -67,17 +67,17 @@ export default function Hero() {
           {/* Description */}
           <LoadingWrapper 
             delay={600}
-            className=""
+            className="mb-12 md:mb-16"
             animationType="fade-blur"
             preserveSpace={true}
           >
-            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-12 smooth-transition">
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto smooth-transition leading-relaxed">
               {t.hero.description}
             </p>
           </LoadingWrapper>
           
-          {/* CTA Buttons Container - Fixed height to prevent jumping */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 min-h-[64px]">
+          {/* CTA Buttons Container */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 md:mb-20 min-h-[80px]">
             <LoadingWrapper 
               delay={800}
               className=""
@@ -86,10 +86,10 @@ export default function Hero() {
             >
               <a
                 href="#contact"
-                className="gradient-primary text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg hover:shadow-primary/25 smooth-transition flex items-center justify-center group"
+                className="gradient-primary text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:shadow-lg hover:shadow-primary/25 smooth-transition flex items-center justify-center group"
               >
                 <span className="smooth-transition">{t.hero.cta}</span>
-                <ArrowRight className="ml-2 group-hover:translate-x-1 smooth-transition-fast" />
+                <ArrowRight className="ml-3 group-hover:translate-x-1 smooth-transition-fast" />
               </a>
             </LoadingWrapper>
             
@@ -101,7 +101,7 @@ export default function Hero() {
             >
               <a
                 href="#services"
-                className="glass text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/10 smooth-transition flex items-center justify-center"
+                className="glass text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:bg-white/10 smooth-transition flex items-center justify-center"
               >
                 <span className="smooth-transition">{t.hero.learnMore}</span>
               </a>
@@ -116,8 +116,8 @@ export default function Hero() {
             preserveSpace={true}
           >
             <div className="flex justify-center">
-              <div className="bg-black/20 backdrop-blur-sm rounded-full p-3 border border-white/10 hover:bg-white/10 smooth-transition animate-bounce">
-                <ChevronDown size={28} className="text-gray-300 hover:text-primary smooth-transition" />
+              <div className="bg-black/20 backdrop-blur-sm rounded-full p-4 border border-white/10 hover:bg-white/10 smooth-transition animate-bounce">
+                <ChevronDown size={32} className="text-gray-300 hover:text-primary smooth-transition" />
               </div>
             </div>
           </LoadingWrapper>

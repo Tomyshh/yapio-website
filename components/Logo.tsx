@@ -74,12 +74,12 @@ export default function Logo({
 export function ResponsiveLogo({ className = '', onClick }: { className?: string; onClick?: () => void }) {
   return (
     <>
-      {/* Desktop: Logo complet */}
+      {/* Desktop: Icône seule */}
       <div className="hidden md:block">
         <Logo 
-          variant="full" 
-          size="md" 
-          theme="white" 
+          variant="icon" 
+          size="lg" 
+          theme="default" 
           className={className}
           onClick={onClick}
           priority
@@ -90,7 +90,7 @@ export function ResponsiveLogo({ className = '', onClick }: { className?: string
       <div className="md:hidden">
         <Logo 
           variant="icon" 
-          size="md" 
+          size="lg" 
           theme="white" 
           className={className}
           onClick={onClick}

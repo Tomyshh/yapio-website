@@ -2,6 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force WhatsApp portal to be on top */
+#whatsapp-portal {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  pointer-events: none !important;
+}
+
+#whatsapp-portal > * {
+  pointer-events: auto !important;
+}
+
+/* Déclarations des polices Overcame */
+@font-face {
+  font-family: 'Overcame';
+  src: url('/fonts/OvercameDemoRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overcame';
+  src: url('/fonts/OvercameDemoBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overcame';
+  src: url('/fonts/OvercameDemoItalic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overcame';
+  src: url('/fonts/OvercameDemoBoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overcame';
+  src: url('/fonts/OvercameDemoOutline.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #0A0A0A;
   --foreground: #FFFFFF;
@@ -333,6 +385,27 @@ body {
 
 /* Utility classes optimisées */
 @layer utilities {
+  /* Classes pour les gros titres avec la police Overcame */
+  .font-overcame {
+    font-family: 'Overcame', serif;
+  }
+  
+  .font-overcame-bold {
+    font-family: 'Overcame', serif;
+    font-weight: 700;
+  }
+  
+  .font-overcame-italic {
+    font-family: 'Overcame', serif;
+    font-style: italic;
+  }
+  
+  .font-overcame-outline {
+    font-family: 'Overcame', serif;
+    -webkit-text-stroke: 1px currentColor;
+    -webkit-text-fill-color: transparent;
+  }
+  
   .gradient-primary {
     background: linear-gradient(135deg, #7737E9 0%, #5E1FD4 100%);
   }
@@ -342,7 +415,7 @@ body {
   }
   
   .glass {
-    @apply backdrop-blur-lg bg-white/5 border border-white/10;
+    @apply backdrop-blur-lg bg-black/20 border border-white/5;
   }
   
   .section-padding {

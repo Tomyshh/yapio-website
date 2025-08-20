@@ -37,6 +37,7 @@ const config: Config = {
         'float': 'float 3s ease-in-out infinite',
         'slide-up': 'slideUp 0.5s ease-out',
         'fade-in': 'fadeIn 0.5s ease-out',
+        'spin-slow': 'spin 3s linear infinite',
       },
       keyframes: {
         float: {

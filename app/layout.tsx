@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Suspense } from "react";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 
 
@@ -12,11 +13,15 @@ export const metadata: Metadata = {
   authors: [{ name: "YAPIO" }],
   icons: {
     icon: [
-      { url: "/branding/icononly_nobuffer.png", sizes: "32x32", type: "image/png" },
-      { url: "/branding/icononly_nobuffer.png", sizes: "16x16", type: "image/png" },
+      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "16x16", type: "image/png" },
+      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "32x32", type: "image/png" },
+      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "48x48", type: "image/png" },
+      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "64x64", type: "image/png" },
     ],
-    apple: "/branding/icononly_nobuffer.png",
-    shortcut: "/branding/icononly_nobuffer.png",
+    apple: [
+      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/branding/icononly_transparent_nobuffer.png",
   },
   openGraph: {
     title: "YAPIO - Développement d'Applications",
@@ -60,10 +65,10 @@ export default function RootLayout({
   return (
     <html lang="fr" className="dark">
       <head>
-        {/* Préchargement des polices système pour éviter FOUT */}
+        {/* Préchargement des images pour éviter FOUT */}
         <link
           rel="preload"
-          href="/branding/icononly_nobuffer.png"
+          href="/branding/icononly_transparent_nobuffer.png"
           as="image"
           type="image/png"
         />
@@ -120,6 +125,7 @@ export default function RootLayout({
             {children}
           </LanguageProvider>
         </Suspense>
+        <WhatsAppButton />
       </body>
     </html>
   );

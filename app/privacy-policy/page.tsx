@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
         <div className="max-w-4xl mx-auto section-padding py-16">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-4 font-overcame-bold">
               {t.privacyPolicy.title}
             </h1>
             <p className="text-gray-400 text-lg">

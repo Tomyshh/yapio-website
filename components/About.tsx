@@ -23,7 +23,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 font-overcame-bold">
             <span className="gradient-text">{t.about.title}</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
