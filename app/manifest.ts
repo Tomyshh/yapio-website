@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 
+export const dynamic = 'force-static'
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'YAPIO - Développement d\'Applications Mobile, Desktop & Web',
@@ -47,7 +49,7 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/branding/icononly_transparent_nobuffer.png',
         sizes: '192x192',
         type: 'image/png',
-        purpose: 'any maskable',
+        purpose: 'maskable',
       },
       {
         src: '/branding/icononly_transparent_nobuffer.png',
@@ -59,7 +61,7 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/branding/icononly_transparent_nobuffer.png',
         sizes: '512x512',
         type: 'image/png',
-        purpose: 'any maskable',
+        purpose: 'maskable',
       },
     ],
     screenshots: [

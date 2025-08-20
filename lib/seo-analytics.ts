@@ -87,29 +87,29 @@ class SEOAnalytics {
   // Collecter les Core Web Vitals
   async collectWebVitals(): Promise<void> {
     try {
-      const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
+      const { onCLS, onINP, onFCP, onLCP, onTTFB } = await import('web-vitals');
 
-      getCLS((metric) => {
+      onCLS((metric) => {
         this.metrics.coreWebVitals.cls = metric.value;
         this.sendMetrics('CLS', metric.value);
       });
 
-      getFID((metric) => {
+      onINP((metric) => {
         this.metrics.coreWebVitals.fid = metric.value;
-        this.sendMetrics('FID', metric.value);
+        this.sendMetrics('INP', metric.value);
       });
 
-      getFCP((metric) => {
+      onFCP((metric) => {
         this.metrics.coreWebVitals.fcp = metric.value;
         this.sendMetrics('FCP', metric.value);
       });
 
-      getLCP((metric) => {
+      onLCP((metric) => {
         this.metrics.coreWebVitals.lcp = metric.value;
         this.sendMetrics('LCP', metric.value);
       });
 
-      getTTFB((metric) => {
+      onTTFB((metric) => {
         this.metrics.coreWebVitals.ttfb = metric.value;
         this.sendMetrics('TTFB', metric.value);
       });
@@ -121,8 +121,8 @@ class SEOAnalytics {
   // Envoyer les métriques (remplacez par votre service d'analytics)
   private sendMetrics(metricName: string, value: number): void {
     // Exemple d'envoi vers Google Analytics 4
-    if (typeof gtag !== 'undefined') {
-      gtag('event', metricName, {
+    if (typeof window !== 'undefined' && 'gtag' in window && typeof (window as any).gtag === 'function') {
+      (window as any).gtag('event', metricName, {
         event_category: 'Web Vitals',
         value: Math.round(value),
         non_interaction: true,

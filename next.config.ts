@@ -95,7 +95,6 @@ const nextConfig: NextConfig = {
 
   // Configuration du build pour l'optimisation
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react', 'framer-motion', 'react-intersection-observer'],
   },
 
