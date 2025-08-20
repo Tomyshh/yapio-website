@@ -65,25 +65,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
-    // Transition fluide avec flou pour le changement de langue
-    document.documentElement.style.filter = 'blur(2px)';
-    document.documentElement.style.opacity = '0.9';
-    document.documentElement.style.transform = 'scale(0.99)';
-    
-    setTimeout(() => {
-      setLanguage(lang);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('language', lang);
-        document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
-      }
-      
-      // Restaurer progressivement l'état normal
-      setTimeout(() => {
-        document.documentElement.style.filter = 'blur(0px)';
-        document.documentElement.style.opacity = '1';
-        document.documentElement.style.transform = 'scale(1)';
-      }, 200);
-    }, 150);
+    // Transition simplifiée et plus rapide
+    setLanguage(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', lang);
+      document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
+    }
   };
 
   // Mise à jour de la direction quand la langue change

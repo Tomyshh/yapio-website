@@ -1,9 +1,13 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
+import { Metadata } from 'next';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { generateMetadata as generateSEOMetadata, pageSEO } from '@/lib/seo';
+
+export const metadata: Metadata = generateSEOMetadata(pageSEO.privacy);
+
+'use client';
 
 export default function PrivacyPolicyPage() {
   const { t } = useLanguage();

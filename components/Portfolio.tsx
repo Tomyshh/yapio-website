@@ -18,6 +18,7 @@ export default function Portfolio() {
       color: 'from-white to-gray-200',
       bgColor: 'bg-white/10',
       borderColor: 'border-white/20',
+      description: 'Solutions d\'eloignement de pigeons',
     },
     {
       name: 'DTAI',
@@ -26,6 +27,7 @@ export default function Portfolio() {
       color: 'from-red-400 to-pink-400',
       bgColor: 'bg-red-500/10',
       borderColor: 'border-red-400/20',
+      description: 'Expertise en intelligence artificielle dans la transcription et traduction',
     },
     {
       name: 'Havrouta',
@@ -34,6 +36,7 @@ export default function Portfolio() {
       color: 'from-[#C2A765] to-[#D4B876]',
       bgColor: 'bg-[#C2A765]/10',
       borderColor: 'border-[#C2A765]/20',
+      description: 'Plateforme éducative moderne et interactive',
     },
     {
       name: 'Olim',
@@ -42,6 +45,7 @@ export default function Portfolio() {
       color: 'from-[#0E78FE] to-[#3B8FFF]',
       bgColor: 'bg-[#0E78FE]/10',
       borderColor: 'border-[#0E78FE]/20',
+      description: 'Services d\'accompagnement et conciergerie administrative',
     },
     {
       name: 'Taim',
@@ -50,6 +54,7 @@ export default function Portfolio() {
       color: 'from-green-400 to-teal-400',
       bgColor: 'bg-green-500/10',
       borderColor: 'border-green-400/20',
+      description: 'Applications web et mobile pour un restaurant en ligne',
     },
   ];
 
@@ -139,14 +144,8 @@ export default function Portfolio() {
                       </h3>
                       <div className={`w-20 h-1.5 mx-auto md:mx-0 rounded-full bg-gradient-to-r ${client.color} mb-6 transform origin-left group-hover:scale-x-150 transition-transform duration-500`} />
                       <p className="text-gray-300 text-xl leading-relaxed">
-                        Client de confiance depuis plusieurs années
+                        {client.description}
                       </p>
-                      
-                      {/* Badge de confiance */}
-                      <div className="mt-6 inline-flex items-center px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
-                        <div className="w-2 h-2 rounded-full bg-green-400 mr-2 animate-pulse" />
-                        <span className="text-sm text-gray-400">Partenaire vérifié</span>
-                      </div>
                     </div>
                   </div>
                 </div>

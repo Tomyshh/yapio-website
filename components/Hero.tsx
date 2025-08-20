@@ -29,7 +29,7 @@ export default function Hero() {
           <LoadingWrapper 
             delay={0}
             className="flex justify-center mb-8 md:mb-12"
-            animationType="scale-blur"
+            animationType="fade"
             preserveSpace={true}
           >
             <GlowLogo 
@@ -42,9 +42,9 @@ export default function Hero() {
           
           {/* Main title */}
           <LoadingWrapper 
-            delay={200}
+            delay={100}
             className="mb-8 md:mb-12"
-            animationType="fade-blur"
+            animationType="fade"
             preserveSpace={true}
           >
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-overcame-bold leading-tight">
@@ -54,24 +54,24 @@ export default function Hero() {
           
           {/* Subtitle */}
           <LoadingWrapper 
-            delay={400}
+            delay={200}
             className="mb-8 md:mb-12"
-            animationType="slide-up-blur"
+            animationType="fade"
             preserveSpace={true}
           >
-            <h2 className="text-2xl md:text-4xl lg:text-5xl text-gray-300 smooth-transition leading-relaxed">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl text-gray-300 transition-opacity duration-300 leading-relaxed">
               {t.hero.subtitle}
             </h2>
           </LoadingWrapper>
           
           {/* Description */}
           <LoadingWrapper 
-            delay={600}
+            delay={300}
             className="mb-12 md:mb-16"
-            animationType="fade-blur"
+            animationType="fade"
             preserveSpace={true}
           >
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto smooth-transition leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto transition-opacity duration-300 leading-relaxed">
               {t.hero.description}
             </p>
           </LoadingWrapper>
@@ -79,40 +79,40 @@ export default function Hero() {
           {/* CTA Buttons Container */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 md:mb-20 min-h-[80px]">
             <LoadingWrapper 
-              delay={800}
+              delay={400}
               className=""
-              animationType="fade-blur"
+              animationType="fade"
               preserveSpace={true}
             >
               <a
                 href="#contact"
-                className="gradient-primary text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:shadow-lg hover:shadow-primary/25 smooth-transition flex items-center justify-center group"
+                className="gradient-primary text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 flex items-center justify-center group"
               >
-                <span className="smooth-transition">{t.hero.cta}</span>
-                <ArrowRight className="ml-3 group-hover:translate-x-1 smooth-transition-fast" />
+                <span className="transition-transform duration-200">{t.hero.cta}</span>
+                <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform duration-200" />
               </a>
             </LoadingWrapper>
             
             <LoadingWrapper 
-              delay={1000}
+              delay={500}
               className=""
-              animationType="fade-blur"
+              animationType="fade"
               preserveSpace={true}
             >
               <a
                 href="#services"
-                className="glass text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:bg-white/10 smooth-transition flex items-center justify-center"
+                className="glass text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:bg-white/10 transition-all duration-300 flex items-center justify-center"
               >
-                <span className="smooth-transition">{t.hero.learnMore}</span>
+                <span className="transition-transform duration-200">{t.hero.learnMore}</span>
               </a>
             </LoadingWrapper>
           </div>
           
           {/* Scroll indicator */}
           <LoadingWrapper 
-            delay={1000}
+            delay={600}
             className=""
-            animationType="fade-blur"
+            animationType="fade"
             preserveSpace={true}
           >
             <div className="flex justify-center">

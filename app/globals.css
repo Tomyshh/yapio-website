@@ -74,11 +74,10 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  /* Améliorer la fluidité des animations */
+  text-rendering: optimizeSpeed; /* Plus rapide que optimizeLegibility */
+  /* GPU acceleration */
   transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
+  will-change: auto;
 }
 
 body {
@@ -92,6 +91,13 @@ body {
   /* Optimisations pour la fluidité */
   will-change: auto;
   contain: layout style paint;
+}
+
+/* Animation optimisée pour le background moderne */
+@keyframes modernFlow {
+  0% { transform: translateX(-10%) translateY(-10%) rotate(0deg); }
+  50% { transform: translateX(5%) translateY(5%) rotate(180deg); }
+  100% { transform: translateX(-5%) translateY(-5%) rotate(360deg); }
 }
 
 /* Custom scrollbar */

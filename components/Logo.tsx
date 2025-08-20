@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import Image from 'next/image';
 
 interface LogoProps {
@@ -12,7 +12,7 @@ interface LogoProps {
   onClick?: () => void;
 }
 
-export default function Logo({ 
+function LogoComponent({ 
   variant = 'full', 
   size = 'md', 
   theme = 'default',
@@ -76,7 +76,7 @@ export function ResponsiveLogo({ className = '', onClick }: { className?: string
     <>
       {/* Desktop: Icône seule */}
       <div className="hidden md:block">
-        <Logo 
+        <LogoComponent 
           variant="icon" 
           size="lg" 
           theme="default" 
@@ -88,7 +88,7 @@ export function ResponsiveLogo({ className = '', onClick }: { className?: string
       
       {/* Mobile: Icône seule */}
       <div className="md:hidden">
-        <Logo 
+        <LogoComponent 
           variant="icon" 
           size="lg" 
           theme="white" 
@@ -105,8 +105,17 @@ export function ResponsiveLogo({ className = '', onClick }: { className?: string
 export function GlowLogo({ className = '', ...props }: LogoProps) {
   return (
     <div className={`relative ${className}`}>
-      <Logo {...props} />
+      <LogoComponent {...props} />
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse opacity-0 hover:opacity-100 transition-opacity duration-500" />
     </div>
   );
 }
+
+// Export du composant mémorisé
+export default memo(LogoComponent);
+
+// Export mémorisé pour ResponsiveLogo
+export const ResponsiveLogoMemo = memo(ResponsiveLogo);
+
+// Export mémorisé pour GlowLogo  
+export const GlowLogoMemo = memo(GlowLogo);

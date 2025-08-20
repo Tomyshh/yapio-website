@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 
 interface UseIntersectionObserverOptions {
   threshold?: number;
@@ -8,65 +8,62 @@ interface UseIntersectionObserverOptions {
   triggerOnce?: boolean;
 }
 
+// Version ultra-optimisée de l'intersection observer
 export function useIntersectionObserver({
   threshold = 0.1,
-  rootMargin = '0px',
+  rootMargin = '50px',
   triggerOnce = true,
 }: UseIntersectionObserverOptions = {}) {
   const [isIntersecting, setIsIntersecting] = useState(false);
-  const [hasTriggered, setHasTriggered] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
+  
+  // Mémorisation de l'observer pour éviter les re-créations
+  const observer = useMemo(() => {
+    if (typeof window === 'undefined') return null;
+    
+    return new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsIntersecting(true);
+          // Si triggerOnce, on disconnecte immédiatement
+          if (triggerOnce) {
+            observer?.disconnect();
+          }
+        } else if (!triggerOnce) {
+          setIsIntersecting(false);
+        }
+      },
+      { threshold, rootMargin }
+    );
+  }, [threshold, rootMargin, triggerOnce]);
 
   useEffect(() => {
     const element = elementRef.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const isVisible = entry.isIntersecting;
-        
-        if (isVisible && (!triggerOnce || !hasTriggered)) {
-          setIsIntersecting(true);
-          setHasTriggered(true);
-        } else if (!triggerOnce) {
-          setIsIntersecting(isVisible);
-        }
-      },
-      {
-        threshold,
-        rootMargin,
-      }
-    );
+    if (!element || !observer) return;
 
     observer.observe(element);
 
-    return () => {
-      observer.unobserve(element);
-    };
-  }, [threshold, rootMargin, triggerOnce, hasTriggered]);
+    return () => observer.disconnect();
+  }, [observer]);
 
   return { elementRef, isIntersecting };
 }
 
-// Hook pour les animations échelonnées
-export function useStaggeredAnimation(itemCount: number, delay: number = 100) {
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(
+// Hook simplifié pour les animations échelonnées
+export function useStaggeredAnimation(itemCount: number, delay: number = 50) {
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(() => 
     new Array(itemCount).fill(false)
   );
   const { elementRef, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
     if (isIntersecting) {
-      // Animer chaque élément avec un délai
-      for (let i = 0; i < itemCount; i++) {
-        setTimeout(() => {
-          setVisibleItems(prev => {
-            const newState = [...prev];
-            newState[i] = true;
-            return newState;
-          });
-        }, i * delay);
-      }
+      // Animation plus rapide et plus fluide
+      const timer = setTimeout(() => {
+        setVisibleItems(new Array(itemCount).fill(true));
+      }, delay);
+      
+      return () => clearTimeout(timer);
     }
   }, [isIntersecting, itemCount, delay]);
 

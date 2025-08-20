@@ -3,47 +3,11 @@ import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Suspense } from "react";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SEOOptimizer from "@/components/SEOOptimizer";
+import { SEODebuggerTrigger } from "@/components/SEODebugger";
+import { generateMetadata as generateSEOMetadata, pageSEO, generateStructuredData } from "@/lib/seo";
 
-
-
-export const metadata: Metadata = {
-  title: "YAPIO - Développement d'Applications Mobile, Desktop & Web",
-  description: "YAPIO - Société de développement d'applications mobiles, desktop et web. Solutions innovantes et performantes pour votre entreprise.",
-  keywords: "développement application, mobile app, desktop app, web app, développeur, YAPIO",
-  authors: [{ name: "YAPIO" }],
-  icons: {
-    icon: [
-      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "16x16", type: "image/png" },
-      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "32x32", type: "image/png" },
-      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "48x48", type: "image/png" },
-      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "64x64", type: "image/png" },
-    ],
-    apple: [
-      { url: "/branding/icononly_transparent_nobuffer.png", sizes: "180x180", type: "image/png" },
-    ],
-    shortcut: "/branding/icononly_transparent_nobuffer.png",
-  },
-  openGraph: {
-    title: "YAPIO - Développement d'Applications",
-    description: "Solutions innovantes pour applications mobiles, desktop et web",
-    type: "website",
-    siteName: "YAPIO",
-    images: [
-      {
-        url: "/branding/fulllogo_nobuffer.png",
-        width: 1200,
-        height: 630,
-        alt: "YAPIO - Développement d'Applications",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "YAPIO - Développement d'Applications",
-    description: "Solutions innovantes pour applications mobiles, desktop et web",
-    images: ["/branding/fulllogo_nobuffer.png"],
-  },
-};
+export const metadata: Metadata = generateSEOMetadata(pageSEO.home);
 
 // Composant de chargement fluide
 function LoadingFallback() {
@@ -65,7 +29,22 @@ export default function RootLayout({
   return (
     <html lang="fr" className="dark">
       <head>
-        {/* Préchargement des images pour éviter FOUT */}
+        {/* Métadonnées SEO avancées */}
+        <meta name="theme-color" content="#000000" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+        
+        {/* Icônes optimisées */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/branding/icononly_transparent_nobuffer.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/branding/icononly_transparent_nobuffer.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/branding/icononly_transparent_nobuffer.png" />
+        <link rel="icon" type="image/png" sizes="64x64" href="/branding/icononly_transparent_nobuffer.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/branding/icononly_transparent_nobuffer.png" />
+        <link rel="shortcut icon" href="/branding/icononly_transparent_nobuffer.png" />
+        
+        {/* Préchargement des ressources critiques */}
         <link
           rel="preload"
           href="/branding/icononly_transparent_nobuffer.png"
@@ -78,19 +57,29 @@ export default function RootLayout({
           as="image"
           type="image/png"
         />
-        {/* Configuration pour éviter le flash de contenu non stylé */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateStructuredData('Organization', {})),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateStructuredData('WebSite', {})),
+          }}
+        />
+        
+        {/* Configuration simplifiée pour le chargement */}
         <style>{`
           html { 
             font-display: swap;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
           }
-          html.loaded {
-            visibility: visible;
-            opacity: 1;
-          }
-          /* Skeleton loading pour le texte */
           .text-skeleton {
             background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
             background-size: 200% 100%;
@@ -101,31 +90,17 @@ export default function RootLayout({
             100% { background-position: -200% 0; }
           }
         `}</style>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Marquer le HTML comme chargé dès que possible
-              document.addEventListener('DOMContentLoaded', function() {
-                setTimeout(() => {
-                  document.documentElement.classList.add('loaded');
-                }, 100);
-              });
-              
-              // Fallback si DOMContentLoaded ne se déclenche pas
-              setTimeout(() => {
-                document.documentElement.classList.add('loaded');
-              }, 300);
-            `,
-          }}
-        />
       </head>
       <body suppressHydrationWarning className="transition-all duration-300">
-        <Suspense fallback={<LoadingFallback />}>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </Suspense>
-        <WhatsAppButton />
+        <SEOOptimizer>
+          <Suspense fallback={<LoadingFallback />}>
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
+          </Suspense>
+          <WhatsAppButton />
+          <SEODebuggerTrigger />
+        </SEOOptimizer>
       </body>
     </html>
   );

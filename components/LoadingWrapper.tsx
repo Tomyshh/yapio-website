@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, memo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LoadingWrapperProps {
@@ -12,61 +12,36 @@ interface LoadingWrapperProps {
   preserveSpace?: boolean;
 }
 
-export function LoadingWrapper({ 
+// Version optimisée du LoadingWrapper
+function LoadingWrapperComponent({ 
   children, 
   className = '', 
   delay = 0,
   fallback,
-  animationType = 'fade-blur',
+  animationType = 'fade',
   preserveSpace = true
 }: LoadingWrapperProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const { isLoading: languageLoading } = useLanguage();
 
   useEffect(() => {
     if (!languageLoading) {
-      const timer = setTimeout(() => {
-        setIsReady(true);
-        // Délai pour déclencher l'animation
-        setTimeout(() => setIsVisible(true), 50);
-      }, delay);
-
+      const timer = setTimeout(() => setIsReady(true), delay);
       return () => clearTimeout(timer);
     }
   }, [languageLoading, delay]);
 
-  const getAnimationClass = () => {
-    if (!isVisible) return 'opacity-0';
-    
-    switch (animationType) {
-      case 'fade':
-        return 'animate-fade-in';
-      case 'fade-blur':
-        return 'animate-fade-in-blur';
-      case 'scale-blur':
-        return 'animate-scale-in-blur';
-      case 'slide-up-blur':
-        return 'animate-slide-up-blur';
-      default:
-        return 'animate-fade-in-blur';
-    }
-  };
+  // Simplification des animations - utilise des classes CSS plus performantes
+  const animationClass = isReady ? 'opacity-100 transition-opacity duration-500' : 'opacity-0';
 
-  // Si on veut préserver l'espace, on affiche toujours le contenu mais invisible
   if (preserveSpace) {
     return (
-      <div className={`${className} ${isReady ? getAnimationClass() : 'opacity-0'}`}>
-        {isReady ? children : (
-          <div className="invisible">
-            {children}
-          </div>
-        )}
+      <div className={`${className} ${animationClass}`}>
+        {children}
       </div>
     );
   }
 
-  // Mode classique avec fallback
   if (!isReady || languageLoading) {
     return fallback || (
       <div className={`loading-skeleton h-8 w-full ${className}`} />
@@ -74,11 +49,14 @@ export function LoadingWrapper({
   }
 
   return (
-    <div className={`${getAnimationClass()} ${className}`}>
+    <div className={`${animationClass} ${className}`}>
       {children}
     </div>
   );
 }
+
+// Mémorisation pour éviter les re-renders
+export const LoadingWrapper = memo(LoadingWrapperComponent);
 
 interface SkeletonTextProps {
   lines?: number;
