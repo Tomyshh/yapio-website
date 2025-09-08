@@ -10,6 +10,7 @@ export default function Portfolio() {
   const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  // Liste des clients - SecurityBear ajouté
   const clients = [
     {
       name: 'Aerilux',
@@ -55,6 +56,15 @@ export default function Portfolio() {
       bgColor: 'bg-green-500/10',
       borderColor: 'border-green-400/20',
       description: 'Applications web et mobile pour un restaurant en ligne',
+    },
+    {
+      name: 'SecurityBear',
+      logo: '/logo/securitybear_logo.png',
+      alt: 'Logo SecurityBear',
+      color: 'from-orange-400 to-red-500',
+      bgColor: 'bg-orange-500/10',
+      borderColor: 'border-orange-400/20',
+      description: 'Solutions de surveillance et caméras de sécurité',
     },
   ];
 
@@ -121,6 +131,7 @@ export default function Portfolio() {
                     <div className={`relative ${
                       client.name === 'Havrouta' ? 'w-56 h-56 md:w-64 md:h-64' :
                       client.name === 'Olim' ? 'w-60 h-60 md:w-72 md:h-72' :
+                      client.name === 'SecurityBear' ? 'w-72 h-72 md:w-80 md:h-80' :
                       'w-72 h-72 md:w-80 md:h-80'
                     }`}>
                       <Image
@@ -139,7 +150,7 @@ export default function Portfolio() {
                     
                     {/* Client info modernisée */}
                     <div className="text-center md:text-left max-w-md">
-                      <h3 className={`text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r ${client.color} bg-clip-text text-transparent animate-pulse-slow`}>
+                      <h3 className={`text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r ${client.color} bg-clip-text text-transparent animate-pulse-slow`} style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
                         {client.name}
                       </h3>
                       <div className={`w-20 h-1.5 mx-auto md:mx-0 rounded-full bg-gradient-to-r ${client.color} mb-6 transform origin-left group-hover:scale-x-150 transition-transform duration-500`} />
@@ -188,6 +199,21 @@ export default function Portfolio() {
             </div>
           </button>
           
+          {/* Indicateurs de navigation */}
+          <div className="flex justify-center space-x-3 mt-8">
+            {clients.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? 'bg-primary scale-125'
+                    : 'bg-white/30 hover:bg-white/50'
+                }`}
+                aria-label={`Aller au client ${index + 1}`}
+              />
+            ))}
+          </div>
 
         </div>
 
