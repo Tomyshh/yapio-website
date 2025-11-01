@@ -1,15 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Configuration Supabase
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Les variables d\'environnement Supabase sont manquantes');
+// Client Supabase (création paresseuse et optionnelle)
+let cachedClient: ReturnType<typeof createClient> | null = null;
+
+export function getSupabaseClient() {
+  if (cachedClient) return cachedClient;
+  if (!supabaseUrl || !supabaseAnonKey) return null;
+  cachedClient = createClient(supabaseUrl, supabaseAnonKey);
+  return cachedClient;
 }
 
-// Client Supabase
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Fonction helper pour vérifier si Supabase est configuré
+export const isSupabaseConfigured = () => {
+  return Boolean(supabaseUrl && supabaseAnonKey);
+};
 
 // Types pour les données du formulaire de contact
 export interface ContactFormData {
@@ -37,6 +45,16 @@ export interface ContactSubmissionResponse {
 // Fonction pour soumettre le formulaire de contact
 export async function submitContactForm(formData: Omit<ContactFormData, 'id' | 'created_at' | 'status'>): Promise<ContactSubmissionResponse> {
   try {
+    // Vérifier si Supabase est configuré
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return {
+        success: false,
+        message: 'Le service de contact n\'est pas configuré. Veuillez contacter l\'administrateur.',
+        error: 'Supabase not configured',
+      };
+    }
+
     // Validation des données obligatoires
     if (!formData.name || !formData.email || !formData.message) {
       return {
@@ -110,7 +128,7 @@ export async function submitContactForm(formData: Omit<ContactFormData, 'id' | '
     return {
       success: true,
       message: 'Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.',
-      data,
+      data: data as unknown as ContactFormData,
     };
   } catch (error) {
     console.error('Erreur lors de la soumission du formulaire:', error);
@@ -129,6 +147,14 @@ export async function getContactSubmissions(
   status?: 'new' | 'read' | 'replied' | 'archived'
 ) {
   try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return {
+        success: false,
+        error: 'Supabase not configured',
+      };
+    }
+
     let query = supabase
       .from('contact_submissions')
       .select('*')
@@ -161,6 +187,14 @@ export async function getContactSubmissions(
 // Fonction pour marquer une soumission comme lue
 export async function markSubmissionAsRead(id: string) {
   try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return {
+        success: false,
+        error: 'Supabase not configured',
+      };
+    }
+
     const { data, error } = await supabase
       .from('contact_submissions')
       .update({ status: 'read' })
@@ -178,6 +212,162 @@ export async function markSubmissionAsRead(id: string) {
     };
   } catch (error) {
     console.error('Erreur lors de la mise à jour du statut:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erreur inconnue',
+    };
+  }
+}
+
+// ==================== TYPES ET FONCTIONS POUR LES PROJETS ====================
+
+// Types pour les images de projet
+export interface ProjectImage {
+  id: string;
+  project_id: string;
+  image_url: string;
+  image_type: 'desktop' | 'mobile';
+  display_order: number;
+  alt_text?: string;
+  created_at: string;
+}
+
+// Type pour un projet avec ses images
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  logo_url: string;
+  color?: string;
+  bg_color?: string;
+  border_color?: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  images?: ProjectImage[];
+  desktop_images?: ProjectImage[];
+  mobile_images?: ProjectImage[];
+}
+
+// Fonction pour récupérer tous les projets actifs avec leurs images
+export async function getProjects(): Promise<{ success: boolean; data?: Project[]; error?: string }> {
+  try {
+    // Si Supabase n'est pas configuré, retourner un tableau vide
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return {
+        success: true,
+        data: [],
+      };
+    }
+
+    // Récupérer les projets actifs triés par display_order
+    const { data: projects, error: projectsError } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true });
+
+    if (projectsError) {
+      throw projectsError;
+    }
+
+    if (!projects || projects.length === 0) {
+      return {
+        success: true,
+        data: [],
+      };
+    }
+
+    // Récupérer toutes les images pour ces projets
+    const projectIds = projects.map((p) => p.id);
+    const { data: images, error: imagesError } = await supabase
+      .from('project_images')
+      .select('*')
+      .in('project_id', projectIds)
+      .order('display_order', { ascending: true });
+
+    if (imagesError) {
+      throw imagesError;
+    }
+
+    // Combiner les projets avec leurs images
+    const projectsWithImages = projects.map((project) => {
+      const projectImages = images?.filter((img) => img.project_id === project.id) || [];
+      const desktopImages = projectImages.filter((img) => img.image_type === 'desktop');
+      const mobileImages = projectImages.filter((img) => img.image_type === 'mobile');
+
+      return {
+        ...project,
+        images: projectImages,
+        desktop_images: desktopImages,
+        mobile_images: mobileImages,
+      };
+    });
+
+    return {
+      success: true,
+      data: projectsWithImages as unknown as Project[],
+    };
+  } catch (error) {
+    console.error('Erreur lors de la récupération des projets:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erreur inconnue',
+    };
+  }
+}
+
+// Fonction pour récupérer un projet spécifique par son ID
+export async function getProjectById(id: string): Promise<{ success: boolean; data?: Project; error?: string }> {
+  try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return {
+        success: false,
+        error: 'Supabase not configured',
+      };
+    }
+
+    const { data: project, error: projectError } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .single();
+
+    if (projectError) {
+      throw projectError;
+    }
+
+    // Récupérer les images du projet
+    const { data: images, error: imagesError } = await supabase
+      .from('project_images')
+      .select('*')
+      .eq('project_id', id)
+      .order('display_order', { ascending: true });
+
+    if (imagesError) {
+      throw imagesError;
+    }
+
+    const desktopImages = images?.filter((img) => img.image_type === 'desktop') || [];
+    const mobileImages = images?.filter((img) => img.image_type === 'mobile') || [];
+
+    const projectWithImages = {
+      ...project,
+      images: (images || []) as unknown as ProjectImage[],
+      desktop_images: desktopImages as unknown as ProjectImage[],
+      mobile_images: mobileImages as unknown as ProjectImage[],
+    } as Project;
+
+    return {
+      success: true,
+      data: projectWithImages,
+    };
+  } catch (error) {
+    console.error('Erreur lors de la récupération du projet:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Erreur inconnue',

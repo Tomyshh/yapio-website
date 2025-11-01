@@ -7,12 +7,35 @@ import Link from 'next/link';
 import ModernBackground from './ModernBackground';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, isLoading } = useLanguage();
   const [currentYear, setCurrentYear] = useState<number | null>(null);
 
   useEffect(() => {
     setCurrentYear(new Date().getFullYear());
   }, []);
+
+  // Protection contre les erreurs d'hydratation
+  if (isLoading || !t?.footer) {
+    return (
+      <footer className="relative py-8 overflow-hidden">
+        <ModernBackground />
+        <div className="max-w-7xl mx-auto section-padding relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
+              <Logo variant="full" size="sm" theme="white" />
+              <span className="text-gray-400 text-sm">
+                © {currentYear || new Date().getFullYear()} YAPIO. Tous droits réservés
+              </span>
+            </div>
+            <div className="flex space-x-6">
+              <div className="w-32 h-4 bg-gray-700 animate-pulse rounded"></div>
+              <div className="w-28 h-4 bg-gray-700 animate-pulse rounded"></div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="relative py-8 overflow-hidden">

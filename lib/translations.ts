@@ -11,30 +11,30 @@ export const translations = {
       getQuote: 'Demander un devis',
     },
     hero: {
-      title: 'Développement d\'Applications',
-      subtitle: 'Mobile, Desktop & Web',
-      description: 'Nous créons des applications innovantes et performantes pour faire grandir votre entreprise dans le monde numérique.',
+      title: 'Services Numériques sur Mesure',
+      subtitle: 'Applications • IA • Logiciels',
+      description: 'Nous transformons vos idées en solutions digitales performantes : applications mobiles et web, intégration d\'intelligence artificielle et développement de logiciels personnalisés.',
       cta: 'Démarrer votre projet',
       learnMore: 'En savoir plus',
     },
     services: {
       title: 'Nos Services',
-      subtitle: 'Des solutions complètes pour tous vos besoins numériques',
+      subtitle: 'Des solutions digitales innovantes pour propulser votre entreprise',
       mobile: {
         title: 'Applications Mobiles',
-        description: 'Applications natives et cross-platform pour iOS et Android avec les dernières technologies.',
+        description: 'Développement d\'applications natives et cross-platform pour iOS et Android, alliant performance et expérience utilisateur exceptionnelle.',
       },
       desktop: {
-        title: 'Applications Desktop',
-        description: 'Logiciels performants pour Windows, macOS et Linux adaptés à vos besoins métier.',
+        title: 'Applications Web',
+        description: 'Création de sites web et applications web modernes, responsives, sécurisées et optimisées pour vos besoins métier.',
       },
       web: {
-        title: 'Applications Web',
-        description: 'Sites web et applications web modernes, responsives et optimisés pour le SEO.',
+        title: 'Intégration IA',
+        description: 'Intégration de l\'intelligence artificielle dans vos processus : chatbots, analyse de données, automatisation et machine learning.',
       },
       consulting: {
-        title: 'Consulting',
-        description: 'Conseils d\'experts pour optimiser votre stratégie digitale et vos processus.',
+        title: 'Logiciels Sur Mesure',
+        description: 'Développement de solutions logicielles personnalisées adaptées à vos besoins spécifiques et à votre secteur d\'activité.',
       },
     },
     features: {
@@ -59,6 +59,7 @@ export const translations = {
     clients: {
       title: 'Nos Clients',
       subtitle: 'Ils nous font confiance pour leurs projets digitaux',
+      viewMore: 'Voir plus',
       trustSection: {
         title: 'Une expertise reconnue',
         description: 'Depuis notre création, nous avons eu le privilège d\'accompagner des entreprises de différents secteurs dans leur transformation digitale. Chaque projet est unique et nous nous adaptons aux besoins spécifiques de nos clients pour livrer des solutions sur mesure qui dépassent leurs attentes.',
@@ -68,6 +69,31 @@ export const translations = {
           satisfaction: 'Satisfaction client',
         },
       },
+      projects: {
+        chabbataim: 'Applications web et mobile pour un restaurant en ligne',
+        olimService: 'Services d\'accompagnement et conciergerie administrative',
+        aerilux: 'Solutions d\'éloignement de pigeons',
+        dtai: 'Expertise en intelligence artificielle dans la transcription et traduction',
+        havrouta: 'Plateforme éducative moderne et interactive',
+        securityBear: 'Solutions de surveillance et caméras de sécurité',
+        kolot: 'Site de recherche intelligente d\'enregistrement vocaux de prières toraniques',
+        ozLeisrael: 'Site de présentation du programme Oz Leisrael',
+        i24TvChannel: 'Solution de transcription et traduction en temps réel avec affichage des sous-titres pour la chaîne i24news',
+      },
+    },
+    projects: {
+      backToPortfolio: 'Retour au portfolio',
+      year: 'Année',
+      category: 'Catégorie',
+      technologies: 'Technologies utilisées',
+      gallery: 'Galerie',
+      desktopVersion: 'Version Desktop',
+      mobileVersion: 'Version Mobile',
+      noImages: 'Visuels à venir prochainement',
+      interestedTitle: 'Intéressé par un projet similaire ?',
+      interestedDescription: 'Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous aider.',
+      contactUs: 'Nous contacter',
+      closeLightbox: 'Appuyez sur Échap ou cliquez à l\'extérieur pour fermer',
     },
     contact: {
       title: 'Contactez-nous',
@@ -86,9 +112,9 @@ export const translations = {
       },
       projectTypes: {
         mobile: 'Application Mobile',
-        desktop: 'Application Desktop',
-        web: 'Application Web',
-        consulting: 'Consulting',
+        desktop: 'Application Web',
+        web: 'Intégration IA',
+        consulting: 'Logiciel Sur Mesure',
         other: 'Autre',
       },
     },
@@ -97,11 +123,11 @@ export const translations = {
       subtitle: 'Votre partenaire technologique de confiance',
       story: {
         title: 'Notre Histoire',
-        content: 'YAPIO a été fondée avec la vision de démocratiser l\'accès aux technologies de pointe pour les entreprises de toutes tailles. Depuis nos débuts, nous nous sommes spécialisés dans le développement d\'applications innovantes qui transforment les idées en solutions digitales concrètes.',
+        content: 'YAPIO a été fondée avec la vision de démocratiser l\'accès aux technologies de pointe pour les entreprises de toutes tailles. Depuis nos débuts, nous nous sommes spécialisés dans la création de solutions numériques innovantes qui transforment les idées en réalité digitale.',
       },
       mission: {
         title: 'Notre Mission',
-        content: 'Nous accompagnons nos clients dans leur transformation digitale en créant des applications mobiles, desktop et web sur mesure. Notre objectif est de fournir des solutions technologiques qui stimulent la croissance et l\'efficacité de votre entreprise.',
+        content: 'Nous accompagnons nos clients dans leur transformation digitale en créant des applications mobiles, des sites web performants, en intégrant l\'intelligence artificielle et en développant des logiciels sur mesure. Notre objectif est de fournir des solutions technologiques qui stimulent la croissance et l\'efficacité de votre entreprise.',
       },
       values: {
         title: 'Nos Valeurs',
@@ -125,6 +151,13 @@ export const translations = {
       team: {
         title: 'Notre Équipe',
         description: 'Une équipe passionnée de développeurs, designers et consultants techniques dédiés à votre succès.',
+      },
+      cta: 'Travaillons ensemble',
+      stats: {
+        clients: 'Clients satisfaits',
+        projects: 'Projets réalisés',
+        experience: 'Années d\'expérience',
+        passion: 'Passion',
       },
     },
     privacyPolicy: {
@@ -202,7 +235,7 @@ export const translations = {
         },
         services: {
           title: 'Description des Services',
-          content: 'YAPIO fournit des services de développement d\'applications mobiles, desktop et web, ainsi que des services de consulting technique. Nos services sont décrits en détail sur notre site web.',
+          content: 'YAPIO fournit des services de développement d\'applications mobiles et web, d\'intégration d\'intelligence artificielle et de création de logiciels sur mesure. Nos services sont décrits en détail sur notre site web.',
         },
         intellectualProperty: {
           title: 'Propriété Intellectuelle',
@@ -275,30 +308,30 @@ export const translations = {
       getQuote: 'Get a Quote',
     },
     hero: {
-      title: 'Application Development',
-      subtitle: 'Mobile, Desktop & Web',
-      description: 'We create innovative and high-performance applications to grow your business in the digital world.',
+      title: 'Custom Digital Services',
+      subtitle: 'Apps • AI • Software',
+      description: 'We transform your ideas into high-performing digital solutions: mobile and web applications, artificial intelligence integration, and custom software development.',
       cta: 'Start Your Project',
       learnMore: 'Learn More',
     },
     services: {
       title: 'Our Services',
-      subtitle: 'Complete solutions for all your digital needs',
+      subtitle: 'Innovative digital solutions to propel your business',
       mobile: {
         title: 'Mobile Applications',
-        description: 'Native and cross-platform applications for iOS and Android with the latest technologies.',
+        description: 'Development of native and cross-platform applications for iOS and Android, combining performance with exceptional user experience.',
       },
       desktop: {
-        title: 'Desktop Applications',
-        description: 'High-performance software for Windows, macOS and Linux tailored to your business needs.',
+        title: 'Web Applications',
+        description: 'Creation of modern, responsive, secure websites and web applications optimized for your business needs.',
       },
       web: {
-        title: 'Web Applications',
-        description: 'Modern, responsive and SEO-optimized websites and web applications.',
+        title: 'AI Integration',
+        description: 'Integration of artificial intelligence into your processes: chatbots, data analysis, automation, and machine learning.',
       },
       consulting: {
-        title: 'Consulting',
-        description: 'Expert advice to optimize your digital strategy and processes.',
+        title: 'Custom Software',
+        description: 'Development of personalized software solutions tailored to your specific needs and industry sector.',
       },
     },
     features: {
@@ -323,6 +356,7 @@ export const translations = {
     clients: {
       title: 'Our Clients',
       subtitle: 'They trust us for their digital projects',
+      viewMore: 'View more',
       trustSection: {
         title: 'Recognized expertise',
         description: 'Since our inception, we have had the privilege of supporting companies from different sectors in their digital transformation. Each project is unique and we adapt to the specific needs of our clients to deliver tailor-made solutions that exceed their expectations.',
@@ -332,6 +366,31 @@ export const translations = {
           satisfaction: 'Client satisfaction',
         },
       },
+      projects: {
+        chabbataim: 'Web and mobile applications for an online restaurant',
+        olimService: 'Support services and administrative concierge',
+        aerilux: 'Pigeon deterrent solutions',
+        dtai: 'Artificial intelligence expertise in transcription and translation',
+        havrouta: 'Modern and interactive educational platform',
+        securityBear: 'Surveillance solutions and security cameras',
+        kolot: 'Intelligent search site for Torah prayer voice recordings',
+        ozLeisrael: 'Presentation site for the Oz Leisrael program',
+        i24TvChannel: 'Real-time transcription and translation solution with subtitle display for i24news channel',
+      },
+    },
+    projects: {
+      backToPortfolio: 'Back to portfolio',
+      year: 'Year',
+      category: 'Category',
+      technologies: 'Technologies used',
+      gallery: 'Gallery',
+      desktopVersion: 'Desktop Version',
+      mobileVersion: 'Mobile Version',
+      noImages: 'Visuals coming soon',
+      interestedTitle: 'Interested in a similar project?',
+      interestedDescription: 'Contact us to discuss your project and discover how we can help you.',
+      contactUs: 'Contact us',
+      closeLightbox: 'Press Esc or click outside to close',
     },
     contact: {
       title: 'Contact Us',
@@ -350,9 +409,9 @@ export const translations = {
       },
       projectTypes: {
         mobile: 'Mobile Application',
-        desktop: 'Desktop Application',
-        web: 'Web Application',
-        consulting: 'Consulting',
+        desktop: 'Web Application',
+        web: 'AI Integration',
+        consulting: 'Custom Software',
         other: 'Other',
       },
     },
@@ -361,11 +420,11 @@ export const translations = {
       subtitle: 'Your trusted technology partner',
       story: {
         title: 'Our Story',
-        content: 'YAPIO was founded with the vision of democratizing access to cutting-edge technologies for businesses of all sizes. Since our beginnings, we have specialized in developing innovative applications that transform ideas into concrete digital solutions.',
+        content: 'YAPIO was founded with the vision of democratizing access to cutting-edge technologies for businesses of all sizes. Since our beginnings, we have specialized in creating innovative digital solutions that transform ideas into digital reality.',
       },
       mission: {
         title: 'Our Mission',
-        content: 'We support our clients in their digital transformation by creating custom mobile, desktop and web applications. Our goal is to provide technological solutions that drive the growth and efficiency of your business.',
+        content: 'We support our clients in their digital transformation by creating mobile applications, high-performance websites, integrating artificial intelligence, and developing custom software. Our goal is to provide technological solutions that drive the growth and efficiency of your business.',
       },
       values: {
         title: 'Our Values',
@@ -389,6 +448,13 @@ export const translations = {
       team: {
         title: 'Our Team',
         description: 'A passionate team of developers, designers and technical consultants dedicated to your success.',
+      },
+      cta: 'Let\'s Work Together',
+      stats: {
+        clients: 'Satisfied clients',
+        projects: 'Completed projects',
+        experience: 'Years of experience',
+        passion: 'Passion',
       },
     },
     privacyPolicy: {
@@ -466,7 +532,7 @@ export const translations = {
         },
         services: {
           title: 'Service Description',
-          content: 'YAPIO provides mobile, desktop and web application development services, as well as technical consulting services. Our services are described in detail on our website.',
+          content: 'YAPIO provides mobile and web application development services, artificial intelligence integration, and custom software creation. Our services are described in detail on our website.',
         },
         intellectualProperty: {
           title: 'Intellectual Property',
@@ -539,30 +605,30 @@ export const translations = {
       getQuote: 'קבל הצעת מחיר',
     },
     hero: {
-      title: 'פיתוח אפליקציות',
-      subtitle: 'מובייל, דסקטופ ואינטרנט',
-      description: 'אנו יוצרים אפליקציות חדשניות ומתקדמות כדי להצמיח את העסק שלך בעולם הדיגיטלי.',
+      title: 'שירותים דיגיטליים מותאמים אישית',
+      subtitle: 'אפליקציות • בינה מלאכותית • תוכנות',
+      description: 'אנו הופכים את הרעיונות שלך לפתרונות דיגיטליים מתקדמים: אפליקציות מובייל ואינטרנט, שילוב בינה מלאכותית ופיתוח תוכנות מותאמות אישית.',
       cta: 'התחל את הפרויקט שלך',
       learnMore: 'למד עוד',
     },
     services: {
       title: 'השירותים שלנו',
-      subtitle: 'פתרונות מלאים לכל הצרכים הדיגיטליים שלך',
+      subtitle: 'פתרונות דיגיטליים חדשניים להצמחת העסק שלך',
       mobile: {
         title: 'אפליקציות מובייל',
-        description: 'אפליקציות מקוריות וחוצות פלטפורמות ל-iOS ו-Android עם הטכנולוגיות החדישות ביותר.',
+        description: 'פיתוח אפליקציות מקוריות וחוצות פלטפורמות ל-iOS ו-Android, המשלבות ביצועים עם חוויית משתמש יוצאת דופן.',
       },
       desktop: {
-        title: 'אפליקציות דסקטופ',
-        description: 'תוכנות בעלות ביצועים גבוהים ל-Windows, macOS ו-Linux המותאמות לצרכי העסק שלך.',
+        title: 'אפליקציות אינטרנט',
+        description: 'יצירת אתרים ואפליקציות אינטרנט מודרניים, רספונסיביים, מאובטחים ומותאמים לצרכי העסק שלך.',
       },
       web: {
-        title: 'אפליקציות אינטרנט',
-        description: 'אתרים ואפליקציות אינטרנט מודרניים, רספונסיביים ומותאמים ל-SEO.',
+        title: 'שילוב בינה מלאכותית',
+        description: 'שילוב בינה מלאכותית בתהליכים שלך: צ\'אטבוטים, ניתוח נתונים, אוטומציה ולמידת מכונה.',
       },
       consulting: {
-        title: 'ייעוץ',
-        description: 'ייעוץ מומחים לאופטימיזציה של האסטרטגיה הדיגיטלית והתהליכים שלך.',
+        title: 'תוכנות מותאמות אישית',
+        description: 'פיתוח פתרונות תוכנה מותאמים אישית לצרכים הספציפיים שלך ולענף התעשייה שלך.',
       },
     },
     features: {
@@ -587,6 +653,7 @@ export const translations = {
     clients: {
       title: 'הלקוחות שלנו',
       subtitle: 'הם בוטחים בנו עבור הפרויקטים הדיגיטליים שלהם',
+      viewMore: 'ראה עוד',
       trustSection: {
         title: 'מומחיות מוכרת',
         description: 'מאז הקמתנו, זכינו ללוות חברות מתחומים שונים בטרנספורמציה הדיגיטלית שלהם. כל פרויקט הוא ייחודי ואנחנו מתאימים לצרכים הספציפיים של הלקוחות שלנו כדי לספק פתרונות מותאמים אישית שעולים על הציפיות שלהם.',
@@ -596,6 +663,31 @@ export const translations = {
           satisfaction: 'שביעות רצון לקוחות',
         },
       },
+      projects: {
+        chabbataim: 'אפליקציות אינטרנט ומובייל למסעדה מקוונת',
+        olimService: 'שירותי ליווי וקונסיירז\' אדמיניסטרטיבי',
+        aerilux: 'פתרונות להרחקת יונים',
+        dtai: 'מומחיות בבינה מלאכותית בתחום תמלול ותרגום',
+        havrouta: 'פלטפורמה חינוכית מודרנית ואינטראקטיבית',
+        securityBear: 'פתרונות מעקב ומצלמות אבטחה',
+        kolot: 'אתר חיפוש חכם של הקלטות קוליות של תפילות תורניות',
+        ozLeisrael: 'אתר הצגה של תוכנית עוז לישראל',
+        i24TvChannel: 'פתרון תמלול ותרגום בזמן אמת עם הצגת כתוביות לערוץ i24news',
+      },
+    },
+    projects: {
+      backToPortfolio: 'חזרה לתיק העבודות',
+      year: 'שנה',
+      category: 'קטגוריה',
+      technologies: 'טכנולוגיות בשימוש',
+      gallery: 'גלריה',
+      desktopVersion: 'גרסת דסקטופ',
+      mobileVersion: 'גרסת מובייל',
+      noImages: 'תמונות יגיעו בקרוב',
+      interestedTitle: 'מעוניין בפרויקט דומה?',
+      interestedDescription: 'צור איתנו קשר כדי לדון על הפרויקט שלך ולגלות כיצד נוכל לעזור לך.',
+      contactUs: 'צור קשר',
+      closeLightbox: 'לחץ Esc או לחץ מחוץ לסגירה',
     },
     contact: {
       title: 'צור קשר',
@@ -614,9 +706,9 @@ export const translations = {
       },
       projectTypes: {
         mobile: 'אפליקציית מובייל',
-        desktop: 'אפליקציית דסקטופ',
-        web: 'אפליקציית אינטרנט',
-        consulting: 'ייעוץ',
+        desktop: 'אפליקציית אינטרנט',
+        web: 'שילוב בינה מלאכותית',
+        consulting: 'תוכנה מותאמת אישית',
         other: 'אחר',
       },
     },
@@ -625,11 +717,11 @@ export const translations = {
       subtitle: 'השותף הטכנולוגי המהימן שלך',
       story: {
         title: 'הסיפור שלנו',
-        content: 'YAPIO נוסדה עם החזון לדמוקרטיזציה של הגישה לטכנולוגיות מתקדמות לעסקים בכל הגדלים. מאז התחלתנו, התמחינו בפיתוח אפליקציות חדשניות שהופכות רעיונות לפתרונות דיגיטליים קונקרטיים.',
+        content: 'YAPIO נוסדה עם החזון לדמוקרטיזציה של הגישה לטכנולוגיות מתקדמות לעסקים בכל הגדלים. מאז התחלתנו, התמחינו ביצירת פתרונות דיגיטליים חדשניים שהופכים רעיונות למציאות דיגיטלית.',
       },
       mission: {
         title: 'המשימה שלנו',
-        content: 'אנו תומכים בלקוחותינו בטרנספורמציה הדיגיטלית שלהם על ידי יצירת אפליקציות מובייל, דסקטופ ואינטרנט מותאמות אישית. המטרה שלנו היא לספק פתרונות טכנולוגיים שמניעים את הצמיחה והיעילות של העסק שלך.',
+        content: 'אנו תומכים בלקוחותינו בטרנספורמציה הדיגיטלית שלהם על ידי יצירת אפליקציות מובייל, אתרי אינטרנט מתקדמים, שילוב בינה מלאכותית ופיתוח תוכנות מותאמות אישית. המטרה שלנו היא לספק פתרונות טכנולוגיים שמניעים את הצמיחה והיעילות של העסק שלך.',
       },
       values: {
         title: 'הערכים שלנו',
@@ -653,6 +745,13 @@ export const translations = {
       team: {
         title: 'הצוות שלנו',
         description: 'צוות נלהב של מפתחים, מעצבים ויועצים טכניים המוקדשים להצלחתך.',
+      },
+      cta: 'בוא נעבוד ביחד',
+      stats: {
+        clients: 'לקוחות מרוצים',
+        projects: 'פרויקטים שהושלמו',
+        experience: 'שנות ניסיון',
+        passion: 'תשוקה',
       },
     },
     privacyPolicy: {
@@ -730,7 +829,7 @@ export const translations = {
         },
         services: {
           title: 'תיאור השירותים',
-          content: 'YAPIO מספקת שירותי פיתוח אפליקציות מובייל, דסקטופ ואינטרנט, כמו גם שירותי ייעוץ טכני. השירותים שלנו מתוארים בפירוט באתר שלנו.',
+          content: 'YAPIO מספקת שירותי פיתוח אפליקציות מובייל ואינטרנט, שילוב בינה מלאכותית ויצירת תוכנות מותאמות אישית. השירותים שלנו מתוארים בפירוט באתר שלנו.',
         },
         intellectualProperty: {
           title: 'קניין רוחני',

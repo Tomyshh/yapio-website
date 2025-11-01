@@ -29,6 +29,11 @@ export default function RootLayout({
   return (
     <html lang="fr" className="dark">
       <head>
+        {/* Google Fonts - Orbitron et Exo 2 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+        
         {/* Métadonnées SEO avancées */}
         <meta name="theme-color" content="#000000" />
         <meta name="msapplication-TileColor" content="#000000" />

@@ -45,6 +45,7 @@ export function generateMetadata({
       languages: {
         'fr': canonicalUrl,
         'en': `${canonicalUrl}?lang=en`,
+        'he': `${canonicalUrl}?lang=he`,
       },
     },
     openGraph: {
@@ -92,14 +93,14 @@ export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPa
       return {
         ...baseStructuredData,
         name: 'YAPIO',
-        description: 'Société de développement d\'applications mobiles, desktop et web. Solutions innovantes et performantes pour votre entreprise.',
+        description: 'Services numériques sur mesure : applications mobiles et web, intégration d\'intelligence artificielle et développement de logiciels personnalisés.',
         url: baseUrl,
         logo: `${baseUrl}/branding/fulllogo_nobuffer.png`,
         contactPoint: {
           '@type': 'ContactPoint',
           telephone: '+33-XXX-XXX-XXX', // Remplacez par votre numéro
           contactType: 'customer service',
-          availableLanguage: ['French', 'English'],
+          availableLanguage: ['French', 'English', 'Hebrew'],
         },
         address: {
           '@type': 'PostalAddress',
@@ -119,7 +120,7 @@ export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPa
         ...baseStructuredData,
         name: 'YAPIO',
         url: baseUrl,
-        description: 'Développement d\'applications mobiles, desktop et web',
+        description: 'Services numériques : applications mobiles et web, IA, logiciels sur mesure',
         publisher: {
           '@type': 'Organization',
           name: 'YAPIO',
@@ -177,21 +178,25 @@ export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPa
 }
 
 export const defaultSEO: SEOConfig = {
-  title: 'YAPIO - Développement d\'Applications Mobile, Desktop & Web',
-  description: 'YAPIO - Société de développement d\'applications mobiles, desktop et web. Solutions innovantes et performantes pour votre entreprise. Expertise React Native, Flutter, Next.js.',
+  title: 'YAPIO - Services Numériques Sur Mesure | Applications, IA & Logiciels',
+  description: 'YAPIO - Services numériques innovants : développement d\'applications mobiles et web, intégration d\'intelligence artificielle et création de logiciels sur mesure. Solutions personnalisées pour votre entreprise.',
   keywords: [
-    'développement application',
-    'mobile app',
-    'desktop app',
-    'web app',
+    'services numériques',
+    'développement application mobile',
+    'application web',
+    'intégration IA',
+    'intelligence artificielle',
+    'logiciel sur mesure',
+    'chatbot',
+    'machine learning',
     'React Native',
     'Flutter',
     'Next.js',
     'développeur',
     'YAPIO',
     'France',
-    'application mobile',
-    'développement web',
+    'Israël',
+    'transformation digitale',
     'startup',
     'entreprise',
     'solution digitale',
@@ -208,7 +213,7 @@ export const pageSEO = {
   },
   about: {
     title: 'À propos de YAPIO - Notre équipe et notre expertise',
-    description: 'Découvrez l\'équipe YAPIO, notre expertise en développement d\'applications mobiles, desktop et web. Notre mission, nos valeurs et notre approche innovante.',
+    description: 'Découvrez l\'équipe YAPIO, notre expertise en développement d\'applications mobiles et web, intégration d\'IA et logiciels sur mesure. Notre mission, nos valeurs et notre approche innovante.',
     keywords: [
       'équipe YAPIO',
       'expertise développement',
@@ -216,7 +221,9 @@ export const pageSEO = {
       'mission',
       'valeurs',
       'développeurs expérimentés',
+      'intelligence artificielle',
       'France',
+      'Israël',
     ],
     canonical: `${baseUrl}/about/`,
     structuredData: [

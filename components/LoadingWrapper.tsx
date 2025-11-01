@@ -22,14 +22,27 @@ function LoadingWrapperComponent({
   preserveSpace = true
 }: LoadingWrapperProps) {
   const [isReady, setIsReady] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { isLoading: languageLoading } = useLanguage();
 
   useEffect(() => {
+    setIsMounted(true);
     if (!languageLoading) {
       const timer = setTimeout(() => setIsReady(true), delay);
       return () => clearTimeout(timer);
     }
   }, [languageLoading, delay]);
+
+  // Éviter les différences d'hydratation en attendant le montage côté client
+  if (!isMounted) {
+    return preserveSpace ? (
+      <div className={`${className} opacity-0`}>
+        {children}
+      </div>
+    ) : (
+      fallback || <div className={`loading-skeleton h-8 w-full ${className}`} />
+    );
+  }
 
   // Simplification des animations - utilise des classes CSS plus performantes
   const animationClass = isReady ? 'opacity-100 transition-opacity duration-500' : 'opacity-0';

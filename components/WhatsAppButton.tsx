@@ -58,8 +58,10 @@ function WhatsAppButtonContent() {
 
 export default function WhatsAppButton() {
   const [mounted, setMounted] = useState(false);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
+    // Attendre que le composant soit monté côté client
     setMounted(true);
     
     // Créer un conteneur pour le portal s'il n'existe pas
@@ -77,6 +79,8 @@ export default function WhatsAppButton() {
       document.body.appendChild(container);
     }
     
+    setPortalContainer(container);
+    
     return () => {
       // Nettoyer si nécessaire
       const portalContainer = document.getElementById('whatsapp-portal');
@@ -86,14 +90,10 @@ export default function WhatsAppButton() {
     };
   }, []);
 
-  if (!mounted) {
+  // Éviter le rendu avant que le composant soit monté côté client
+  if (!mounted || !portalContainer) {
     return null;
   }
 
-  const container = document.getElementById('whatsapp-portal');
-  if (!container) {
-    return null;
-  }
-
-  return createPortal(<WhatsAppButtonContent />, container);
+  return createPortal(<WhatsAppButtonContent />, portalContainer);
 }

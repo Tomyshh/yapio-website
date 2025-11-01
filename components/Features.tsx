@@ -6,7 +6,23 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
 
 export default function Features() {
-  const { t } = useLanguage();
+  const { t, isLoading } = useLanguage();
+
+  // Protection contre les erreurs d'hydratation
+  if (isLoading || !t?.features) {
+    return (
+      <section className="py-20 relative overflow-hidden">
+        <ModernBackground />
+        <div className="max-w-7xl mx-auto section-padding relative z-10">
+          <div className="text-center mb-16">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-700 rounded w-64 mx-auto mb-4"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const features = [
     {

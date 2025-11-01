@@ -37,7 +37,8 @@ function getInitialLanguage(): Language {
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+  // Utiliser français par défaut pour éviter l'hydratation mismatch
+  const [language, setLanguage] = useState<Language>('fr');
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
 
@@ -48,20 +49,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // Récupérer la vraie langue côté client
     const clientLanguage = getInitialLanguage();
     
-    // Si la langue côté client est différente, on fait une transition fluide
-    if (clientLanguage !== language) {
-      // Petite transition pour éviter le flash
-      setTimeout(() => {
-        setLanguage(clientLanguage);
-        setIsLoading(false);
-      }, 50);
-    } else {
+    // Toujours faire une transition, même si c'est la même langue
+    // Cela évite les problèmes d'hydratation
+    setTimeout(() => {
+      setLanguage(clientLanguage);
       setIsLoading(false);
-    }
-
-    // Configuration initiale de la direction
-    document.documentElement.dir = clientLanguage === 'he' ? 'rtl' : 'ltr';
-    document.documentElement.style.transition = 'all 0.3s ease-in-out';
+      
+      // Configuration de la direction après le changement de langue
+      if (typeof document !== 'undefined') {
+        document.documentElement.dir = clientLanguage === 'he' ? 'rtl' : 'ltr';
+        document.documentElement.style.transition = 'all 0.3s ease-in-out';
+      }
+    }, 100); // Délai légèrement plus long pour assurer une hydratation propre
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
@@ -81,13 +80,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [language, isClient]);
 
   // Mémorisation des valeurs pour éviter les re-renders inutiles
+  // Utiliser toujours les traductions françaises côté serveur pour éviter l'hydratation mismatch
   const value: LanguageContextType = useMemo(() => ({
     language,
     setLanguage: handleSetLanguage,
-    t: translations[language],
+    t: isClient ? translations[language] : translations['fr'],
     dir: language === 'he' ? 'rtl' as const : 'ltr' as const,
     isLoading,
-  }), [language, isLoading]);
+  }), [language, isLoading, isClient]);
 
   return (
     <LanguageContext.Provider value={value}>

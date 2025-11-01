@@ -1,4 +1,20 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YAPIO - Services Numériques Sur Mesure
+
+Site web professionnel multilingue pour YAPIO, une entreprise spécialisée dans les services numériques.
+
+## 🌍 Langues Disponibles
+
+Le site est entièrement disponible en trois langues :
+- **Français** (🇫🇷)
+- **English** (🇬🇧)
+- **עברית** (🇮🇱) - Hébreu avec support RTL
+
+## 🚀 Services Offerts
+
+1. **Applications Mobiles** - Développement d'applications natives et cross-platform pour iOS et Android
+2. **Applications Web** - Création de sites web et applications web modernes et performantes
+3. **Intégration IA** - Intégration de l'intelligence artificielle (chatbots, analyse de données, automatisation)
+4. **Logiciels Sur Mesure** - Développement de solutions logicielles personnalisées
 
 ## Getting Started
 

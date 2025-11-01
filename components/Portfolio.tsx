@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ModernBackground from './ModernBackground';
@@ -10,61 +11,97 @@ export default function Portfolio() {
   const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  // Liste des clients - SecurityBear ajouté
+  // Liste des clients - Utilisation des logos depuis /projects/
   const clients = [
     {
+      name: 'Chabbataim',
+      slug: 'chabbataim',
+      logo: '/projects/Chabbataim/logo.png',
+      alt: 'Logo Chabbataim',
+      color: 'from-green-400 to-teal-400',
+      bgColor: 'bg-green-500/10',
+      borderColor: 'border-green-400/20',
+      description: t.clients?.projects?.chabbataim || 'Applications web et mobile pour un restaurant en ligne',
+    },
+    {
+      name: 'Olim Service',
+      slug: 'olim-service',
+      logo: '/projects/Olim Service/logo.png',
+      alt: 'Logo Olim Service',
+      color: 'from-[#0E78FE] to-[#3B8FFF]',
+      bgColor: 'bg-[#0E78FE]/10',
+      borderColor: 'border-[#0E78FE]/20',
+      description: t.clients?.projects?.olimService || 'Services d\'accompagnement et conciergerie administrative',
+    },
+    {
       name: 'Aerilux',
-      logo: '/logo/aerilux_logo.png',
+      slug: 'aerilux',
+      logo: '/projects/Aerilux/logo.png',
       alt: 'Logo Aerilux',
       color: 'from-white to-gray-200',
       bgColor: 'bg-white/10',
       borderColor: 'border-white/20',
-      description: 'Solutions d\'eloignement de pigeons',
+      description: t.clients?.projects?.aerilux || 'Solutions d\'éloignement de pigeons',
     },
     {
       name: 'DTAI',
-      logo: '/logo/dtai_logo.png',
+      slug: 'dtai',
+      logo: '/projects/DTAI/logo.png',
       alt: 'Logo DTAI',
       color: 'from-red-400 to-pink-400',
       bgColor: 'bg-red-500/10',
       borderColor: 'border-red-400/20',
-      description: 'Expertise en intelligence artificielle dans la transcription et traduction',
+      description: t.clients?.projects?.dtai || 'Expertise en intelligence artificielle dans la transcription et traduction',
     },
     {
       name: 'Havrouta',
-      logo: '/logo/havrouta_logo.png',
+      slug: 'havrouta',
+      logo: '/projects/Havrouta/logo.png',
       alt: 'Logo Havrouta',
       color: 'from-[#C2A765] to-[#D4B876]',
       bgColor: 'bg-[#C2A765]/10',
       borderColor: 'border-[#C2A765]/20',
-      description: 'Plateforme éducative moderne et interactive',
+      description: t.clients?.projects?.havrouta || 'Plateforme éducative moderne et interactive',
     },
     {
-      name: 'Olim',
-      logo: '/logo/olim_logo.png',
-      alt: 'Logo Olim',
-      color: 'from-[#0E78FE] to-[#3B8FFF]',
-      bgColor: 'bg-[#0E78FE]/10',
-      borderColor: 'border-[#0E78FE]/20',
-      description: 'Services d\'accompagnement et conciergerie administrative',
-    },
-    {
-      name: 'Taim',
-      logo: '/logo/taim_logo.png',
-      alt: 'Logo Taim',
-      color: 'from-green-400 to-teal-400',
-      bgColor: 'bg-green-500/10',
-      borderColor: 'border-green-400/20',
-      description: 'Applications web et mobile pour un restaurant en ligne',
-    },
-    {
-      name: 'SecurityBear',
-      logo: '/logo/securitybear_logo.png',
-      alt: 'Logo SecurityBear',
+      name: 'Security Bear',
+      slug: 'security-bear',
+      logo: '/projects/Security Bear/logo.png',
+      alt: 'Logo Security Bear',
       color: 'from-orange-400 to-red-500',
       bgColor: 'bg-orange-500/10',
       borderColor: 'border-orange-400/20',
-      description: 'Solutions de surveillance et caméras de sécurité',
+      description: t.clients?.projects?.securityBear || 'Solutions de surveillance et caméras de sécurité',
+    },
+    {
+      name: 'Kolot',
+      slug: 'kolot',
+      logo: '/projects/Kolot/logo.png',
+      alt: 'Logo Kolot',
+      color: 'from-purple-400 to-indigo-400',
+      bgColor: 'bg-purple-500/10',
+      borderColor: 'border-purple-400/20',
+      description: t.clients?.projects?.kolot || 'Site de recherche intelligente d\'enregistrement vocaux',
+    },
+    {
+      name: 'Oz Leisrael',
+      slug: 'oz-leisrael',
+      logo: '/projects/Oz Leisrael/logo.png',
+      alt: 'Logo Oz Leisrael',
+      color: 'from-blue-400 to-cyan-400',
+      bgColor: 'bg-blue-500/10',
+      borderColor: 'border-blue-400/20',
+      description: t.clients?.projects?.ozLeisrael || 'Site de présentation du programme Oz Leisrael',
+    },
+    {
+      name: 'i24 TV channel',
+      slug: 'i24-tv-channel',
+      logo: '/projects/i24 TV channel/logo.png',
+      alt: 'Logo i24 TV channel',
+      color: 'from-red-500 to-blue-600',
+      bgColor: 'bg-red-500/10',
+      borderColor: 'border-red-500/20',
+      description: t.clients?.projects?.i24TvChannel || 'Solution de transcription et traduction en temps réel',
     },
   ];
 
@@ -127,36 +164,46 @@ export default function Portfolio() {
                   className="w-full flex-shrink-0 flex items-center justify-center"
                 >
                   <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
-                    {/* Client logo simple */}
-                    <div className={`relative ${
-                      client.name === 'Havrouta' ? 'w-56 h-56 md:w-64 md:h-64' :
-                      client.name === 'Olim' ? 'w-60 h-60 md:w-72 md:h-72' :
-                      client.name === 'SecurityBear' ? 'w-72 h-72 md:w-80 md:h-80' :
-                      'w-72 h-72 md:w-80 md:h-80'
-                    }`}>
+                    {/* Client logo - Taille uniforme */}
+                    <div className="relative w-64 h-64 md:w-72 md:h-72">
                       <Image
                         src={client.logo}
                         alt={client.alt}
                         fill
                         className="object-contain"
-                        sizes={
-                          client.name === 'Havrouta' ? "(max-width: 768px) 224px, 256px" :
-                          client.name === 'Olim' ? "(max-width: 768px) 240px, 288px" :
-                          "(max-width: 768px) 288px, 320px"
-                        }
+                        sizes="(max-width: 768px) 256px, 288px"
                         priority={index === 0}
                       />
                     </div>
                     
                     {/* Client info modernisée */}
-                    <div className="text-center md:text-left max-w-md">
-                      <h3 className={`text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r ${client.color} bg-clip-text text-transparent animate-pulse-slow`} style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+                    <div className="text-center md:text-left max-w-md space-y-6">
+                      <h3 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${client.color} bg-clip-text text-transparent animate-pulse-slow`} style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
                         {client.name}
                       </h3>
-                      <div className={`w-20 h-1.5 mx-auto md:mx-0 rounded-full bg-gradient-to-r ${client.color} mb-6 transform origin-left group-hover:scale-x-150 transition-transform duration-500`} />
+                      <div className={`w-20 h-1.5 mx-auto md:mx-0 rounded-full bg-gradient-to-r ${client.color} transform origin-left transition-transform duration-500`} />
                       <p className="text-gray-300 text-xl leading-relaxed">
                         {client.description}
                       </p>
+                      
+                      {/* Bouton Voir plus */}
+                      <div className="pt-4">
+                        <Link
+                          href={`/projects/${client.slug}`}
+                          className={`inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r ${client.color} text-black font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300`}
+                        >
+                          <span>{t.clients?.viewMore || 'Voir plus'}</span>
+                          <svg 
+                            className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

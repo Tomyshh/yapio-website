@@ -6,13 +6,30 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
 
 export default function About() {
-  const { t } = useLanguage();
+  const { t, isLoading } = useLanguage();
+  
+  // Vérification de sécurité pour éviter les erreurs pendant l'hydratation
+  if (isLoading || !t?.about?.stats) {
+    return (
+      <section id="about" className="py-20 relative overflow-hidden">
+        <ModernBackground />
+        <div className="max-w-7xl mx-auto section-padding relative z-10">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-700 rounded w-64 mx-auto mb-4"></div>
+              <div className="h-6 bg-gray-700 rounded w-96 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   
   const stats = [
-    { icon: Users, value: '50+', label: 'Clients satisfaits' },
-    { icon: Trophy, value: '100+', label: 'Projets réalisés' },
-    { icon: Clock, value: '5+', label: 'Années d\'expérience' },
-    { icon: Heart, value: '100%', label: 'Passion' },
+    { icon: Users, value: '50+', label: t.about.stats.clients },
+    { icon: Trophy, value: '100+', label: t.about.stats.projects },
+    { icon: Clock, value: '5+', label: t.about.stats.experience },
+    { icon: Heart, value: '100%', label: t.about.stats.passion },
   ];
 
   return (
@@ -53,7 +70,7 @@ export default function About() {
               href="#contact"
               className="inline-flex gradient-primary text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300"
             >
-              Travaillons ensemble
+              {t.about.cta}
             </a>
           </div>
 

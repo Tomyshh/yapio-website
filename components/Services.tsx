@@ -1,12 +1,29 @@
 'use client';
 
 import React from 'react';
-import { Smartphone, Monitor, Globe, Lightbulb } from 'lucide-react';
+import { Smartphone, Globe, Sparkles, Code } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
 
 export default function Services() {
-  const { t } = useLanguage();
+  const { t, isLoading } = useLanguage();
+
+  // Protection contre les erreurs d'hydratation
+  if (isLoading || !t?.services) {
+    return (
+      <section id="services" className="py-20 relative overflow-hidden">
+        <ModernBackground />
+        <div className="max-w-7xl mx-auto section-padding relative z-10">
+          <div className="text-center mb-16">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-700 rounded w-64 mx-auto mb-4"></div>
+              <div className="h-6 bg-gray-700 rounded w-96 mx-auto"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const services = [
     {
@@ -16,19 +33,19 @@ export default function Services() {
       gradient: 'from-blue-500 to-purple-500',
     },
     {
-      icon: Monitor,
+      icon: Globe,
       title: t.services.desktop.title,
       description: t.services.desktop.description,
       gradient: 'from-purple-500 to-pink-500',
     },
     {
-      icon: Globe,
+      icon: Sparkles,
       title: t.services.web.title,
       description: t.services.web.description,
       gradient: 'from-pink-500 to-red-500',
     },
     {
-      icon: Lightbulb,
+      icon: Code,
       title: t.services.consulting.title,
       description: t.services.consulting.description,
       gradient: 'from-yellow-500 to-orange-500',
