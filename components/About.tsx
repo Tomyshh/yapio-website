@@ -26,9 +26,9 @@ export default function About() {
   }
   
   const stats = [
-    { icon: Users, value: '50+', label: t.about.stats.clients },
-    { icon: Trophy, value: '100+', label: t.about.stats.projects },
-    { icon: Clock, value: '5+', label: t.about.stats.experience },
+    { icon: Users, value: '20+', label: t.about.stats.clients },
+    { icon: Trophy, value: '10+', label: t.about.stats.projects },
+    { icon: Clock, value: '8+', label: t.about.stats.experience },
     { icon: Heart, value: '100%', label: t.about.stats.passion },
   ];
 

@@ -153,48 +153,48 @@ export default function Portfolio() {
         {/* Modern Carousel */}
         <div className="relative max-w-7xl mx-auto">
           {/* Carousel track */}
-          <div className="relative h-96 md:h-[28rem] overflow-hidden">
+          <div className="relative overflow-hidden">
             <div 
-              className="flex transition-transform duration-1000 ease-out h-full"
+              className="flex transition-transform duration-1000 ease-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {clients.map((client, index) => (
                 <div
                   key={index}
-                  className="w-full flex-shrink-0 flex items-center justify-center"
+                  className="w-full flex-shrink-0 px-4 py-8"
                 >
-                  <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-20">
+                  <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-20 min-h-[32rem] md:min-h-[28rem]">
                     {/* Client logo - Taille uniforme */}
-                    <div className="relative w-64 h-64 md:w-72 md:h-72">
+                    <div className="relative w-56 h-56 md:w-72 md:h-72 flex-shrink-0">
                       <Image
                         src={client.logo}
                         alt={client.alt}
                         fill
                         className="object-contain"
-                        sizes="(max-width: 768px) 256px, 288px"
+                        sizes="(max-width: 768px) 224px, 288px"
                         priority={index === 0}
                       />
                     </div>
                     
                     {/* Client info modernisée */}
-                    <div className="text-center md:text-left max-w-md space-y-6">
-                      <h3 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${client.color} bg-clip-text text-transparent animate-pulse-slow`} style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+                    <div className="text-center md:text-left max-w-md space-y-4 md:space-y-6">
+                      <h3 className={`text-3xl md:text-5xl font-bold bg-gradient-to-r ${client.color} bg-clip-text text-transparent animate-pulse-slow`} style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
                         {client.name}
                       </h3>
                       <div className={`w-20 h-1.5 mx-auto md:mx-0 rounded-full bg-gradient-to-r ${client.color} transform origin-left transition-transform duration-500`} />
-                      <p className="text-gray-300 text-xl leading-relaxed">
+                      <p className="text-gray-300 text-base md:text-xl leading-relaxed px-2 md:px-0">
                         {client.description}
                       </p>
                       
                       {/* Bouton Voir plus */}
-                      <div className="pt-4">
+                      <div className="pt-2 md:pt-4">
                         <Link
                           href={`/projects/${client.slug}`}
-                          className={`inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r ${client.color} text-black font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300`}
+                          className={`inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full bg-gradient-to-r ${client.color} text-black font-bold text-base md:text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300`}
                         >
-                          <span>{t.clients?.viewMore || 'Voir plus'}</span>
+                          <span>{t.clients?.viewMore || 'Voir'}</span>
                           <svg 
-                            className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
+                            className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform duration-300" 
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor"

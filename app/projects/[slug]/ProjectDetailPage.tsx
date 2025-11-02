@@ -79,7 +79,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           '/projects/Chabbataim/chimage1_mobile.png',
           '/projects/Chabbataim/chimage2-mobile.png'
         ],
-        technologies: ['React Native', 'Node.js', 'MongoDB'],
+        technologies: ['React', 'Node.js', 'Firebase'],
         year: '2024',
         category: 'Application Mobile'
       },
@@ -98,7 +98,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         mobile_images: [
           '/projects/Olim Service/olimapp_mobile.png'
         ],
-        technologies: ['Next.js', 'React', 'Tailwind CSS'],
+        technologies: ['Next.js', 'React', 'Supabase'],
         year: '2024',
         category: 'Site Web & Application'
       },
@@ -114,7 +114,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           '/projects/Aerilux/image1-desktop.png'
         ],
         mobile_images: [],
-        technologies: ['WordPress', 'PHP', 'JavaScript'],
+        technologies: ['React', 'Node.js', 'PostgreSQL'],
         year: '2023',
         category: 'Site Web'
       },
@@ -128,7 +128,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         display_order: 3,
         desktop_images: [],
         mobile_images: [],
-        technologies: ['Python', 'TensorFlow', 'React'],
+        technologies: ['React', 'Node.js', 'Express'],
         year: '2024',
         category: 'Intelligence Artificielle'
       },
@@ -162,7 +162,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         mobile_images: [
           '/projects/Security Bear/app-mobile.png'
         ],
-        technologies: ['React', 'Node.js', 'IoT'],
+        technologies: ['React', 'Node.js', 'Firebase'],
         year: '2023',
         category: 'Application Web & Mobile'
       },
@@ -178,7 +178,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           '/projects/Kolot/image1-desktop.png'
         ],
         mobile_images: [],
-        technologies: ['Vue.js', 'Laravel', 'MySQL'],
+        technologies: ['Laravel', 'PostgreSQL'],
         year: '2024',
         category: 'Plateforme Web'
       },
@@ -212,7 +212,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           '/projects/i24 TV channel/chaine3-desktop.png'
         ],
         mobile_images: [],
-        technologies: ['React', 'Video.js', 'WebRTC'],
+        technologies: ['React', 'Node.js', 'Express'],
         year: '2024',
         category: 'Plateforme Streaming'
       }
@@ -321,15 +321,56 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
       <ModernBackground />
       
       <div className="relative z-10">
-        {/* Header avec retour */}
+        {/* Header avec retour et navigation */}
         <div className="max-w-7xl mx-auto section-padding py-8">
-          <Link 
-            href="/#portfolio"
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
-          >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            {t.projects?.backToPortfolio || 'Retour au portfolio'}
-          </Link>
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            {/* Bouton retour moderne */}
+            <Link 
+              href="/#portfolio"
+              className="inline-flex items-center justify-center w-12 h-12 rounded-full glass border border-white/20 text-white hover:bg-white/10 hover:scale-110 transition-all duration-300 group"
+              aria-label={t.projects?.backToPortfolio || 'Retour au portfolio'}
+            >
+              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            </Link>
+
+            {/* Navigation horizontale avec mini-bulles */}
+            <div className="flex items-center gap-3 overflow-x-auto overflow-y-visible scrollbar-hide flex-1 justify-end py-6">
+              {getProjectsFromConfig()
+                .filter(p => p.id !== project?.id)
+                .map((otherProject) => (
+                  <Link
+                    key={otherProject.id}
+                    href={`/projects/${otherProject.id}`}
+                    className="group relative flex-shrink-0 mb-12 mt-2"
+                    title={otherProject.name}
+                  >
+                    {/* Mini bulle de projet */}
+                    <div className="relative w-14 h-14">
+                      {/* Effet de glow */}
+                      <div className={`absolute -inset-4 rounded-full bg-gradient-to-br ${otherProject.color} opacity-0 group-hover:opacity-30 transition-all duration-300 blur-lg`} />
+                      
+                      {/* Cercle principal */}
+                      <div className={`relative w-full h-full rounded-full glass border-2 ${otherProject.border_color} overflow-hidden backdrop-blur-sm group-hover:scale-110 transition-all duration-300 flex items-center justify-center p-2`}>
+                        <Image
+                          src={`/projects/${otherProject.name}/logo.png`}
+                          alt={`Logo ${otherProject.name}`}
+                          width={40}
+                          height={40}
+                          className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+
+                      {/* Tooltip au survol */}
+                      <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20">
+                        <div className={`px-3 py-1.5 rounded-lg bg-gradient-to-r ${otherProject.color} text-black text-xs font-bold whitespace-nowrap shadow-lg`}>
+                          {otherProject.name}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          </div>
         </div>
 
         {/* Hero Section */}
@@ -500,6 +541,89 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                 <p className="text-xl text-gray-400">{t.projects?.noImages || 'Visuels à venir prochainement'}</p>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Navigation vers d'autres projets */}
+        <div className="max-w-7xl mx-auto section-padding py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-overcame-bold">
+              <span className="gradient-text">{t.projects?.exploreOtherProjects || 'Découvrez nos autres projets'}</span>
+            </h2>
+            <p className="text-gray-400 text-lg">{t.projects?.exploreDescription || 'Explorez notre portfolio et découvrez nos réalisations'}</p>
+          </div>
+
+          <div className="relative">
+            {/* Grid de projets */}
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 md:gap-8">
+              {getProjectsFromConfig()
+                .filter(p => p.id !== project?.id)
+                .map((otherProject) => (
+                  <Link
+                    key={otherProject.id}
+                    href={`/projects/${otherProject.id}`}
+                    className="group relative"
+                  >
+                    {/* Bulle de projet */}
+                    <div className="relative aspect-square">
+                      {/* Cercle de fond avec effet de glow */}
+                      <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${otherProject.color} opacity-20 group-hover:opacity-30 transition-all duration-500 blur-xl group-hover:blur-2xl`} />
+                      
+                      {/* Cercle principal */}
+                      <div className={`relative w-full h-full rounded-full glass border-2 ${otherProject.border_color} overflow-hidden backdrop-blur-sm group-hover:scale-110 transition-all duration-500 flex items-center justify-center p-6`}>
+                        {/* Logo du projet */}
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={`/projects/${otherProject.name}/logo.png`}
+                            alt={`Logo ${otherProject.name}`}
+                            fill
+                            className="object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500"
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                          />
+                        </div>
+                        
+                        {/* Overlay au survol */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${otherProject.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                      </div>
+
+                      {/* Indicateur "Voir le projet" */}
+                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                        <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${otherProject.color} text-black text-xs font-bold whitespace-nowrap shadow-lg`}>
+                          {t.projects?.viewProject || 'Voir le projet'}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Nom du projet */}
+                    <div className="mt-6 text-center">
+                      <h3 className="text-white font-semibold text-base md:text-lg group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
+                        {otherProject.name}
+                      </h3>
+                      <p className="text-gray-500 text-xs md:text-sm mt-1 line-clamp-1">
+                        {otherProject.category}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+
+            {/* Bouton "Voir tous les projets" */}
+            <div className="text-center mt-12">
+              <Link
+                href="/#portfolio"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass border border-white/20 text-white hover:bg-white/10 transition-all duration-300 group"
+              >
+                <span className="text-sm font-semibold">{t.projects?.viewAllProjects || 'Voir tous nos projets'}</span>
+                <svg 
+                  className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
 

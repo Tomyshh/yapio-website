@@ -59,7 +59,7 @@ export const translations = {
     clients: {
       title: 'Nos Clients',
       subtitle: 'Ils nous font confiance pour leurs projets digitaux',
-      viewMore: 'Voir plus',
+      viewMore: 'Voir',
       trustSection: {
         title: 'Une expertise reconnue',
         description: 'Depuis notre création, nous avons eu le privilège d\'accompagner des entreprises de différents secteurs dans leur transformation digitale. Chaque projet est unique et nous nous adaptons aux besoins spécifiques de nos clients pour livrer des solutions sur mesure qui dépassent leurs attentes.',
@@ -90,6 +90,10 @@ export const translations = {
       desktopVersion: 'Version Desktop',
       mobileVersion: 'Version Mobile',
       noImages: 'Visuels à venir prochainement',
+      exploreOtherProjects: 'Découvrez nos autres projets',
+      exploreDescription: 'Explorez notre portfolio et découvrez nos réalisations',
+      viewProject: 'Voir le projet',
+      viewAllProjects: 'Voir tous nos projets',
       interestedTitle: 'Intéressé par un projet similaire ?',
       interestedDescription: 'Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous aider.',
       contactUs: 'Nous contacter',
@@ -356,7 +360,7 @@ export const translations = {
     clients: {
       title: 'Our Clients',
       subtitle: 'They trust us for their digital projects',
-      viewMore: 'View more',
+      viewMore: 'View',
       trustSection: {
         title: 'Recognized expertise',
         description: 'Since our inception, we have had the privilege of supporting companies from different sectors in their digital transformation. Each project is unique and we adapt to the specific needs of our clients to deliver tailor-made solutions that exceed their expectations.',
@@ -387,6 +391,10 @@ export const translations = {
       desktopVersion: 'Desktop Version',
       mobileVersion: 'Mobile Version',
       noImages: 'Visuals coming soon',
+      exploreOtherProjects: 'Explore our other projects',
+      exploreDescription: 'Explore our portfolio and discover our work',
+      viewProject: 'View project',
+      viewAllProjects: 'View all our projects',
       interestedTitle: 'Interested in a similar project?',
       interestedDescription: 'Contact us to discuss your project and discover how we can help you.',
       contactUs: 'Contact us',
@@ -653,7 +661,7 @@ export const translations = {
     clients: {
       title: 'הלקוחות שלנו',
       subtitle: 'הם בוטחים בנו עבור הפרויקטים הדיגיטליים שלהם',
-      viewMore: 'ראה עוד',
+      viewMore: 'ראה',
       trustSection: {
         title: 'מומחיות מוכרת',
         description: 'מאז הקמתנו, זכינו ללוות חברות מתחומים שונים בטרנספורמציה הדיגיטלית שלהם. כל פרויקט הוא ייחודי ואנחנו מתאימים לצרכים הספציפיים של הלקוחות שלנו כדי לספק פתרונות מותאמים אישית שעולים על הציפיות שלהם.',
@@ -684,6 +692,10 @@ export const translations = {
       desktopVersion: 'גרסת דסקטופ',
       mobileVersion: 'גרסת מובייל',
       noImages: 'תמונות יגיעו בקרוב',
+      exploreOtherProjects: 'גלה את הפרויקטים האחרים שלנו',
+      exploreDescription: 'חקור את תיק העבודות שלנו וגלה את ההישגים שלנו',
+      viewProject: 'צפה בפרויקט',
+      viewAllProjects: 'צפה בכל הפרויקטים שלנו',
       interestedTitle: 'מעוניין בפרויקט דומה?',
       interestedDescription: 'צור איתנו קשר כדי לדון על הפרויקט שלך ולגלות כיצד נוכל לעזור לך.',
       contactUs: 'צור קשר',

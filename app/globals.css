@@ -577,3 +577,13 @@ body {
     width: 100%;
   }
 }
+
+/* Cacher la barre de défilement mais garder le scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE et Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari et Opera */
+}
