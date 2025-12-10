@@ -5,7 +5,7 @@ export const translations = {
     nav: {
       home: 'Accueil',
       services: 'Services',
-      portfolio: 'Clients',
+      portfolio: 'Projets',
       about: 'À propos',
       contact: 'Contact',
       getQuote: 'Demander un devis',
@@ -57,8 +57,8 @@ export const translations = {
       },
     },
     clients: {
-      title: 'Nos Clients',
-      subtitle: 'Ils nous font confiance pour leurs projets digitaux',
+      title: 'Nos Projets',
+      subtitle: 'Découvrez nos réalisations et projets digitaux',
       viewMore: 'Voir',
       trustSection: {
         title: 'Une expertise reconnue',
@@ -306,7 +306,7 @@ export const translations = {
     nav: {
       home: 'Home',
       services: 'Services',
-      portfolio: 'Clients',
+      portfolio: 'Projects',
       about: 'About',
       contact: 'Contact',
       getQuote: 'Get a Quote',
@@ -358,8 +358,8 @@ export const translations = {
       },
     },
     clients: {
-      title: 'Our Clients',
-      subtitle: 'They trust us for their digital projects',
+      title: 'Our Projects',
+      subtitle: 'Discover our digital achievements and projects',
       viewMore: 'View',
       trustSection: {
         title: 'Recognized expertise',
@@ -607,7 +607,7 @@ export const translations = {
     nav: {
       home: 'בית',
       services: 'שירותים',
-      portfolio: 'לקוחות',
+      portfolio: 'פרויקטים',
       about: 'אודות',
       contact: 'צור קשר',
       getQuote: 'קבל הצעת מחיר',
@@ -659,8 +659,8 @@ export const translations = {
       },
     },
     clients: {
-      title: 'הלקוחות שלנו',
-      subtitle: 'הם בוטחים בנו עבור הפרויקטים הדיגיטליים שלהם',
+      title: 'הפרויקטים שלנו',
+      subtitle: 'גלה את ההישגים והפרויקטים הדיגיטליים שלנו',
       viewMore: 'ראה',
       trustSection: {
         title: 'מומחיות מוכרת',

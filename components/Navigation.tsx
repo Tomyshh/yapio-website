@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/lib/translations';
 import { ResponsiveLogo } from './Logo';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LoadingWrapper } from './LoadingWrapper';
-import ClientOnly from './ClientOnly';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,14 +18,21 @@ export default function Navigation() {
 
   // Déterminer si nous sommes sur la page d'accueil
   const isHomePage = pathname === '/';
+  const isProjectsPage = pathname === '/projects' || pathname.startsWith('/projects/');
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+    handleScroll(); // Check initial state
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Fermer le menu mobile lors du changement de page
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const languages: { code: Language; name: string; flag: string }[] = [
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
@@ -34,203 +40,274 @@ export default function Navigation() {
     { code: 'he', name: 'עברית', flag: '🇮🇱' },
   ];
 
-  // Définir navItems - maintenant sécurisé dans ClientOnly
+  // Navigation items - maintenant avec des pages dédiées
   const navItems = [
     { 
-      href: isHomePage ? '#home' : '/#home', 
+      href: '/', 
       label: t.nav.home,
-      isHome: true
+      isActive: isHomePage
     },
     { 
       href: isHomePage ? '#services' : '/#services', 
       label: t.nav.services,
-      isHome: false
+      isActive: false
     },
     { 
-      href: isHomePage ? '#portfolio' : '/#portfolio', 
+      href: '/projects', 
       label: t.nav.portfolio,
-      isHome: false
+      isActive: isProjectsPage
     },
     { 
       href: isHomePage ? '#about' : '/#about', 
       label: t.nav.about,
-      isHome: false
+      isActive: false
     },
     { 
       href: isHomePage ? '#contact' : '/#contact', 
       label: t.nav.contact,
-      isHome: false
+      isActive: false
     },
   ];
 
   return (
-    <ClientOnly 
-      fallback={
-        <nav className="fixed top-0 w-full z-50 smooth-transition bg-transparent">
-          <div className="max-w-7xl mx-auto section-padding">
-            <div className="flex items-center justify-between h-16">
-              <div className="flex items-center">
-                <Link href="/" className="flex items-center hover:opacity-80 smooth-transition">
-                  <ResponsiveLogo />
-                </Link>
-              </div>
-              <div className="hidden md:flex items-center space-x-8">
-                <div className="w-20 h-6 bg-gray-700 animate-pulse rounded"></div>
-                <div className="w-20 h-6 bg-gray-700 animate-pulse rounded"></div>
-                <div className="w-20 h-6 bg-gray-700 animate-pulse rounded"></div>
-                <div className="w-20 h-6 bg-gray-700 animate-pulse rounded"></div>
-                <div className="w-20 h-6 bg-gray-700 animate-pulse rounded"></div>
-              </div>
-              <div className="md:hidden">
-                <Menu size={24} className="text-gray-300" />
-              </div>
-            </div>
-          </div>
-        </nav>
-      }
-    >
-      <nav className={`fixed top-0 w-full z-50 smooth-transition ${
-        isScrolled ? 'backdrop-blur-lg bg-black/30 shadow-lg' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto section-padding">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <Link href={isHomePage ? "#home" : "/"} className="flex items-center hover:opacity-80 smooth-transition">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      isScrolled 
+        ? 'py-2 backdrop-blur-xl bg-black/70 shadow-lg shadow-black/20 border-b border-white/5' 
+        : 'py-4 bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <motion.div 
+            className="flex items-center"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link href="/" className="flex items-center group">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <ResponsiveLogo />
-              </Link>
-            </div>
+              </motion.div>
+            </Link>
+          </motion.div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center">
+            {/* Nav Links */}
+            <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full px-2 py-1 border border-white/10">
               {navItems.map((item, index) => (
-                <LoadingWrapper 
+                <motion.div
                   key={item.href}
-                  delay={index * 50}
-                  animationType="fade-blur"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
                 >
                   <Link
                     href={item.href}
-                    className="text-gray-300 hover:text-primary smooth-transition"
+                    className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                      item.isActive
+                        ? 'text-white'
+                        : 'text-gray-400 hover:text-white'
+                    }`}
                   >
-                    {item.label}
+                    {item.isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary rounded-full"
+                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                    <span className="relative z-10">{item.label}</span>
                   </Link>
-                </LoadingWrapper>
+                </motion.div>
               ))}
-              
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center ml-4 gap-2">
               {/* Language Selector */}
-              <LoadingWrapper 
-                delay={250}
-                animationType="scale-blur"
-              >
-                <div className="relative">
-                  <button
-                    onClick={() => setShowLangMenu(!showLangMenu)}
-                    className="flex items-center space-x-2 text-gray-300 hover:text-primary smooth-transition"
-                  >
-                    <Globe size={20} />
-                    <span>{languages.find(l => l.code === language)?.flag}</span>
-                  </button>
-                  
+              <div className="relative">
+                <motion.button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Globe size={16} />
+                  <span className="text-lg">{languages.find(l => l.code === language)?.flag}</span>
+                  <ChevronDown size={14} className={`transition-transform duration-300 ${showLangMenu ? 'rotate-180' : ''}`} />
+                </motion.button>
+                
+                <AnimatePresence>
                   {showLangMenu && (
-                    <div className="absolute top-full mt-2 right-0 backdrop-blur-lg bg-black/40 border border-white/5 rounded-lg shadow-xl py-2 min-w-[150px] animate-scale-in-blur">
-                      {languages.map((lang) => (
-                        <button
+                    <motion.div 
+                      className="absolute top-full mt-2 right-0 backdrop-blur-xl bg-black/80 border border-white/10 rounded-xl shadow-2xl py-2 min-w-[140px] overflow-hidden"
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {languages.map((lang, index) => (
+                        <motion.button
                           key={lang.code}
                           onClick={() => {
                             setLanguage(lang.code);
                             setShowLangMenu(false);
                           }}
-                          className={`w-full px-4 py-2 text-left hover:bg-dark-300 smooth-transition flex items-center space-x-2 ${
-                            language === lang.code ? 'text-primary' : 'text-gray-300'
+                          className={`w-full px-4 py-2.5 text-left hover:bg-white/10 transition-all flex items-center gap-3 ${
+                            language === lang.code ? 'text-primary bg-primary/10' : 'text-gray-300'
                           }`}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
                         >
-                          <span>{lang.flag}</span>
-                          <span>{lang.name}</span>
-                        </button>
+                          <span className="text-lg">{lang.flag}</span>
+                          <span className="text-sm font-medium">{lang.name}</span>
+                        </motion.button>
                       ))}
-                    </div>
+                    </motion.div>
                   )}
-                </div>
-              </LoadingWrapper>
+                </AnimatePresence>
+              </div>
 
-              <LoadingWrapper 
-                delay={300}
-                animationType="scale-blur"
-                preserveSpace={true}
+              {/* CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
               >
                 <Link
                   href={isHomePage ? "#contact" : "/#contact"}
-                  className="gradient-primary text-white px-6 py-2 rounded-full hover:shadow-lg hover:shadow-primary/25 smooth-transition"
+                  className="relative overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-blue-600 text-white text-sm font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 group"
                 >
-                  {t.nav.getQuote}
+                  <span className="relative z-10">{t.nav.getQuote}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>
-              </LoadingWrapper>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-300 hover:text-white"
-              >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
+              </motion.div>
             </div>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile menu button */}
+          <motion.button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all"
+            whileTap={{ scale: 0.9 }}
+          >
+            <AnimatePresence mode="wait">
+              {isOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X size={20} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu size={20} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </div>
+
+        {/* Mobile Navigation */}
+        <AnimatePresence>
           {isOpen && (
-            <div className="md:hidden backdrop-blur-lg bg-black/30 border border-white/5 mt-2 rounded-lg animate-scale-in-blur">
-              <div className="px-2 pt-2 pb-3 space-y-1">
+            <motion.div
+              className="md:hidden mt-4 overflow-hidden"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="backdrop-blur-xl bg-black/70 border border-white/10 rounded-2xl p-4 space-y-2">
                 {navItems.map((item, index) => (
-                  <div key={item.href} className="animate-fade-in-blur" style={{ animationDelay: `${index * 80}ms` }}>
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
                     <Link
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className="block px-3 py-2 text-gray-300 hover:text-primary smooth-transition rounded-md hover:bg-white/5"
+                      className={`block px-4 py-3 rounded-xl transition-all duration-300 ${
+                        item.isActive
+                          ? 'bg-gradient-to-r from-primary/20 to-blue-600/20 text-white border border-primary/30'
+                          : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      }`}
                     >
                       {item.label}
                     </Link>
-                  </div>
+                  </motion.div>
                 ))}
                 
-                <div className="px-3 py-2 animate-fade-in-blur" style={{ animationDelay: '400ms' }}>
-                  <div className="flex space-x-2">
-                    {languages.map((lang, index) => (
+                {/* Mobile Language Selector */}
+                <motion.div 
+                  className="pt-2 border-t border-white/10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  <div className="flex gap-2 px-2">
+                    {languages.map((lang) => (
                       <button
                         key={lang.code}
                         onClick={() => {
                           setLanguage(lang.code);
-                          setIsOpen(false);
                         }}
-                        className={`px-3 py-1 rounded smooth-transition animate-scale-in-blur ${
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl transition-all ${
                           language === lang.code
                             ? 'bg-primary text-white'
-                            : 'bg-dark-300 text-gray-300 hover:bg-dark-200'
+                            : 'bg-white/5 text-gray-300 hover:bg-white/10'
                         }`}
-                        style={{ animationDelay: `${450 + index * 50}ms` }}
                       >
-                        {lang.flag} {lang.name}
+                        <span>{lang.flag}</span>
+                        <span className="text-sm">{lang.name}</span>
                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
                 
-                <div className="animate-scale-in-blur" style={{ animationDelay: '600ms' }}>
+                {/* Mobile CTA */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
                   <Link
                     href={isHomePage ? "#contact" : "/#contact"}
                     onClick={() => setIsOpen(false)}
-                    className="block mx-3 text-center gradient-primary text-white px-6 py-2 rounded-full smooth-transition hover:shadow-lg hover:shadow-primary/25"
+                    className="block text-center bg-gradient-to-r from-primary to-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
                   >
                     {t.nav.getQuote}
                   </Link>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           )}
-        </div>
-      </nav>
-    </ClientOnly>
+        </AnimatePresence>
+      </div>
+
+      {/* Overlay for closing dropdowns */}
+      {showLangMenu && (
+        <div 
+          className="fixed inset-0 z-[-1]" 
+          onClick={() => setShowLangMenu(false)}
+        />
+      )}
+    </nav>
   );
 }

@@ -6,6 +6,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import SEOOptimizer from "@/components/SEOOptimizer";
 import { SEODebuggerTrigger } from "@/components/SEODebugger";
 import { generateMetadata as generateSEOMetadata, pageSEO, generateStructuredData } from "@/lib/seo";
+import ClientWrapper from "@/components/ClientWrapper";
 
 export const metadata: Metadata = generateSEOMetadata(pageSEO.home);
 
@@ -14,8 +15,11 @@ function LoadingFallback() {
   return (
     <div className="min-h-screen bg-dark flex items-center justify-center">
       <div className="flex flex-col items-center space-y-4">
-        <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-        <div className="text-gray-400 animate-pulse">Chargement...</div>
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-primary/20 rounded-full"></div>
+          <div className="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-primary rounded-full animate-spin"></div>
+        </div>
+        <div className="text-gray-400 animate-pulse text-lg">Chargement...</div>
       </div>
     </div>
   );
@@ -109,11 +113,13 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body suppressHydrationWarning className="transition-all duration-300">
+      <body suppressHydrationWarning className="transition-all duration-300 antialiased">
         <SEOOptimizer>
           <Suspense fallback={<LoadingFallback />}>
             <LanguageProvider>
-              {children}
+              <ClientWrapper>
+                {children}
+              </ClientWrapper>
             </LanguageProvider>
           </Suspense>
           <WhatsAppButton />
