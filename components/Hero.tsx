@@ -62,19 +62,6 @@ function ClientOnlyDecorations() {
         ))}
       </div>
 
-      {/* Lignes décoratives animées */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-        <motion.div
-          className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary to-transparent"
-          animate={{ x: [-1000, 1000] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"
-          animate={{ x: [1000, -1000] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-        />
-      </div>
     </>
   );
 }
