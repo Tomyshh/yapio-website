@@ -18,9 +18,10 @@ function LoadingWrapperComponent({
   className = '', 
   delay = 0,
   fallback,
-  animationType = 'fade',
+  animationType: _animationType = 'fade',
   preserveSpace = true
 }: LoadingWrapperProps) {
+  void _animationType;
   const [isReady, setIsReady] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const { isLoading: languageLoading } = useLanguage();

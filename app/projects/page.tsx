@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ArrowUpRight, Sparkles, Monitor, Smartphone, X, ZoomIn, Filter, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Monitor, Smartphone, X, ZoomIn, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';

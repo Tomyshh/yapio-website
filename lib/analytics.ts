@@ -19,6 +19,13 @@ export const analyticsConfig = {
   },
 };
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
+  }
+}
+
 // Initialiser Google Analytics 4
 export const initGA = () => {
   if (typeof window === 'undefined' || !analyticsConfig.googleAnalytics.measurementId) {
@@ -50,9 +57,11 @@ export const initGA = () => {
   document.head.appendChild(script2);
 
   // Rendre gtag disponible globalement
-  (window as any).gtag = (window as any).gtag || function() {
-    ((window as any).dataLayer = (window as any).dataLayer || []).push(arguments);
-  };
+  window.gtag =
+    window.gtag ||
+    ((...args: unknown[]) => {
+      (window.dataLayer = window.dataLayer || []).push(args);
+    });
 };
 
 // Initialiser Google Tag Manager
@@ -119,17 +128,17 @@ export const initHotjar = () => {
 };
 
 // Événements personnalisés pour le tracking
-export const trackEvent = (eventName: string, parameters: Record<string, any> = {}) => {
+export const trackEvent = (eventName: string, parameters: Record<string, unknown> = {}) => {
   if (typeof window === 'undefined') return;
 
   // Google Analytics 4
-  if ((window as any).gtag) {
-    (window as any).gtag('event', eventName, parameters);
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', eventName, parameters);
   }
 
   // Google Tag Manager
-  if ((window as any).dataLayer) {
-    (window as any).dataLayer.push({
+  if (Array.isArray(window.dataLayer)) {
+    window.dataLayer.push({
       event: eventName,
       ...parameters,
     });
@@ -137,7 +146,14 @@ export const trackEvent = (eventName: string, parameters: Record<string, any> = 
 };
 
 // Tracking des Core Web Vitals
-export const trackWebVitals = (metric: any) => {
+export type WebVitalsMetric = {
+  name: string;
+  value: number;
+  id?: string;
+  delta?: number;
+};
+
+export const trackWebVitals = (metric: WebVitalsMetric) => {
   trackEvent(metric.name, {
     event_category: 'Web Vitals',
     value: Math.round(metric.value),
@@ -148,7 +164,7 @@ export const trackWebVitals = (metric: any) => {
 };
 
 // Tracking des erreurs
-export const trackError = (error: Error, errorInfo?: any) => {
+export const trackError = (error: Error, errorInfo?: unknown) => {
   trackEvent('exception', {
     description: error.message,
     fatal: false,

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ArrowLeft, Monitor, Smartphone, ExternalLink, Calendar, Tag, X, ZoomIn, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ModernBackground from '@/components/ModernBackground';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -51,19 +51,9 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [lightboxImage, setLightboxImage] = useState<{ url: string; alt: string } | null>(null);
 
-  useEffect(() => {
-    if (!t?.clients?.projects || languageLoading) return;
+  const projectsFromConfig = useMemo<Project[]>(() => {
+    if (!t?.clients?.projects) return [];
 
-    const projects = getProjectsFromConfig();
-    const foundProject = projects.find(p => p.id.toLowerCase() === slug);
-
-    if (foundProject) {
-      setProject(foundProject);
-    }
-    setIsLoading(false);
-  }, [slug, t?.clients?.projects, languageLoading]);
-
-  function getProjectsFromConfig(): Project[] {
     const projectsConfig = getLocalizedProjects(t).map((p) => ({
       id: p.slug,
       name: p.name,
@@ -80,7 +70,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
       logo_url: p.logo,
     }));
 
-    return projectsConfig.map((config, index) => {
+    return projectsConfig.map((config) => {
       const desktopImages = config.desktop_images.map((url, imgIndex) => ({
         id: `${config.name}-desktop-${imgIndex}`,
         project_id: config.name,
@@ -121,7 +111,18 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         category: config.category,
       };
     });
-  }
+  }, [t]);
+
+  useEffect(() => {
+    if (!t?.clients?.projects || languageLoading) return;
+
+    const foundProject = projectsFromConfig.find((p) => p.id.toLowerCase() === slug);
+
+    if (foundProject) {
+      setProject(foundProject);
+    }
+    setIsLoading(false);
+  }, [slug, t?.clients?.projects, languageLoading, projectsFromConfig]);
 
   const openLightbox = (url: string, alt: string) => {
     setLightboxImage({ url, alt });
@@ -207,7 +208,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
 
             {/* Navigation horizontale avec mini-bulles */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-1 justify-end py-2">
-              {getProjectsFromConfig()
+              {projectsFromConfig
                 .filter(p => p.id !== project?.id)
                 .map((otherProject, index) => (
                   <motion.div
@@ -501,7 +502,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           <div className="relative">
             {/* Grid de projets */}
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6 md:gap-8">
-              {getProjectsFromConfig()
+              {projectsFromConfig
                 .filter(p => p.id !== project?.id)
                 .map((otherProject) => (
                   <Link

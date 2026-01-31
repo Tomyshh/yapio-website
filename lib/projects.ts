@@ -251,10 +251,17 @@ export const PROJECTS: ProjectConfig[] = [
 
 export type LocalizedProject = ProjectConfig & { description: string };
 
-export function getLocalizedProjects(t: any): LocalizedProject[] {
+type TranslationsLike = {
+  clients?: {
+    projects?: Record<string, string>;
+  };
+};
+
+export function getLocalizedProjects(t: unknown): LocalizedProject[] {
+  const projectsTranslations = (t as TranslationsLike | null | undefined)?.clients?.projects;
   return PROJECTS.map((p) => ({
     ...p,
-    description: (t?.clients?.projects && (t.clients.projects as any)[p.descriptionKey]) || p.fallbackDescription,
+    description: (projectsTranslations && projectsTranslations[p.descriptionKey]) || p.fallbackDescription,
   }));
 }
 

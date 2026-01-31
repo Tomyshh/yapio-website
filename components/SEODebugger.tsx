@@ -9,10 +9,12 @@ interface SEOReport {
   recommendations: string[];
 }
 
+type SEOMetrics = ReturnType<(typeof seoAnalytics)['analyzePage']>;
+
 export default function SEODebugger() {
   const [isVisible, setIsVisible] = useState(false);
   const [report, setReport] = useState<SEOReport | null>(null);
-  const [metrics, setMetrics] = useState<any>(null);
+  const [metrics, setMetrics] = useState<SEOMetrics | null>(null);
 
   useEffect(() => {
     // Afficher uniquement en mode développement
@@ -36,7 +38,7 @@ export default function SEODebugger() {
     // Raccourci clavier pour afficher/masquer
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key === 'S') {
-        setIsVisible(!isVisible);
+        setIsVisible((v) => !v);
       }
     };
 
@@ -46,7 +48,7 @@ export default function SEODebugger() {
       clearInterval(interval);
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [isVisible]);
+  }, []);
 
   if (process.env.NODE_ENV !== 'development' || !isVisible) {
     return null;

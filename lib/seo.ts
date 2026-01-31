@@ -8,7 +8,7 @@ export interface SEOConfig {
   ogImage?: string
   ogType?: 'website' | 'article' | 'profile'
   noIndex?: boolean
-  structuredData?: any
+  structuredData?: unknown
 }
 
 const baseUrl = 'https://yapio.io'
@@ -82,7 +82,18 @@ export function generateMetadata({
   return metadata
 }
 
-export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPage' | 'Article', data: any) {
+type StructuredDataInput = Record<string, unknown> & {
+  title?: string
+  description?: string
+  url?: string
+  datePublished?: string
+  dateModified?: string
+}
+
+export function generateStructuredData(
+  type: 'Organization' | 'WebSite' | 'WebPage' | 'Article',
+  data: StructuredDataInput
+) {
   const baseStructuredData = {
     '@context': 'https://schema.org',
     '@type': type,
@@ -137,9 +148,9 @@ export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPa
     case 'WebPage':
       return {
         ...baseStructuredData,
-        name: data.title,
-        description: data.description,
-        url: data.url || baseUrl,
+        name: data.title ?? '',
+        description: data.description ?? '',
+        url: data.url ?? baseUrl,
         isPartOf: {
           '@type': 'WebSite',
           name: 'YAPIO',
@@ -155,8 +166,8 @@ export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPa
     case 'Article':
       return {
         ...baseStructuredData,
-        headline: data.title,
-        description: data.description,
+        headline: data.title ?? '',
+        description: data.description ?? '',
         author: {
           '@type': 'Organization',
           name: 'YAPIO',
@@ -167,8 +178,8 @@ export function generateStructuredData(type: 'Organization' | 'WebSite' | 'WebPa
           name: 'YAPIO',
           logo: `${baseUrl}/branding/fulllogo_nobuffer.png`,
         },
-        datePublished: data.datePublished || new Date().toISOString(),
-        dateModified: data.dateModified || new Date().toISOString(),
+        datePublished: data.datePublished ?? new Date().toISOString(),
+        dateModified: data.dateModified ?? new Date().toISOString(),
         ...data,
       }
 

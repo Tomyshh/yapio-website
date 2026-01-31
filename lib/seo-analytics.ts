@@ -121,8 +121,8 @@ class SEOAnalytics {
   // Envoyer les métriques (remplacez par votre service d'analytics)
   private sendMetrics(metricName: string, value: number): void {
     // Exemple d'envoi vers Google Analytics 4
-    if (typeof window !== 'undefined' && 'gtag' in window && typeof (window as any).gtag === 'function') {
-      (window as any).gtag('event', metricName, {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', metricName, {
         event_category: 'Web Vitals',
         value: Math.round(value),
         non_interaction: true,

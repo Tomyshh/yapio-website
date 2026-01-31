@@ -31,7 +31,6 @@ function LogoComponent({
   // Sélection du fichier de logo approprié
   const getLogoSrc = () => {
     const basePrefix = theme === 'grayscale' ? 'grayscale' : 'fulllogo';
-    const suffix = theme === 'white' ? '_transparent' : '';
     const nobuffer = '_nobuffer';
     
     switch (variant) {

@@ -4,7 +4,7 @@
  */
 
 // Debounce optimisé pour les événements de scroll
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -20,7 +20,7 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 // Throttle optimisé pour les animations
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
