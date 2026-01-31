@@ -13,6 +13,7 @@
   pointer-events: auto !important;
 }
 
+/* Root variables */
 :root {
   --background: #0A0A0A;
   --foreground: #FFFFFF;
@@ -21,6 +22,13 @@
   --transition-slow: 500ms ease-out;
   --primary: #7737E9;
   --primary-dark: #5E1FD4;
+
+  /* Surfaces & borders (palette pro, sobre) */
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-2: rgba(255, 255, 255, 0.055);
+  --border: rgba(255, 255, 255, 0.08);
+  --muted: rgba(255, 255, 255, 0.78);
+  --muted-2: rgba(255, 255, 255, 0.62);
 }
 
 * {
@@ -35,7 +43,9 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
-  transform: translateZ(0);
+  /* IMPORTANT:
+     Ne pas appliquer de transform sur html/body.
+     Sinon `position: fixed` (ex: navbar) peut ne plus être fixé au viewport. */
   will-change: auto;
 }
 
@@ -69,7 +79,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   will-change: auto;
-  contain: layout style paint;
+  /* `contain` peut aussi perturber des éléments fixed dans certains cas */
 }
 
 /* Custom scrollbar */
@@ -284,6 +294,52 @@ body {
   
   .glass-strong {
     @apply backdrop-blur-xl bg-black/40 border border-white/10;
+  }
+
+  /* Premium surfaces */
+  .surface {
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .surface-2 {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+
+  .hairline {
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent);
+  }
+
+  .text-muted {
+    color: var(--muted);
+  }
+
+  .text-muted-2 {
+    color: var(--muted-2);
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium;
+    background: rgba(119, 55, 233, 0.10);
+    border: 1px solid rgba(119, 55, 233, 0.22);
+  }
+
+  /* Subtle grid + noise overlays (background helpers) */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center;
+  }
+
+  .bg-noise {
+    background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 0);
+    background-size: 3px 3px;
+    background-position: 0 0;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
   }
   
   /* Section padding */

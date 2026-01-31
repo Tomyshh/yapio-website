@@ -3,132 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ArrowUpRight, Sparkles, Monitor, Smartphone, X, ZoomIn, Filter } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Monitor, Smartphone, X, ZoomIn, Filter, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ModernBackground from '@/components/ModernBackground';
 import AnimatedSection from '@/components/AnimatedSection';
 import { TiltCard } from '@/components/MagneticButton';
-
-// Configuration des projets
-const projectsConfig = [
-  {
-    id: 'chabbataim',
-    name: 'Chabbataim',
-    color: 'from-green-400 to-teal-400',
-    bgColor: 'bg-green-500/10',
-    borderColor: 'border-green-400/20',
-    category: 'mobile',
-    year: '2024',
-    images: {
-      desktop: [],
-      mobile: ['/projects/Chabbataim/chimage1_mobile.png', '/projects/Chabbataim/chimage2-mobile.png']
-    }
-  },
-  {
-    id: 'olim-service',
-    name: 'Olim Service',
-    color: 'from-[#0E78FE] to-[#3B8FFF]',
-    bgColor: 'bg-[#0E78FE]/10',
-    borderColor: 'border-[#0E78FE]/20',
-    category: 'web',
-    year: '2024',
-    images: {
-      desktop: ['/projects/Olim Service/image1_desktop.png', '/projects/Olim Service/image2_desktop.png'],
-      mobile: ['/projects/Olim Service/olimapp_mobile.png']
-    }
-  },
-  {
-    id: 'aerilux',
-    name: 'Aerilux',
-    color: 'from-white to-gray-200',
-    bgColor: 'bg-white/10',
-    borderColor: 'border-white/20',
-    category: 'web',
-    year: '2023',
-    images: {
-      desktop: ['/projects/Aerilux/image1-desktop.png'],
-      mobile: []
-    }
-  },
-  {
-    id: 'dtai',
-    name: 'DTAI',
-    color: 'from-red-400 to-pink-400',
-    bgColor: 'bg-red-500/10',
-    borderColor: 'border-red-400/20',
-    category: 'ia',
-    year: '2024',
-    images: { desktop: [], mobile: [] }
-  },
-  {
-    id: 'havrouta',
-    name: 'Havrouta',
-    color: 'from-[#C2A765] to-[#D4B876]',
-    bgColor: 'bg-[#C2A765]/10',
-    borderColor: 'border-[#C2A765]/20',
-    category: 'mobile',
-    year: '2024',
-    images: {
-      desktop: [],
-      mobile: ['/projects/Havrouta/happ-mobile.png']
-    }
-  },
-  {
-    id: 'security-bear',
-    name: 'Security Bear',
-    color: 'from-orange-400 to-red-500',
-    bgColor: 'bg-orange-500/10',
-    borderColor: 'border-orange-400/20',
-    category: 'web',
-    year: '2023',
-    images: {
-      desktop: ['/projects/Security Bear/image1-desktop.png'],
-      mobile: ['/projects/Security Bear/app-mobile.png']
-    }
-  },
-  {
-    id: 'kolot',
-    name: 'Kolot',
-    color: 'from-purple-400 to-indigo-400',
-    bgColor: 'bg-purple-500/10',
-    borderColor: 'border-purple-400/20',
-    category: 'web',
-    year: '2024',
-    images: {
-      desktop: ['/projects/Kolot/image1-desktop.png'],
-      mobile: []
-    }
-  },
-  {
-    id: 'oz-leisrael',
-    name: 'Oz Leisrael',
-    color: 'from-blue-400 to-cyan-400',
-    bgColor: 'bg-blue-500/10',
-    borderColor: 'border-blue-400/20',
-    category: 'web',
-    year: '2023',
-    images: {
-      desktop: ['/projects/Oz Leisrael/image1_desktop.png'],
-      mobile: []
-    }
-  },
-  {
-    id: 'i24-tv-channel',
-    name: 'i24 TV channel',
-    color: 'from-red-500 to-blue-600',
-    bgColor: 'bg-red-500/10',
-    borderColor: 'border-red-500/20',
-    category: 'ia',
-    year: '2024',
-    images: {
-      desktop: ['/projects/i24 TV channel/chaine-desktop.png', '/projects/i24 TV channel/chaine2-desktop.png'],
-      mobile: []
-    }
-  },
-];
+import { PROJECTS } from '@/lib/projects';
 
 const categories = [
   { id: 'all', label: 'Tous', icon: Sparkles },
@@ -139,8 +23,23 @@ const categories = [
 
 export default function ProjectsPage() {
   const { t } = useLanguage();
+  const router = useRouter();
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxImage, setLightboxImage] = useState<{ url: string; alt: string; type: 'desktop' | 'mobile' } | null>(null);
+
+  const projectsConfig = PROJECTS.map((p) => ({
+    id: p.slug,
+    name: p.name,
+    color: p.color,
+    bgColor: p.bgColor,
+    borderColor: p.borderColor,
+    category: p.category,
+    year: p.year,
+    images: p.images,
+    logo: p.logo,
+    alt: p.alt,
+    externalUrl: p.externalUrl,
+  }));
 
   const filteredProjects = activeFilter === 'all' 
     ? projectsConfig 
@@ -227,7 +126,6 @@ export default function ProjectsPage() {
                   ...project.images.desktop.map(url => ({ url, type: 'desktop' as const })),
                   ...project.images.mobile.map(url => ({ url, type: 'mobile' as const }))
                 ];
-                const previewImage = allImages[0];
 
                 return (
                   <motion.div
@@ -242,31 +140,33 @@ export default function ProjectsPage() {
                       <div className={`
                         h-full rounded-2xl overflow-hidden
                         bg-gradient-to-br from-black/40 via-black/20 to-transparent
-                        backdrop-blur-xl border ${project.borderColor}
+                        backdrop-blur-xl border border-white/10 hover:border-white/15
                         hover:shadow-xl transition-all duration-500
                         group
-                      `}>
-                        {/* Image de preview ou logo */}
-                        <div className="relative h-48 overflow-hidden">
-                          {previewImage ? (
-                            <Image
-                              src={previewImage.url}
-                              alt={project.name}
-                              fill
-                              className="object-cover group-hover:scale-110 transition-transform duration-700"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          ) : (
-                            <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${project.color} opacity-20`}>
-                              <Image
-                                src={`/projects/${project.name}/logo.png`}
-                                alt={project.name}
-                                width={120}
-                                height={120}
-                                className="object-contain"
-                              />
-                            </div>
-                          )}
+                      `}
+                      role="link"
+                      tabIndex={0}
+                      aria-label={`Voir le projet ${project.name}`}
+                      onClick={() => router.push(`/projects/${project.id}`)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          router.push(`/projects/${project.id}`);
+                        }
+                      }}
+                      >
+                        {/* Preview: logo sur fond noir (plus épuré) */}
+                        <div className="relative h-48 overflow-hidden bg-black">
+                          <div className="absolute inset-0 bg-gradient-to-br from-black via-black/85 to-black/70" />
+                          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.12),transparent_55%)]" />
+                          <Image
+                            src={project.logo}
+                            alt={project.alt || project.name}
+                            fill
+                            className="object-contain p-10 opacity-95 drop-shadow-2xl group-hover:scale-[1.02] transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            priority={index < 3}
+                          />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                           
                           {/* Badge catégorie */}
@@ -283,7 +183,7 @@ export default function ProjectsPage() {
                             <div className="flex items-center gap-3">
                               <div className="relative w-10 h-10 flex-shrink-0">
                                 <Image
-                                  src={`/projects/${project.name}/logo.png`}
+                                  src={project.logo}
                                   alt={`Logo ${project.name}`}
                                   fill
                                   className="object-contain"
@@ -303,8 +203,11 @@ export default function ProjectsPage() {
                               {allImages.slice(0, 3).map((img, idx) => (
                                 <motion.button
                                   key={idx}
-                                  onClick={() => openLightbox(img.url, `${project.name} - ${img.type}`, img.type)}
-                                  className={`relative overflow-hidden rounded-lg border border-white/20 hover:border-white/40 transition-all ${
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    openLightbox(img.url, `${project.name} - ${img.type}`, img.type);
+                                  }}
+                                  className={`relative overflow-hidden rounded-lg border border-white/12 hover:border-white/20 transition-all ${
                                     img.type === 'mobile' ? 'w-8 h-12' : 'w-16 h-10'
                                   }`}
                                   whileHover={{ scale: 1.1 }}
@@ -330,19 +233,45 @@ export default function ProjectsPage() {
                           )}
 
                           {/* Bouton voir */}
-                          <Link
-                            href={`/projects/${project.id}`}
-                            className={`
-                              w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
-                              bg-gradient-to-r ${project.color}
-                              text-black font-semibold text-sm
-                              hover:shadow-lg transition-all duration-300
-                              group/btn
-                            `}
-                          >
-                            <span>Voir le projet</span>
-                            <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                          </Link>
+                          <div className="flex items-stretch gap-2">
+                            <Link
+                              href={`/projects/${project.id}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className={`
+                                flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+                                bg-white/5 hover:bg-white/10
+                                border border-white/12 hover:border-white/18
+                                text-white font-semibold text-sm
+                                hover:shadow-lg hover:shadow-black/30
+                                transition-all duration-300
+                                group/btn
+                              `}
+                            >
+                              <span>Voir le projet</span>
+                              <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                            </Link>
+
+                            {project.externalUrl && (
+                              <a
+                                href={project.externalUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className={`
+                                  w-11 rounded-xl
+                                  bg-white/5 hover:bg-white/10
+                                  border border-white/12 hover:border-white/18
+                                  text-white/90 hover:text-white
+                                  flex items-center justify-center
+                                  transition-all duration-300
+                                `}
+                                aria-label={`Ouvrir ${project.name} (lien externe)`}
+                                title="Ouvrir le lien externe"
+                              >
+                                <ExternalLink className="w-4 h-4" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </TiltCard>

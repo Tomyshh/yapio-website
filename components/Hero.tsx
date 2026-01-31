@@ -1,73 +1,15 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles, Check } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { GlowLogo } from './Logo';
 import ModernBackground from './ModernBackground';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import MagneticButton from './MagneticButton';
-import { AnimatedText } from './AnimatedSection';
-
-// Composant pour les éléments décoratifs (rendu uniquement côté client)
-function ClientOnlyDecorations() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
-  // Générer les particules avec des valeurs fixes basées sur l'index
-  const particles = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    width: 2 + (i % 4),
-    height: 2 + ((i + 2) % 4),
-    opacity: 0.2 + (i % 5) * 0.1,
-    left: (i * 5) % 100,
-    top: (i * 7) % 100,
-    duration: 3 + (i % 4),
-    delay: (i % 5) * 0.4,
-    xOffset: ((i % 20) - 10),
-  }));
-
-  return (
-    <>
-      {/* Particules flottantes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="absolute rounded-full bg-primary/30"
-            style={{
-              width: particle.width,
-              height: particle.height,
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, particle.xOffset, 0],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: particle.duration,
-              repeat: Infinity,
-              delay: particle.delay,
-              ease: 'easeInOut',
-            }}
-          />
-        ))}
-      </div>
-
-    </>
-  );
-}
 
 export default function Hero() {
-  const { t, isLoading } = useLanguage();
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLElement>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -125,142 +67,153 @@ export default function Hero() {
     <section 
       id="home" 
       ref={containerRef}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="min-h-screen relative overflow-hidden"
     >
       {/* Fond avec effet parallax */}
       <motion.div 
-        className="absolute inset-0"
+        className="absolute -inset-[30%]"
         style={{ y: backgroundY }}
       >
         <ModernBackground />
       </motion.div>
 
-      {/* Décorations client-only */}
-      <ClientOnlyDecorations />
-
       <motion.div 
-        className="max-w-7xl mx-auto section-padding relative z-10 flex flex-col justify-center min-h-[90vh] py-20"
+        className="max-w-7xl mx-auto section-padding relative z-10 pt-28 md:pt-32 pb-16 md:pb-20"
         style={{ y: textY, opacity, scale }}
       >
-        <motion.div 
-          className="text-center space-y-8 md:space-y-12"
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center"
           variants={containerVariants}
           initial="hidden"
           animate={isMounted ? 'visible' : 'hidden'}
         >
-          {/* Logo avec effet brillant */}
-          <motion.div variants={itemVariants} className="flex justify-center mb-8 md:mb-12">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <GlowLogo 
-                variant="full" 
-                size="xl" 
-                theme="white" 
-                className="opacity-90 hover:opacity-100 transition-opacity duration-500" 
+          {/* Colonne éditoriale */}
+          <div className="lg:col-span-7">
+            <motion.div variants={itemVariants} className="flex items-center gap-4">
+              <GlowLogo
+                variant="full"
+                size="lg"
+                theme="white"
+                className="opacity-95"
               />
-            </motion.div>
-          </motion.div>
-          
-          {/* Badge animé */}
-          <motion.div variants={itemVariants} className="flex justify-center">
-            <motion.div 
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
-              whileHover={{ scale: 1.05, borderColor: 'rgba(119, 55, 233, 0.5)' }}
-            >
-              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-              <span className="text-sm text-primary font-medium">Innovation & Excellence</span>
-            </motion.div>
-          </motion.div>
-          
-          {/* Titre principal avec animation de texte */}
-          <motion.div variants={itemVariants} className="mb-8 md:mb-12">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-overcame-bold leading-tight">
-              <span className="gradient-text block">
-                {t.hero?.title || 'Services Numériques sur Mesure'}
+              <span className="hidden md:inline-block text-xs tracking-[0.2em] uppercase text-gray-500">
+                {t.hero.studio}
               </span>
-            </h1>
-          </motion.div>
-          
-          {/* Sous-titre avec effet de révélation */}
-          <motion.div variants={itemVariants}>
-            <motion.h2 
-              className="text-2xl md:text-4xl lg:text-5xl text-gray-300 leading-relaxed"
-            >
-              {t.hero?.subtitle || 'Applications • IA • Logiciels'}
-            </motion.h2>
-          </motion.div>
-          
-          {/* Description avec animation */}
-          <motion.div variants={itemVariants} className="mb-12 md:mb-16">
-            <motion.p 
-              className="text-lg md:text-xl lg:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed"
-            >
-              {t.hero?.description || 'Nous transformons vos idées en solutions digitales performantes.'}
-            </motion.p>
-          </motion.div>
-          
-          {/* Boutons CTA avec effet magnétique */}
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-6 justify-center mb-16 md:mb-20"
-            variants={containerVariants}
-          >
-            <motion.div variants={buttonVariants}>
-              <MagneticButton
-                as="a"
-                href="#contact"
-                className="gradient-primary text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold shadow-lg shadow-primary/25 flex items-center justify-center group"
-                strength={0.25}
-              >
-                <span>{t.hero?.cta || 'Démarrer votre projet'}</span>
-                <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform duration-200" />
-              </MagneticButton>
             </motion.div>
-            
-            <motion.div variants={buttonVariants}>
-              <MagneticButton
-                as="a"
-                href="#services"
-                className="glass text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10"
-                strength={0.25}
-              >
-                <span>{t.hero?.learnMore || 'En savoir plus'}</span>
-              </MagneticButton>
+
+            <motion.div variants={itemVariants} className="mt-8">
+              <div className="eyebrow w-fit">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span>{t.hero.eyebrow}</span>
+              </div>
             </motion.div>
-          </motion.div>
-          
-          {/* Indicateur de scroll animé */}
-          <motion.div
-            variants={itemVariants}
-            className="flex justify-center"
-          >
-            <motion.a
-              href="#services"
-              className="group"
-              animate={{
-                y: [0, 10, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            >
-              <motion.div 
-                className="bg-black/20 backdrop-blur-sm rounded-full p-4 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ChevronDown size={32} className="text-gray-300 group-hover:text-primary transition-colors duration-300" />
+
+            <motion.div variants={itemVariants} className="mt-6">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-overcame-bold leading-[1.05] text-white">
+                <span className="block">{t.hero?.title || 'Services Numériques sur Mesure'}</span>
+              </h1>
+              <div className="mt-6 h-px hairline" />
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="mt-6">
+              <p className="text-lg md:text-2xl text-gray-300 leading-relaxed">
+                {t.hero?.subtitle || 'Applications • IA • Logiciels'}
+              </p>
+              <p className="mt-4 text-base md:text-lg text-gray-400 max-w-2xl leading-relaxed">
+                {t.hero?.description || 'Nous transformons vos idées en solutions digitales performantes.'}
+              </p>
+            </motion.div>
+
+            <motion.div className="mt-10 flex flex-col sm:flex-row gap-4" variants={containerVariants}>
+              <motion.div variants={buttonVariants}>
+                <MagneticButton
+                  as="a"
+                  href="#contact"
+                  className="bg-primary hover:bg-primary-600 text-white px-8 py-4 rounded-full text-base md:text-lg font-semibold shadow-lg shadow-primary/25 flex items-center justify-center group border border-primary/30"
+                  strength={0.22}
+                >
+                  <span>{t.hero?.cta || 'Démarrer votre projet'}</span>
+                  <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform duration-200" />
+                </MagneticButton>
               </motion.div>
-            </motion.a>
+
+              <motion.div variants={buttonVariants}>
+                <MagneticButton
+                  as="a"
+                  href="#services"
+                  className="glass text-white px-8 py-4 rounded-full text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10"
+                  strength={0.22}
+                >
+                  <span>{t.hero.secondaryCta}</span>
+                </MagneticButton>
+              </motion.div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
+              <span className="inline-flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-white/30" /> {t.hero.pills.deadlines}</span>
+              <span className="inline-flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-white/30" /> {t.hero.pills.maintainable}</span>
+              <span className="inline-flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-white/30" /> {t.hero.pills.support}</span>
+            </motion.div>
+          </div>
+
+          {/* Colonne “proof / offre” */}
+          <motion.div variants={itemVariants} className="lg:col-span-5">
+            <div className="glass rounded-3xl p-7 md:p-8 border border-white/10 relative overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 blur-3xl" />
+              </div>
+              <div className="relative z-10">
+                <p className="text-xs uppercase tracking-[0.2em] text-gray-500">{t.hero.offer.kicker}</p>
+                <h3 className="mt-3 text-2xl font-semibold text-white">{t.hero.offer.title}</h3>
+                <p className="mt-3 text-gray-400 leading-relaxed">
+                  {t.hero.offer.description}
+                </p>
+
+                <div className="mt-6 space-y-3">
+                  {t.hero.offer.items.map((txt) => (
+                    <div key={txt} className="flex items-start gap-3">
+                      <div className="mt-0.5 w-6 h-6 rounded-full bg-primary/10 border border-primary/25 flex items-center justify-center">
+                        <Check className="w-4 h-4 text-primary" />
+                      </div>
+                      <p className="text-gray-300">{txt}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 grid grid-cols-2 gap-3">
+                  {t.hero.metrics.map((s) => (
+                    <div key={s.v} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                      <div className="text-xl font-semibold text-white">{s.k}</div>
+                      <div className="text-xs text-gray-400 mt-1">{s.v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
       </motion.div>
 
       {/* Gradient de transition vers la section suivante */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark to-transparent pointer-events-none" />
+
+      {/* Indicateur de scroll (discret) */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center pointer-events-none">
+        <motion.a
+          href="#services"
+          className="pointer-events-auto"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <motion.div
+            className="bg-black/20 backdrop-blur-sm rounded-full p-3 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300"
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ChevronDown size={22} className="text-gray-300" />
+          </motion.div>
+        </motion.a>
+      </div>
     </section>
   );
 }

@@ -16,10 +16,36 @@ export const translations = {
       description: 'Nous transformons vos idées en solutions digitales performantes : applications mobiles et web, intégration d\'intelligence artificielle et développement de logiciels personnalisés.',
       cta: 'Démarrer votre projet',
       learnMore: 'En savoir plus',
+      secondaryCta: 'Voir nos services',
+      studio: 'Studio produit & ingénierie',
+      eyebrow: 'Design. Développement. Livraison.',
+      pills: {
+        deadlines: 'Délais clairs',
+        maintainable: 'Code maintenable',
+        support: 'Support réactif',
+      },
+      offer: {
+        kicker: 'Ce que vous obtenez',
+        title: 'Une exécution premium.',
+        description: 'Un process simple, une communication nette, et une livraison propre.',
+        items: [
+          'Design UI moderne et épuré',
+          'Développement performant (Web & Mobile)',
+          'SEO + tracking + bonnes pratiques',
+        ],
+      },
+      metrics: [
+        { k: '8+', v: 'années d’expérience' },
+        { k: '20+', v: 'clients servis' },
+        { k: '10+', v: 'projets livrés' },
+        { k: '100%', v: 'implication' },
+      ],
     },
     services: {
       title: 'Nos Services',
       subtitle: 'Des solutions digitales innovantes pour propulser votre entreprise',
+      badge: 'Ce que nous faisons',
+      learnMore: 'En savoir plus',
       mobile: {
         title: 'Applications Mobiles',
         description: 'Développement d\'applications natives et cross-platform pour iOS et Android, alliant performance et expérience utilisateur exceptionnelle.',
@@ -39,6 +65,7 @@ export const translations = {
     },
     features: {
       title: 'Pourquoi nous choisir ?',
+      badge: 'Nos avantages',
       quality: {
         title: 'Qualité Premium',
         description: 'Code propre, maintenable et conforme aux meilleures pratiques de l\'industrie.',
@@ -60,6 +87,7 @@ export const translations = {
       title: 'Nos Projets',
       subtitle: 'Découvrez nos réalisations et projets digitaux',
       viewMore: 'Voir',
+      capturesLabel: 'Captures d\'écran',
       trustSection: {
         title: 'Une expertise reconnue',
         description: 'Depuis notre création, nous avons eu le privilège d\'accompagner des entreprises de différents secteurs dans leur transformation digitale. Chaque projet est unique et nous nous adaptons aux besoins spécifiques de nos clients pour livrer des solutions sur mesure qui dépassent leurs attentes.',
@@ -98,10 +126,19 @@ export const translations = {
       interestedDescription: 'Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous aider.',
       contactUs: 'Nous contacter',
       closeLightbox: 'Appuyez sur Échap ou cliquez à l\'extérieur pour fermer',
+      lightboxMobile: 'Mobile',
+      lightboxDesktop: 'Desktop',
     },
     contact: {
       title: 'Contactez-nous',
       subtitle: 'Discutons de votre projet',
+      badge: 'Parlons de votre projet',
+      infoTitle: 'Informations de contact',
+      infoLabels: {
+        Email: 'Email',
+        WhatsApp: 'WhatsApp',
+        Location: 'Localisation',
+      },
       form: {
         name: 'Nom complet',
         email: 'Email',
@@ -113,6 +150,7 @@ export const translations = {
         sending: 'Envoi en cours...',
         success: 'Message envoyé avec succès !',
         error: 'Erreur lors de l\'envoi. Veuillez réessayer.',
+        selectPlaceholder: '---',
       },
       projectTypes: {
         mobile: 'Application Mobile',
@@ -125,6 +163,7 @@ export const translations = {
     about: {
       title: 'À propos de YAPIO',
       subtitle: 'Votre partenaire technologique de confiance',
+      badge: 'Qui sommes-nous',
       story: {
         title: 'Notre Histoire',
         content: 'YAPIO a été fondée avec la vision de démocratiser l\'accès aux technologies de pointe pour les entreprises de toutes tailles. Depuis nos débuts, nous nous sommes spécialisés dans la création de solutions numériques innovantes qui transforment les idées en réalité digitale.',
@@ -317,10 +356,36 @@ export const translations = {
       description: 'We transform your ideas into high-performing digital solutions: mobile and web applications, artificial intelligence integration, and custom software development.',
       cta: 'Start Your Project',
       learnMore: 'Learn More',
+      secondaryCta: 'View services',
+      studio: 'Product studio & engineering',
+      eyebrow: 'Design. Development. Delivery.',
+      pills: {
+        deadlines: 'Clear timelines',
+        maintainable: 'Maintainable code',
+        support: 'Responsive support',
+      },
+      offer: {
+        kicker: 'What you get',
+        title: 'Premium execution.',
+        description: 'A simple process, clear communication, and clean delivery.',
+        items: [
+          'Modern, clean UI design',
+          'High-performance development (Web & Mobile)',
+          'SEO + tracking + best practices',
+        ],
+      },
+      metrics: [
+        { k: '8+', v: 'years of experience' },
+        { k: '20+', v: 'clients served' },
+        { k: '10+', v: 'projects delivered' },
+        { k: '100%', v: 'commitment' },
+      ],
     },
     services: {
       title: 'Our Services',
       subtitle: 'Innovative digital solutions to propel your business',
+      badge: 'What we do',
+      learnMore: 'Learn more',
       mobile: {
         title: 'Mobile Applications',
         description: 'Development of native and cross-platform applications for iOS and Android, combining performance with exceptional user experience.',
@@ -340,6 +405,7 @@ export const translations = {
     },
     features: {
       title: 'Why Choose Us?',
+      badge: 'Our advantages',
       quality: {
         title: 'Premium Quality',
         description: 'Clean, maintainable code that follows industry best practices.',
@@ -361,6 +427,7 @@ export const translations = {
       title: 'Our Projects',
       subtitle: 'Discover our digital achievements and projects',
       viewMore: 'View',
+      capturesLabel: 'Screenshots',
       trustSection: {
         title: 'Recognized expertise',
         description: 'Since our inception, we have had the privilege of supporting companies from different sectors in their digital transformation. Each project is unique and we adapt to the specific needs of our clients to deliver tailor-made solutions that exceed their expectations.',
@@ -399,10 +466,19 @@ export const translations = {
       interestedDescription: 'Contact us to discuss your project and discover how we can help you.',
       contactUs: 'Contact us',
       closeLightbox: 'Press Esc or click outside to close',
+      lightboxMobile: 'Mobile',
+      lightboxDesktop: 'Desktop',
     },
     contact: {
       title: 'Contact Us',
       subtitle: 'Let\'s discuss your project',
+      badge: 'Let\'s talk about your project',
+      infoTitle: 'Contact information',
+      infoLabels: {
+        Email: 'Email',
+        WhatsApp: 'WhatsApp',
+        Location: 'Location',
+      },
       form: {
         name: 'Full Name',
         email: 'Email',
@@ -414,6 +490,7 @@ export const translations = {
         sending: 'Sending...',
         success: 'Message sent successfully!',
         error: 'Error sending message. Please try again.',
+        selectPlaceholder: '---',
       },
       projectTypes: {
         mobile: 'Mobile Application',
@@ -426,6 +503,7 @@ export const translations = {
     about: {
       title: 'About YAPIO',
       subtitle: 'Your trusted technology partner',
+      badge: 'Who we are',
       story: {
         title: 'Our Story',
         content: 'YAPIO was founded with the vision of democratizing access to cutting-edge technologies for businesses of all sizes. Since our beginnings, we have specialized in creating innovative digital solutions that transform ideas into digital reality.',
@@ -618,10 +696,36 @@ export const translations = {
       description: 'אנו הופכים את הרעיונות שלך לפתרונות דיגיטליים מתקדמים: אפליקציות מובייל ואינטרנט, שילוב בינה מלאכותית ופיתוח תוכנות מותאמות אישית.',
       cta: 'התחל את הפרויקט שלך',
       learnMore: 'למד עוד',
+      secondaryCta: 'צפה בשירותים',
+      studio: 'סטודיו מוצר והנדסה',
+      eyebrow: 'עיצוב. פיתוח. מסירה.',
+      pills: {
+        deadlines: 'לוחות זמנים ברורים',
+        maintainable: 'קוד ניתן לתחזוקה',
+        support: 'תמיכה מהירה',
+      },
+      offer: {
+        kicker: 'מה תקבלו',
+        title: 'ביצוע פרימיום.',
+        description: 'תהליך פשוט, תקשורת ברורה, ומסירה נקייה.',
+        items: [
+          'עיצוב UI מודרני ונקי',
+          'פיתוח ביצועים גבוהים (ווב ומובייל)',
+          'SEO + מעקב + שיטות עבודה מומלצות',
+        ],
+      },
+      metrics: [
+        { k: '8+', v: 'שנות ניסיון' },
+        { k: '20+', v: 'לקוחות' },
+        { k: '10+', v: 'פרויקטים שנמסרו' },
+        { k: '100%', v: 'מחויבות' },
+      ],
     },
     services: {
       title: 'השירותים שלנו',
       subtitle: 'פתרונות דיגיטליים חדשניים להצמחת העסק שלך',
+      badge: 'מה אנחנו עושים',
+      learnMore: 'למד עוד',
       mobile: {
         title: 'אפליקציות מובייל',
         description: 'פיתוח אפליקציות מקוריות וחוצות פלטפורמות ל-iOS ו-Android, המשלבות ביצועים עם חוויית משתמש יוצאת דופן.',
@@ -641,6 +745,7 @@ export const translations = {
     },
     features: {
       title: 'למה לבחור בנו?',
+      badge: 'היתרונות שלנו',
       quality: {
         title: 'איכות פרימיום',
         description: 'קוד נקי וניתן לתחזוקה העומד בסטנדרטים הגבוהים ביותר בתעשייה.',
@@ -662,6 +767,7 @@ export const translations = {
       title: 'הפרויקטים שלנו',
       subtitle: 'גלה את ההישגים והפרויקטים הדיגיטליים שלנו',
       viewMore: 'ראה',
+      capturesLabel: 'צילומי מסך',
       trustSection: {
         title: 'מומחיות מוכרת',
         description: 'מאז הקמתנו, זכינו ללוות חברות מתחומים שונים בטרנספורמציה הדיגיטלית שלהם. כל פרויקט הוא ייחודי ואנחנו מתאימים לצרכים הספציפיים של הלקוחות שלנו כדי לספק פתרונות מותאמים אישית שעולים על הציפיות שלהם.',
@@ -700,10 +806,19 @@ export const translations = {
       interestedDescription: 'צור איתנו קשר כדי לדון על הפרויקט שלך ולגלות כיצד נוכל לעזור לך.',
       contactUs: 'צור קשר',
       closeLightbox: 'לחץ Esc או לחץ מחוץ לסגירה',
+      lightboxMobile: 'מובייל',
+      lightboxDesktop: 'דסקטופ',
     },
     contact: {
       title: 'צור קשר',
       subtitle: 'בוא נדבר על הפרויקט שלך',
+      badge: 'בוא נדבר על הפרויקט שלך',
+      infoTitle: 'פרטי קשר',
+      infoLabels: {
+        Email: 'אימייל',
+        WhatsApp: 'וואטסאפ',
+        Location: 'מיקום',
+      },
       form: {
         name: 'שם מלא',
         email: 'אימייל',
@@ -715,6 +830,7 @@ export const translations = {
         sending: 'שולח...',
         success: 'ההודעה נשלחה בהצלחה!',
         error: 'שגיאה בשליחת ההודעה. אנא נסה שוב.',
+        selectPlaceholder: '---',
       },
       projectTypes: {
         mobile: 'אפליקציית מובייל',
@@ -727,6 +843,7 @@ export const translations = {
     about: {
       title: 'אודות YAPIO',
       subtitle: 'השותף הטכנולוגי המהימן שלך',
+      badge: 'מי אנחנו',
       story: {
         title: 'הסיפור שלנו',
         content: 'YAPIO נוסדה עם החזון לדמוקרטיזציה של הגישה לטכנולוגיות מתקדמות לעסקים בכל הגדלים. מאז התחלתנו, התמחינו ביצירת פתרונות דיגיטליים חדשניים שהופכים רעיונות למציאות דיגיטלית.',

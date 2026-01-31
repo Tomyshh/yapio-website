@@ -1,24 +1,33 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { Shield, Zap, HeadphonesIcon, Sparkles, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 
 export default function Features() {
   const { t, isLoading } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
+  const [scrollTargetReady, setScrollTargetReady] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  // N'attacher la ref à useScroll qu'après hydratation (évite "Target ref is defined but not hydrated")
+  useLayoutEffect(() => {
+    if (!isMounted) return;
+    const id = requestAnimationFrame(() => {
+      setScrollTargetReady(!!sectionRef.current);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [isMounted]);
+
   const { scrollYProgress } = useScroll({
-    target: isMounted ? sectionRef : undefined,
+    target: scrollTargetReady ? sectionRef : undefined,
     offset: ['start end', 'end start'],
   });
 
@@ -45,28 +54,28 @@ export default function Features() {
       icon: Shield,
       title: t.features.quality.title,
       description: t.features.quality.description,
-      color: 'from-blue-400 to-cyan-400',
+      color: 'from-primary to-primary-600',
       delay: 0,
     },
     {
       icon: Zap,
       title: t.features.speed.title,
       description: t.features.speed.description,
-      color: 'from-yellow-400 to-orange-400',
+      color: 'from-primary to-primary-600',
       delay: 0.15,
     },
     {
       icon: HeadphonesIcon,
       title: t.features.support.title,
       description: t.features.support.description,
-      color: 'from-green-400 to-emerald-400',
+      color: 'from-primary to-primary-600',
       delay: 0.3,
     },
     {
       icon: Sparkles,
       title: t.features.innovation.title,
       description: t.features.innovation.description,
-      color: 'from-purple-400 to-pink-400',
+      color: 'from-primary to-primary-600',
       delay: 0.45,
     },
   ];
@@ -93,21 +102,21 @@ export default function Features() {
   };
 
   return (
-    <section ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden">
+    <section ref={sectionRef} className="py-20 lg:py-28 relative overflow-hidden">
       {/* Arrière-plan moderne avec parallax */}
-      <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+      <motion.div className="absolute -inset-[30%]" style={{ y: backgroundY }}>
         <ModernBackground />
       </motion.div>
 
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}
-        <AnimatedSection animation="fadeUp" className="text-center mb-16 lg:mb-20">
+        <AnimatedSection animation="fadeUp" className="text-center mb-12 lg:mb-16">
           <motion.div 
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
             whileHover={{ scale: 1.05 }}
           >
             <CheckCircle className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">Nos avantages</span>
+            <span className="text-sm text-primary font-medium">{t.features.badge}</span>
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-overcame-bold">
@@ -120,7 +129,8 @@ export default function Features() {
           className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.25 }}
         >
           {features.map((feature, index) => {
             const Icon = feature.icon;
@@ -131,7 +141,7 @@ export default function Features() {
                 className="group"
               >
                 <motion.div
-                  className="flex items-start space-x-6 p-6 rounded-2xl transition-all duration-500 hover:bg-white/5"
+                  className="flex items-start space-x-6 p-6 rounded-2xl transition-all duration-500 hover:bg-white/[0.03] border border-transparent hover:border-white/10"
                   whileHover={{ x: 10 }}
                 >
                   {/* Icon avec animation */}

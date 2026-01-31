@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
 
@@ -12,14 +12,23 @@ export default function Contact() {
   const { t, isLoading } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const [scrollTargetReady, setScrollTargetReady] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  // N'attacher la ref à useScroll qu'après hydratation (évite "Target ref is defined but not hydrated")
+  useLayoutEffect(() => {
+    if (!isMounted) return;
+    const id = requestAnimationFrame(() => {
+      setScrollTargetReady(!!sectionRef.current);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [isMounted]);
+
   const { scrollYProgress } = useScroll({
-    target: isMounted ? sectionRef : undefined,
+    target: scrollTargetReady ? sectionRef : undefined,
     offset: ['start end', 'end start'],
   });
 
@@ -111,21 +120,21 @@ export default function Contact() {
       label: 'Email',
       value: 'tomyyapp@gmail.com',
       href: 'mailto:tomyyapp@gmail.com',
-      color: 'from-blue-400 to-cyan-400',
+      color: 'from-primary to-primary-600',
     },
     {
       icon: Phone,
       label: 'WhatsApp',
       value: '+972 58 426 8519',
       href: 'https://wa.me/972584268519',
-      color: 'from-green-400 to-emerald-400',
+      color: 'from-primary to-primary-600',
     },
     {
       icon: MapPin,
       label: 'Location',
       value: 'Worldwide Service',
       href: null,
-      color: 'from-purple-400 to-pink-400',
+      color: 'from-primary to-primary-600',
     },
   ];
 
@@ -137,7 +146,7 @@ export default function Contact() {
   return (
     <section id="contact" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden">
       {/* Arrière-plan moderne avec parallax */}
-      <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+      <motion.div className="absolute -inset-[30%]" style={{ y: backgroundY }}>
         <ModernBackground />
       </motion.div>
       
@@ -149,7 +158,7 @@ export default function Contact() {
             whileHover={{ scale: 1.05 }}
           >
             <MessageSquare className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">Parlons de votre projet</span>
+            <span className="text-sm text-primary font-medium">{t.contact.badge}</span>
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-overcame-bold">
@@ -170,7 +179,7 @@ export default function Contact() {
                   whileHover={{ y: -5 }}
                 >
                   <h3 className="text-2xl font-semibold mb-8 text-white">
-                    Informations de contact
+                    {t.contact.infoTitle}
                   </h3>
                   
                   <div className="space-y-6">
@@ -193,7 +202,7 @@ export default function Contact() {
                             <Icon className="w-full h-full text-white" />
                           </motion.div>
                           <div>
-                            <p className="text-gray-400 text-sm">{info.label}</p>
+                            <p className="text-gray-400 text-sm">{t.contact.infoLabels[info.label as keyof typeof t.contact.infoLabels]}</p>
                             <p className="text-white text-lg font-medium group-hover:text-primary transition-colors">
                               {info.value}
                             </p>
@@ -295,7 +304,7 @@ export default function Contact() {
                       animate={focusedField === 'projectType' ? 'focus' : 'blur'}
                       variants={inputVariants}
                     >
-                      <option value="">---</option>
+                      <option value="">{t.contact.form.selectPlaceholder}</option>
                       <option value="mobile">{t.contact.projectTypes.mobile}</option>
                       <option value="desktop">{t.contact.projectTypes.desktop}</option>
                       <option value="web">{t.contact.projectTypes.web}</option>

@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ModernBackground from '@/components/ModernBackground';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { getLocalizedProjects } from '@/lib/projects';
 
 interface ProjectImage {
   id: string;
@@ -63,163 +64,21 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
   }, [slug, t?.clients?.projects, languageLoading]);
 
   function getProjectsFromConfig(): Project[] {
-    const getProjectDescription = (projectKey: string) => {
-      if (!t?.clients?.projects) return '';
-      return (t.clients.projects as any)[projectKey] || '';
-    };
-
-    const projectsConfig = [
-      {
-        id: 'chabbataim',
-        name: 'Chabbataim',
-        description: getProjectDescription('chabbataim'),
-        color: 'from-green-400 to-teal-400',
-        bg_color: 'bg-green-500/10',
-        border_color: 'border-green-400/20',
-        display_order: 0,
-        desktop_images: [],
-        mobile_images: [
-          '/projects/Chabbataim/chimage1_mobile.png',
-          '/projects/Chabbataim/chimage2-mobile.png'
-        ],
-        technologies: ['React', 'Node.js', 'Firebase'],
-        year: '2024',
-        category: 'Application Mobile'
-      },
-      {
-        id: 'olim-service',
-        name: 'Olim Service',
-        description: getProjectDescription('olimService'),
-        color: 'from-[#0E78FE] to-[#3B8FFF]',
-        bg_color: 'bg-[#0E78FE]/10',
-        border_color: 'border-[#0E78FE]/20',
-        display_order: 1,
-        desktop_images: [
-          '/projects/Olim Service/image1_desktop.png',
-          '/projects/Olim Service/image2_desktop.png'
-        ],
-        mobile_images: [
-          '/projects/Olim Service/olimapp_mobile.png'
-        ],
-        technologies: ['Next.js', 'React', 'Supabase'],
-        year: '2024',
-        category: 'Site Web & Application'
-      },
-      {
-        id: 'aerilux',
-        name: 'Aerilux',
-        description: getProjectDescription('aerilux'),
-        color: 'from-white to-gray-200',
-        bg_color: 'bg-white/10',
-        border_color: 'border-white/20',
-        display_order: 2,
-        desktop_images: [
-          '/projects/Aerilux/image1-desktop.png'
-        ],
-        mobile_images: [],
-        technologies: ['React', 'Node.js', 'PostgreSQL'],
-        year: '2023',
-        category: 'Site Web'
-      },
-      {
-        id: 'dtai',
-        name: 'DTAI',
-        description: getProjectDescription('dtai'),
-        color: 'from-red-400 to-pink-400',
-        bg_color: 'bg-red-500/10',
-        border_color: 'border-red-400/20',
-        display_order: 3,
-        desktop_images: [],
-        mobile_images: [],
-        technologies: ['React', 'Node.js', 'Express'],
-        year: '2024',
-        category: 'Intelligence Artificielle'
-      },
-      {
-        id: 'havrouta',
-        name: 'Havrouta',
-        description: getProjectDescription('havrouta'),
-        color: 'from-[#C2A765] to-[#D4B876]',
-        bg_color: 'bg-[#C2A765]/10',
-        border_color: 'border-[#C2A765]/20',
-        display_order: 4,
-        desktop_images: [],
-        mobile_images: [
-          '/projects/Havrouta/happ-mobile.png'
-        ],
-        technologies: ['Flutter', 'Firebase', 'Node.js'],
-        year: '2024',
-        category: 'Application Mobile'
-      },
-      {
-        id: 'security-bear',
-        name: 'Security Bear',
-        description: getProjectDescription('securityBear'),
-        color: 'from-orange-400 to-red-500',
-        bg_color: 'bg-orange-500/10',
-        border_color: 'border-orange-400/20',
-        display_order: 5,
-        desktop_images: [
-          '/projects/Security Bear/image1-desktop.png'
-        ],
-        mobile_images: [
-          '/projects/Security Bear/app-mobile.png'
-        ],
-        technologies: ['React', 'Node.js', 'Firebase'],
-        year: '2023',
-        category: 'Application Web & Mobile'
-      },
-      {
-        id: 'kolot',
-        name: 'Kolot',
-        description: getProjectDescription('kolot'),
-        color: 'from-purple-400 to-indigo-400',
-        bg_color: 'bg-purple-500/10',
-        border_color: 'border-purple-400/20',
-        display_order: 6,
-        desktop_images: [
-          '/projects/Kolot/image1-desktop.png'
-        ],
-        mobile_images: [],
-        technologies: ['Laravel', 'PostgreSQL'],
-        year: '2024',
-        category: 'Plateforme Web'
-      },
-      {
-        id: 'oz-leisrael',
-        name: 'Oz Leisrael',
-        description: getProjectDescription('ozLeisrael'),
-        color: 'from-blue-400 to-cyan-400',
-        bg_color: 'bg-blue-500/10',
-        border_color: 'border-blue-400/20',
-        display_order: 7,
-        desktop_images: [
-          '/projects/Oz Leisrael/image1_desktop.png'
-        ],
-        mobile_images: [],
-        technologies: ['React', 'Express', 'PostgreSQL'],
-        year: '2023',
-        category: 'Application Web'
-      },
-      {
-        id: 'i24-tv-channel',
-        name: 'i24 TV channel',
-        description: getProjectDescription('i24TvChannel'),
-        color: 'from-red-500 to-blue-600',
-        bg_color: 'bg-red-500/10',
-        border_color: 'border-red-500/20',
-        display_order: 8,
-        desktop_images: [
-          '/projects/i24 TV channel/chaine-desktop.png',
-          '/projects/i24 TV channel/chaine2-desktop.png',
-          '/projects/i24 TV channel/chaine3-desktop.png'
-        ],
-        mobile_images: [],
-        technologies: ['React', 'Node.js', 'Express'],
-        year: '2024',
-        category: 'Plateforme Streaming'
-      }
-    ];
+    const projectsConfig = getLocalizedProjects(t).map((p) => ({
+      id: p.slug,
+      name: p.name,
+      description: p.description,
+      color: p.color,
+      bg_color: p.bgColor,
+      border_color: p.borderColor,
+      display_order: p.displayOrder ?? 0,
+      desktop_images: p.images.desktop,
+      mobile_images: p.images.mobile,
+      technologies: p.technologies || [],
+      year: p.year,
+      category: p.categoryLabel || '',
+      logo_url: p.logo,
+    }));
 
     return projectsConfig.map((config, index) => {
       const desktopImages = config.desktop_images.map((url, imgIndex) => ({
@@ -242,13 +101,11 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         created_at: new Date().toISOString(),
       }));
 
-      const logoUrl = `/projects/${config.name}/logo.png`;
-
       return {
         id: config.id,
         name: config.name,
         description: config.description,
-        logo_url: logoUrl,
+        logo_url: config.logo_url,
         color: config.color,
         bg_color: config.bg_color,
         border_color: config.border_color,
@@ -330,7 +187,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
       <div className="relative z-10 pt-24">
         {/* Header avec navigation rapide entre projets */}
         <motion.div 
-          className="max-w-7xl mx-auto section-padding py-6"
+          className="max-w-7xl mx-auto section-padding py-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -340,10 +197,10 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link 
                 href="/#portfolio"
-                className="inline-flex items-center gap-3 px-5 py-3 rounded-full glass border border-white/20 text-white hover:bg-white/10 transition-all duration-300 group"
+                className="inline-flex items-center gap-3 px-4 py-2.5 rounded-full glass border border-white/15 text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
                 aria-label={t.projects?.backToPortfolio || 'Retour au portfolio'}
               >
-                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                 <span className="text-sm font-medium">{t.projects?.backToPortfolio || 'Portfolio'}</span>
               </Link>
             </motion.div>
@@ -365,14 +222,11 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       title={otherProject.name}
                     >
                       {/* Mini bulle de projet */}
-                      <div className="relative w-12 h-12">
-                        {/* Effet de glow */}
-                        <div className={`absolute -inset-2 rounded-full bg-gradient-to-br ${otherProject.color} opacity-0 group-hover:opacity-40 transition-all duration-300 blur-lg`} />
-                        
-                        {/* Cercle principal */}
-                        <div className={`relative w-full h-full rounded-full bg-black/40 backdrop-blur-sm border ${otherProject.border_color} overflow-hidden group-hover:scale-110 transition-all duration-300 flex items-center justify-center p-2`}>
+                      <div className="relative w-10 h-10">
+                        {/* Cercle principal (sobre) */}
+                        <div className={`relative w-full h-full rounded-full bg-black/40 backdrop-blur-sm border ${otherProject.border_color} overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-2`}>
                           <Image
-                            src={`/projects/${otherProject.name}/logo.png`}
+                            src={otherProject.logo_url}
                             alt={`Logo ${otherProject.name}`}
                             width={32}
                             height={32}
@@ -396,17 +250,16 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
 
         {/* Hero Section */}
         <motion.div 
-          className="max-w-7xl mx-auto section-padding py-8"
+          className="max-w-7xl mx-auto section-padding py-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <div className="relative glass rounded-3xl p-8 md:p-12 lg:p-16 backdrop-blur-md border border-white/10 overflow-hidden">
-            {/* Gradient décoratif */}
-            <div className={`absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br ${project.color} opacity-10 blur-[100px]`} />
-            <div className={`absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr ${project.color} opacity-5 blur-[100px]`} />
+          <div className="relative glass rounded-2xl p-6 md:p-8 backdrop-blur-md border border-white/10 overflow-hidden">
+            {/* Décor discret */}
+            <div className={`absolute -top-24 -right-24 w-56 h-56 bg-gradient-to-br ${project.color} opacity-[0.08] blur-[90px]`} />
             
-            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
               {/* Logo avec animation */}
               <motion.div 
                 className="flex justify-center lg:justify-start"
@@ -415,22 +268,14 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 <div className="relative group">
-                  {/* Cercle animé en arrière-plan */}
-                  <motion.div
-                    className={`absolute inset-0 bg-gradient-to-r ${project.color} opacity-20 blur-3xl rounded-full`}
-                    animate={{ 
-                      scale: [1, 1.1, 1],
-                      rotate: [0, 180, 360]
-                    }}
-                    transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-                  />
-                  <div className="relative w-56 h-56 md:w-72 md:h-72">
+                  <div className="absolute -inset-6 rounded-full bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.10),transparent_60%)]" />
+                  <div className="relative w-44 h-44 md:w-52 md:h-52">
                     <Image
                       src={project.logo_url}
                       alt={`Logo ${project.name}`}
                       fill
-                      className="object-contain drop-shadow-2xl"
-                      sizes="(max-width: 768px) 224px, 288px"
+                      className="object-contain drop-shadow-xl"
+                      sizes="(max-width: 768px) 176px, 208px"
                       priority
                     />
                   </div>
@@ -439,51 +284,51 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
 
               {/* Détails */}
               <motion.div 
-                className="space-y-5 text-center lg:text-left"
+                className="space-y-4 text-center lg:text-left"
                 initial={{ x: 30, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r ${project.color} bg-clip-text text-transparent font-overcame-bold leading-tight`}
+                <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r ${project.color} bg-clip-text text-transparent font-overcame-bold leading-tight`}
                   style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
                 >
                   {project.name}
                 </h1>
                 
                 <motion.div 
-                  className={`h-1 rounded-full bg-gradient-to-r ${project.color} mx-auto lg:mx-0`}
+                  className={`h-0.5 rounded-full bg-gradient-to-r ${project.color} mx-auto lg:mx-0`}
                   initial={{ width: 0 }}
-                  animate={{ width: '8rem' }}
+                  animate={{ width: '6rem' }}
                   transition={{ duration: 0.5, delay: 0.6 }}
                 />
                 
-                <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                <p className="text-base md:text-lg text-gray-300 leading-relaxed">
                   {project.description}
                 </p>
 
                 {/* Métadonnées */}
-                <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+                <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1">
                   {project.year && (
                     <motion.div 
-                      className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10"
+                      className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.7 }}
                     >
                       <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-white font-medium">{project.year}</span>
+                      <span className="text-white/90 text-sm font-medium">{project.year}</span>
                     </motion.div>
                   )}
                   
                   {project.category && (
                     <motion.div 
-                      className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10"
+                      className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.8 }}
                     >
                       <Tag className="w-4 h-4 text-gray-400" />
-                      <span className="text-white font-medium">{project.category}</span>
+                      <span className="text-white/90 text-sm font-medium">{project.category}</span>
                     </motion.div>
                   )}
                 </div>
@@ -500,7 +345,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       {project.technologies.map((tech, index) => (
                         <motion.span
                           key={index}
-                          className={`px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r ${project.color} text-black`}
+                          className="px-3 py-1.5 rounded-full text-xs font-medium bg-white/5 border border-white/10 text-gray-200"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ delay: 0.9 + index * 0.1, type: 'spring' }}
@@ -518,49 +363,49 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
 
         {/* Galerie d'images */}
         <motion.div 
-          className="max-w-7xl mx-auto section-padding py-12"
+          className="max-w-7xl mx-auto section-padding py-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
           <motion.div 
-            className="text-center mb-10"
+            className="text-center mb-8"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3">
               <Sparkles className="w-4 h-4 text-primary" />
               <span className="text-sm text-primary font-medium">{t.projects?.gallery || 'Galerie'}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white font-overcame-bold">
+            <h2 className="text-2xl md:text-3xl font-bold text-white font-overcame-bold">
               <span className="gradient-text">Captures d&apos;écran</span>
             </h2>
           </motion.div>
 
-          <div className="space-y-12">
+          <div className="space-y-10">
             {/* Images Desktop */}
             {project.desktop_images && project.desktop_images.length > 0 && (
               <motion.div 
-                className="space-y-6"
+                className="space-y-5"
                 initial={{ y: 30, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
               >
                 <div className="flex items-center gap-3 text-gray-300">
-                  <div className={`p-3 rounded-xl bg-gradient-to-br ${project.color} bg-opacity-20`}>
-                    <Monitor className="w-5 h-5" />
+                  <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
+                    <Monitor className="w-4 h-4 text-gray-200" />
                   </div>
-                  <h3 className="text-xl font-bold">{t.projects?.desktopVersion || 'Version Desktop'}</h3>
+                  <h3 className="text-lg font-semibold">{t.projects?.desktopVersion || 'Version Desktop'}</h3>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {project.desktop_images.map((img, imgIndex) => (
                     <motion.div
                       key={img.id}
-                      className="relative aspect-video rounded-2xl overflow-hidden group cursor-pointer glass border border-white/10"
+                      className="relative aspect-video rounded-xl overflow-hidden group cursor-pointer glass border border-white/10"
                       onClick={() => openLightbox(img.image_url, img.alt_text || `${project.name} - Desktop ${imgIndex + 1}`)}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
                       <Image
@@ -572,9 +417,9 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="text-white text-sm font-medium">Cliquer pour agrandir</span>
-                        <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <ZoomIn className="w-5 h-5 text-white" />
+                        <span className="text-white text-xs font-medium">Agrandir</span>
+                        <div className="w-9 h-9 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <ZoomIn className="w-4 h-4 text-white" />
                         </div>
                       </div>
                     </motion.div>
@@ -586,25 +431,25 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
             {/* Images Mobile */}
             {project.mobile_images && project.mobile_images.length > 0 && (
               <motion.div 
-                className="space-y-6"
+                className="space-y-5"
                 initial={{ y: 30, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
               >
                 <div className="flex items-center gap-3 text-gray-300">
-                  <div className={`p-3 rounded-xl bg-gradient-to-br ${project.color} bg-opacity-20`}>
-                    <Smartphone className="w-5 h-5" />
+                  <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
+                    <Smartphone className="w-4 h-4 text-gray-200" />
                   </div>
-                  <h3 className="text-xl font-bold">{t.projects?.mobileVersion || 'Version Mobile'}</h3>
+                  <h3 className="text-lg font-semibold">{t.projects?.mobileVersion || 'Version Mobile'}</h3>
                 </div>
                 
-                <div className="flex flex-wrap gap-6 justify-center">
+                <div className="flex flex-wrap gap-5 justify-center">
                   {project.mobile_images.map((img, imgIndex) => (
                     <motion.div
                       key={img.id}
-                      className="relative w-44 md:w-52 aspect-[9/16] rounded-[2rem] overflow-hidden group cursor-pointer glass border border-white/10"
+                      className="relative w-40 md:w-44 aspect-[9/16] rounded-2xl overflow-hidden group cursor-pointer glass border border-white/10"
                       onClick={() => openLightbox(img.image_url, img.alt_text || `${project.name} - Mobile ${imgIndex + 1}`)}
-                      whileHover={{ scale: 1.05, y: -5 }}
+                      whileHover={{ scale: 1.03, y: -3 }}
                       transition={{ duration: 0.3 }}
                     >
                       <Image
@@ -628,7 +473,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
             {(!project.desktop_images || project.desktop_images.length === 0) && 
              (!project.mobile_images || project.mobile_images.length === 0) && (
               <motion.div 
-                className="glass rounded-2xl p-12 text-center border border-white/10"
+                className="glass rounded-2xl p-8 md:p-10 text-center border border-white/10"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -645,12 +490,12 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         </motion.div>
 
         {/* Navigation vers d'autres projets */}
-        <div className="max-w-7xl mx-auto section-padding py-16">
+        <div className="max-w-7xl mx-auto section-padding py-12">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-overcame-bold">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 font-overcame-bold">
               <span className="gradient-text">{t.projects?.exploreOtherProjects || 'Découvrez nos autres projets'}</span>
             </h2>
-            <p className="text-gray-400 text-lg">{t.projects?.exploreDescription || 'Explorez notre portfolio et découvrez nos réalisations'}</p>
+            <p className="text-gray-400 text-base md:text-lg">{t.projects?.exploreDescription || 'Explorez notre portfolio et découvrez nos réalisations'}</p>
           </div>
 
           <div className="relative">
@@ -666,15 +511,12 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                   >
                     {/* Bulle de projet */}
                     <div className="relative aspect-square">
-                      {/* Cercle de fond avec effet de glow */}
-                      <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${otherProject.color} opacity-20 group-hover:opacity-30 transition-all duration-500 blur-xl group-hover:blur-2xl`} />
-                      
                       {/* Cercle principal */}
-                      <div className={`relative w-full h-full rounded-full glass border-2 ${otherProject.border_color} overflow-hidden backdrop-blur-sm group-hover:scale-110 transition-all duration-500 flex items-center justify-center p-6`}>
+                      <div className={`relative w-full h-full rounded-full glass border ${otherProject.border_color} overflow-hidden backdrop-blur-sm group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-5`}>
                         {/* Logo du projet */}
                         <div className="relative w-full h-full">
                           <Image
-                            src={`/projects/${otherProject.name}/logo.png`}
+                            src={otherProject.logo_url}
                             alt={`Logo ${otherProject.name}`}
                             fill
                             className="object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500"
@@ -734,25 +576,25 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="relative glass rounded-3xl p-10 md:p-14 text-center border border-white/10 overflow-hidden">
+          <div className="relative glass rounded-2xl p-8 md:p-10 text-center border border-white/10 overflow-hidden">
             {/* Gradients décoratifs */}
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-primary/20 rounded-full blur-[80px]" />
-            <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px]" />
+            <div className="absolute -top-24 -right-24 w-56 h-56 bg-primary/15 rounded-full blur-[90px]" />
+            <div className="absolute -bottom-24 -left-24 w-56 h-56 bg-blue-500/15 rounded-full blur-[90px]" />
             
             <div className="relative">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-3">
                 {t.projects?.interestedTitle || 'Intéressé par un projet similaire ?'}
               </h2>
-              <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+              <p className="text-base md:text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
                 {t.projects?.interestedDescription || 'Contactez-nous pour discuter de votre projet.'}
               </p>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/#contact"
-                  className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold hover:shadow-2xl transition-all duration-300"
+                  className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold hover:shadow-xl hover:shadow-primary/20 transition-all duration-300"
                 >
                   {t.projects?.contactUs || 'Nous contacter'}
-                  <ExternalLink className="w-5 h-5" />
+                  <ExternalLink className="w-4 h-4" />
                 </Link>
               </motion.div>
             </div>

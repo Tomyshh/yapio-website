@@ -70,11 +70,11 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      isScrolled 
-        ? 'py-2 backdrop-blur-xl bg-black/80 shadow-lg shadow-black/30' 
-        : 'py-4 bg-transparent'
-    }`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled ? 'py-2' : 'py-3'
+      } backdrop-blur-xl bg-black/65`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -97,7 +97,7 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center">
             {/* Nav Links */}
-            <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full px-2 py-1 border border-white/10">
+            <div className="flex items-center gap-1">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.href}
@@ -113,14 +113,14 @@ export default function Navigation() {
                         : 'text-gray-400 hover:text-white'
                     }`}
                   >
+                    <span className="relative z-10">{item.label}</span>
                     {item.isActive && (
-                      <motion.div
+                      <motion.span
                         layoutId="activeNav"
-                        className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary rounded-full"
+                        className="absolute left-1/2 -bottom-0.5 h-1 w-1 -translate-x-1/2 rounded-full bg-primary"
                         transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                       />
                     )}
-                    <span className="relative z-10">{item.label}</span>
                   </Link>
                 </motion.div>
               ))}
@@ -181,10 +181,9 @@ export default function Navigation() {
               >
                 <Link
                   href={isHomePage ? "#contact" : "/#contact"}
-                  className="relative overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-blue-600 text-white text-sm font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 group"
+                  className="relative overflow-hidden px-5 py-2.5 rounded-full bg-primary hover:bg-primary-600 text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 border border-primary/30"
                 >
                   <span className="relative z-10">{t.nav.getQuote}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>
               </motion.div>
             </div>
@@ -245,7 +244,7 @@ export default function Navigation() {
                       onClick={() => setIsOpen(false)}
                       className={`block px-4 py-3 rounded-xl transition-all duration-300 ${
                         item.isActive
-                          ? 'bg-gradient-to-r from-primary/20 to-blue-600/20 text-white border border-primary/30'
+                          ? 'bg-white/5 text-white border border-primary/30'
                           : 'text-gray-300 hover:text-white hover:bg-white/5'
                       }`}
                     >
@@ -290,7 +289,7 @@ export default function Navigation() {
                   <Link
                     href={isHomePage ? "#contact" : "/#contact"}
                     onClick={() => setIsOpen(false)}
-                    className="block text-center bg-gradient-to-r from-primary to-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
+                    className="block text-center bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all border border-primary/30"
                   >
                     {t.nav.getQuote}
                   </Link>
