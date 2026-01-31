@@ -7,6 +7,7 @@ import ModernBackground from './ModernBackground';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
+import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164, YAPIO_WHATSAPP_PHONE } from '@/lib/contact';
 
 export default function Contact() {
   const { t, isLoading } = useLanguage();
@@ -124,9 +125,16 @@ export default function Contact() {
     },
     {
       icon: Phone,
+      label: 'Phone',
+      value: YAPIO_PHONE_DISPLAY,
+      href: `tel:${YAPIO_PHONE_E164}`,
+      color: 'from-blue-500 to-cyan-500',
+    },
+    {
+      icon: MessageSquare,
       label: 'WhatsApp',
-      value: '+972 58 426 8519',
-      href: 'https://wa.me/972584268519',
+      value: YAPIO_PHONE_DISPLAY,
+      href: `https://wa.me/${YAPIO_WHATSAPP_PHONE}`,
       color: 'from-primary to-primary-600',
     },
     {

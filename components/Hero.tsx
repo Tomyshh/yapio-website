@@ -7,6 +7,7 @@ import { GlowLogo } from './Logo';
 import ModernBackground from './ModernBackground';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import MagneticButton from './MagneticButton';
+import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -145,6 +146,18 @@ export default function Hero() {
                   strength={0.22}
                 >
                   <span>{t.hero.secondaryCta}</span>
+                </MagneticButton>
+              </motion.div>
+
+              <motion.div variants={buttonVariants}>
+                <MagneticButton
+                  as="a"
+                  href={`tel:${YAPIO_PHONE_E164}`}
+                  className="glass text-white px-8 py-4 rounded-full text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10"
+                  strength={0.22}
+                  aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                >
+                  <span>{t.hero.callCta || 'Appeler'}</span>
                 </MagneticButton>
               </motion.div>
             </motion.div>

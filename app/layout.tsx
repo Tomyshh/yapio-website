@@ -83,6 +83,12 @@ export default function RootLayout({
             __html: JSON.stringify(generateStructuredData('WebSite', {})),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateStructuredData('ProfessionalService', {})),
+          }}
+        />
         
         {/* Configuration simplifiée pour le chargement */}
         <style>{`

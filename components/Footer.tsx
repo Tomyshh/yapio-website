@@ -6,6 +6,7 @@ import Logo from './Logo';
 import Link from 'next/link';
 import ModernBackground from './ModernBackground';
 import { motion } from 'framer-motion';
+import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
 
 export default function Footer() {
   const { t, isLoading } = useLanguage();
@@ -67,6 +68,15 @@ export default function Footer() {
           
           {/* Links */}
           <div className="flex items-center space-x-6">
+            <motion.a
+              href={`tel:${YAPIO_PHONE_E164}`}
+              className="text-gray-400 hover:text-primary transition-colors text-sm relative group"
+              whileHover={{ scale: 1.05 }}
+              aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+            >
+              {YAPIO_PHONE_DISPLAY}
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-300" />
+            </motion.a>
             <motion.div whileHover={{ scale: 1.05 }}>
               <Link 
                 href="/privacy-policy" 

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { YAPIO_PHONE_E164, YAPIO_WHATSAPP_PHONE } from './contact'
 
 export interface SEOConfig {
   title: string
@@ -91,7 +92,7 @@ type StructuredDataInput = Record<string, unknown> & {
 }
 
 export function generateStructuredData(
-  type: 'Organization' | 'WebSite' | 'WebPage' | 'Article',
+  type: 'Organization' | 'WebSite' | 'WebPage' | 'Article' | 'ProfessionalService',
   data: StructuredDataInput
 ) {
   const baseStructuredData = {
@@ -109,14 +110,14 @@ export function generateStructuredData(
         logo: `${baseUrl}/branding/fulllogo_nobuffer.png`,
         contactPoint: {
           '@type': 'ContactPoint',
-          telephone: '+33-XXX-XXX-XXX', // Remplacez par votre numéro
-          contactType: 'customer service',
+          telephone: YAPIO_PHONE_E164,
+          contactType: 'sales',
+          areaServed: 'FR',
           availableLanguage: ['French', 'English', 'Hebrew'],
         },
         address: {
           '@type': 'PostalAddress',
           addressCountry: 'FR',
-          addressLocality: 'Ville', // Remplacez par votre ville
         },
         sameAs: [
           'https://www.linkedin.com/company/yapio', // Remplacez par vos réseaux sociaux
@@ -142,6 +143,56 @@ export function generateStructuredData(
           target: `${baseUrl}/search?q={search_term_string}`,
           'query-input': 'required name=search_term_string',
         },
+        ...data,
+      }
+
+    case 'ProfessionalService':
+      return {
+        ...baseStructuredData,
+        name: 'YAPIO',
+        url: baseUrl,
+        description:
+          'Développement d’applications mobiles, CRM et logiciels sur mesure, solutions IA et intégrations (API, webhooks). Contact direct par téléphone.',
+        image: `${baseUrl}${defaultImage}`,
+        telephone: YAPIO_PHONE_E164,
+        email: 'tomyyapp@gmail.com',
+        serviceType: [
+          'Développement d’applications mobiles',
+          'Développement CRM',
+          'Logiciel sur mesure',
+          'Solutions IA (chatbots, automatisations)',
+          'Intégrations API & webhooks',
+        ],
+        areaServed: [
+          {
+            '@type': 'Country',
+            name: 'France',
+          },
+        ],
+        address: {
+          '@type': 'PostalAddress',
+          addressCountry: 'FR',
+        },
+        contactPoint: [
+          {
+            '@type': 'ContactPoint',
+            contactType: 'sales',
+            telephone: YAPIO_PHONE_E164,
+            availableLanguage: ['French', 'English', 'Hebrew'],
+          },
+          {
+            '@type': 'ContactPoint',
+            contactType: 'customer service',
+            telephone: YAPIO_PHONE_E164,
+            availableLanguage: ['French', 'English', 'Hebrew'],
+          },
+        ],
+        sameAs: [
+          'https://www.linkedin.com/company/yapio',
+          'https://twitter.com/yapio_dev',
+          'https://github.com/yapio',
+          `https://wa.me/${YAPIO_WHATSAPP_PHONE}`,
+        ],
         ...data,
       }
 
@@ -189,17 +240,29 @@ export function generateStructuredData(
 }
 
 export const defaultSEO: SEOConfig = {
-  title: 'YAPIO - Services Numériques Sur Mesure | Applications, IA & Logiciels',
-  description: 'YAPIO - Services numériques innovants : développement d\'applications mobiles et web, intégration d\'intelligence artificielle et création de logiciels sur mesure. Solutions personnalisées pour votre entreprise.',
+  title: 'YAPIO - Applications mobiles, CRM, IA, intégrations & logiciels sur mesure',
+  description:
+    'YAPIO conçoit et développe des applications mobiles, des CRM et logiciels sur mesure, des solutions IA (chatbots, automatisations) et des intégrations (API, webhooks) pour votre entreprise.',
   keywords: [
     'services numériques',
     'développement application mobile',
+    'création application mobile',
+    'développement CRM',
+    'CRM sur mesure',
     'application web',
+    'logiciel',
     'intégration IA',
     'intelligence artificielle',
+    'solution IA',
     'logiciel sur mesure',
+    'développement logiciel',
+    'intégrations',
+    'intégration API',
+    'webhooks',
+    'automatisation',
     'chatbot',
     'machine learning',
+    'LLM',
     'React Native',
     'Flutter',
     'Next.js',
@@ -220,6 +283,58 @@ export const pageSEO = {
     structuredData: [
       generateStructuredData('Organization', {}),
       generateStructuredData('WebSite', {}),
+      generateStructuredData('ProfessionalService', {}),
+    ],
+  },
+  projects: {
+    title: 'Projets - YAPIO | Portfolio de réalisations',
+    description:
+      'Explorez nos projets : sites web, applications mobiles, intégrations IA et logiciels sur mesure. Découvrez nos réalisations et contactez-nous pour votre projet.',
+    keywords: [
+      'portfolio',
+      'projets',
+      'réalisations',
+      'site web',
+      'application mobile',
+      'IA',
+      'logiciel sur mesure',
+      'développement',
+      'YAPIO',
+      'France',
+    ],
+    canonical: `${baseUrl}/projects/`,
+    structuredData: [
+      generateStructuredData('WebPage', {
+        title: 'Projets',
+        description: 'Portfolio de réalisations YAPIO',
+        url: `${baseUrl}/projects/`,
+      }),
+    ],
+  },
+  contact: {
+    title: 'Contact - YAPIO | Devis & appel',
+    description:
+      `Appelez-nous au ${YAPIO_PHONE_E164} ou envoyez-nous un message pour discuter de votre projet (web, mobile, IA, logiciel sur mesure).`,
+    keywords: [
+      'contact',
+      'devis',
+      'appel',
+      'téléphone',
+      'développement web',
+      'application mobile',
+      'IA',
+      'logiciel sur mesure',
+      'France',
+      'YAPIO',
+    ],
+    canonical: `${baseUrl}/contact/`,
+    structuredData: [
+      generateStructuredData('WebPage', {
+        title: 'Contact',
+        description: 'Contactez YAPIO pour discuter de votre projet',
+        url: `${baseUrl}/contact/`,
+      }),
+      generateStructuredData('ProfessionalService', {}),
     ],
   },
   about: {

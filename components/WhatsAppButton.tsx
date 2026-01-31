@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { YAPIO_WHATSAPP_PHONE } from '@/lib/contact';
 
 function WhatsAppButtonContent() {
   return (
@@ -16,7 +17,7 @@ function WhatsAppButtonContent() {
       }}
     >
       <a
-        href="https://wa.me/972584268519"
+        href={`https://wa.me/${YAPIO_WHATSAPP_PHONE}`}
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -40,7 +41,7 @@ function WhatsAppButtonContent() {
           e.currentTarget.style.backgroundColor = '#22c55e';
           e.currentTarget.style.transform = 'scale(1)';
         }}
-        aria-label="Contact on WhatsApp"
+        aria-label="Contacter sur WhatsApp"
       >
         <svg
           width="32"

@@ -12,9 +12,10 @@ export const translations = {
     },
     hero: {
       title: 'Services Numériques sur Mesure',
-      subtitle: 'Applications • IA • Logiciels',
-      description: 'Nous transformons vos idées en solutions digitales performantes : applications mobiles et web, intégration d\'intelligence artificielle et développement de logiciels personnalisés.',
+      subtitle: 'Apps mobiles • CRM • IA • Intégrations',
+      description: 'Nous transformons vos idées en solutions digitales performantes : applications mobiles, CRM et logiciels sur mesure, intégration d\'intelligence artificielle et intégrations (API, automatisations).',
       cta: 'Démarrer votre projet',
+      callCta: 'Appeler',
       learnMore: 'En savoir plus',
       secondaryCta: 'Voir nos services',
       studio: 'Studio produit & ingénierie',
@@ -48,19 +49,19 @@ export const translations = {
       learnMore: 'En savoir plus',
       mobile: {
         title: 'Applications Mobiles',
-        description: 'Développement d\'applications natives et cross-platform pour iOS et Android, alliant performance et expérience utilisateur exceptionnelle.',
+        description: 'Création d’applications iOS/Android (native ou cross‑platform) : performance, UX, store, maintenance et évolution.',
       },
       desktop: {
         title: 'Applications Web',
-        description: 'Création de sites web et applications web modernes, responsives, sécurisées et optimisées pour vos besoins métier.',
+        description: 'Sites et applications web modernes (SaaS), sécurisés et performants, avec intégrations API, paiements, emails et automatisations.',
       },
       web: {
         title: 'Intégration IA',
-        description: 'Intégration de l\'intelligence artificielle dans vos processus : chatbots, analyse de données, automatisation et machine learning.',
+        description: 'Solutions IA utiles et mesurables : chatbots, assistants, automatisations, extraction/tri de documents, analyse et workflows.',
       },
       consulting: {
         title: 'Logiciels Sur Mesure',
-        description: 'Développement de solutions logicielles personnalisées adaptées à vos besoins spécifiques et à votre secteur d\'activité.',
+        description: 'Logiciels métiers & CRM sur mesure : gestion commerciale, pipeline, back‑office, dashboards, intégrations et reporting.',
       },
     },
     features: {
@@ -136,6 +137,7 @@ export const translations = {
       infoTitle: 'Informations de contact',
       infoLabels: {
         Email: 'Email',
+        Phone: 'Téléphone',
         WhatsApp: 'WhatsApp',
         Location: 'Localisation',
       },
@@ -352,9 +354,10 @@ export const translations = {
     },
     hero: {
       title: 'Custom Digital Services',
-      subtitle: 'Apps • AI • Software',
-      description: 'We transform your ideas into high-performing digital solutions: mobile and web applications, artificial intelligence integration, and custom software development.',
+      subtitle: 'Mobile apps • CRM • AI • Integrations',
+      description: 'We turn your ideas into high‑performing digital products: mobile apps, custom CRM/software, AI solutions and integrations (APIs, automations).',
       cta: 'Start Your Project',
+      callCta: 'Call',
       learnMore: 'Learn More',
       secondaryCta: 'View services',
       studio: 'Product studio & engineering',
@@ -388,19 +391,19 @@ export const translations = {
       learnMore: 'Learn more',
       mobile: {
         title: 'Mobile Applications',
-        description: 'Development of native and cross-platform applications for iOS and Android, combining performance with exceptional user experience.',
+        description: 'iOS/Android apps (native or cross‑platform): performance, UX, release, maintenance and iteration.',
       },
       desktop: {
         title: 'Web Applications',
-        description: 'Creation of modern, responsive, secure websites and web applications optimized for your business needs.',
+        description: 'Modern web apps (SaaS): secure, fast, with API integrations, payments, emails and automations.',
       },
       web: {
         title: 'AI Integration',
-        description: 'Integration of artificial intelligence into your processes: chatbots, data analysis, automation, and machine learning.',
+        description: 'Practical AI solutions: chatbots/assistants, automations, document processing, analytics and workflows.',
       },
       consulting: {
         title: 'Custom Software',
-        description: 'Development of personalized software solutions tailored to your specific needs and industry sector.',
+        description: 'Custom business software & CRM: sales pipeline, back office, dashboards, integrations and reporting.',
       },
     },
     features: {
@@ -476,6 +479,7 @@ export const translations = {
       infoTitle: 'Contact information',
       infoLabels: {
         Email: 'Email',
+        Phone: 'Phone',
         WhatsApp: 'WhatsApp',
         Location: 'Location',
       },
@@ -692,9 +696,10 @@ export const translations = {
     },
     hero: {
       title: 'שירותים דיגיטליים מותאמים אישית',
-      subtitle: 'אפליקציות • בינה מלאכותית • תוכנות',
-      description: 'אנו הופכים את הרעיונות שלך לפתרונות דיגיטליים מתקדמים: אפליקציות מובייל ואינטרנט, שילוב בינה מלאכותית ופיתוח תוכנות מותאמות אישית.',
+      subtitle: 'אפליקציות מובייל • CRM • בינה מלאכותית • אינטגרציות',
+      description: 'אנחנו הופכים רעיונות לפתרונות דיגיטליים מתקדמים: אפליקציות מובייל, CRM ותוכנות מותאמות אישית, פתרונות AI ואינטגרציות (API ואוטומציות).',
       cta: 'התחל את הפרויקט שלך',
+      callCta: 'התקשר',
       learnMore: 'למד עוד',
       secondaryCta: 'צפה בשירותים',
       studio: 'סטודיו מוצר והנדסה',
@@ -728,19 +733,19 @@ export const translations = {
       learnMore: 'למד עוד',
       mobile: {
         title: 'אפליקציות מובייל',
-        description: 'פיתוח אפליקציות מקוריות וחוצות פלטפורמות ל-iOS ו-Android, המשלבות ביצועים עם חוויית משתמש יוצאת דופן.',
+        description: 'אפליקציות iOS/Android (נייטיב או cross‑platform): ביצועים, UX, העלאה לחנויות ותחזוקה.',
       },
       desktop: {
         title: 'אפליקציות אינטרנט',
-        description: 'יצירת אתרים ואפליקציות אינטרנט מודרניים, רספונסיביים, מאובטחים ומותאמים לצרכי העסק שלך.',
+        description: 'אפליקציות ווב מודרניות (SaaS): מאובטחות ומהירות, עם אינטגרציות API, תשלומים, אימייל ואוטומציות.',
       },
       web: {
         title: 'שילוב בינה מלאכותית',
-        description: 'שילוב בינה מלאכותית בתהליכים שלך: צ\'אטבוטים, ניתוח נתונים, אוטומציה ולמידת מכונה.',
+        description: 'פתרונות AI פרקטיים: צ׳אטבוטים/עוזרים, אוטומציות, עיבוד מסמכים, אנליטיקה ו־workflows.',
       },
       consulting: {
         title: 'תוכנות מותאמות אישית',
-        description: 'פיתוח פתרונות תוכנה מותאמים אישית לצרכים הספציפיים שלך ולענף התעשייה שלך.',
+        description: 'תוכנות עסקיות ו‑CRM מותאמים: ניהול מכירות, back‑office, דשבורדים, אינטגרציות ודוחות.',
       },
     },
     features: {
@@ -816,6 +821,7 @@ export const translations = {
       infoTitle: 'פרטי קשר',
       infoLabels: {
         Email: 'אימייל',
+        Phone: 'טלפון',
         WhatsApp: 'וואטסאפ',
         Location: 'מיקום',
       },

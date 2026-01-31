@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown, Phone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/lib/translations';
 import { ResponsiveLogo } from './Logo';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -128,6 +129,18 @@ export default function Navigation() {
 
             {/* Actions */}
             <div className="flex items-center ml-4 gap-2">
+              {/* Call button */}
+              <motion.a
+                href={`tel:${YAPIO_PHONE_E164}`}
+                className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+              >
+                <Phone size={16} />
+                <span className="text-sm font-medium">{YAPIO_PHONE_DISPLAY}</span>
+              </motion.a>
+
               {/* Language Selector */}
               <div className="relative">
                 <motion.button
@@ -294,6 +307,21 @@ export default function Navigation() {
                     {t.nav.getQuote}
                   </Link>
                 </motion.div>
+
+                {/* Mobile Call */}
+                <motion.a
+                  href={`tel:${YAPIO_PHONE_E164}`}
+                  className="block text-center bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl font-semibold transition-all border border-white/10"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                  aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                >
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <Phone size={18} />
+                    {YAPIO_PHONE_DISPLAY}
+                  </span>
+                </motion.a>
               </div>
             </motion.div>
           )}
