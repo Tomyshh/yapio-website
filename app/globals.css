@@ -249,23 +249,23 @@ body {
 @layer utilities {
   /* Font classes */
   .font-overcame {
-    font-family: 'Orbitron', monospace;
+    font-family: var(--font-orbitron), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     font-weight: 400;
   }
   
   .font-overcame-bold {
-    font-family: 'Orbitron', monospace;
+    font-family: var(--font-orbitron), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     font-weight: 900;
   }
   
   .font-overcame-italic {
-    font-family: 'Exo 2', sans-serif;
+    font-family: var(--font-exo2), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji';
     font-style: italic;
     font-weight: 400;
   }
   
   .font-overcame-outline {
-    font-family: 'Orbitron', monospace;
+    font-family: var(--font-orbitron), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     font-weight: 700;
     -webkit-text-stroke: 1px currentColor;
     -webkit-text-fill-color: transparent;
@@ -764,4 +764,79 @@ body {
 .animate-slide-in-right {
   animation: slide-in-right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   will-change: transform, opacity;
+}
+
+/* ================================
+   PERFORMANCE GUARDS (mobile / R-M)
+   ================================ */
+
+/* Animation du fond moderne (désactivée sur mobile) */
+.modern-bg-accent {
+  animation: modernFlow 22s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+/* iOS/Android: éviter les "sauts" liés à 100vh (barre d'adresse) */
+@supports (height: 100svh) {
+  .min-h-screen { min-height: 100svh; }
+  .h-screen { height: 100svh; }
+}
+
+/* Respect de la préférence utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Mobile/tactile: couper les effets les plus coûteux */
+@media (pointer: coarse), (max-width: 768px) {
+  .modern-bg-accent {
+    animation: none !important;
+  }
+
+  /* Navbar (backdrop blur) */
+  nav.glass-strong {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.72) !important;
+  }
+
+  /* Backdrop-filter = très coûteux sur mobile */
+  .glass,
+  .glass-strong {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  /* Animations infinies (glow/float/pulse/gradient/etc) */
+  .animate-pulse-slow,
+  .animate-float,
+  .animate-glow,
+  .animate-shimmer,
+  .animate-gradient-shift,
+  .animate-border-dance,
+  .animate-rotate-slow,
+  .animate-morph,
+  .animate-modern-flow,
+  .animate-modern-flow-reverse,
+  .animate-float-slow,
+  .animate-slide-right,
+  .animate-slide-left,
+  .animate-slide-down,
+  .animate-logo-glow,
+  .animate-carousel-shine,
+  .animate-progress-bar,
+  .animate-gentle-glow {
+    animation: none !important;
+  }
+}
+
+/* Rendu hors écran (réduit le coût initial) */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
 }

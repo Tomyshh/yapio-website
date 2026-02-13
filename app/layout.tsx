@@ -7,8 +7,25 @@ import SEOOptimizer from "@/components/SEOOptimizer";
 import { SEODebuggerTrigger } from "@/components/SEODebugger";
 import { generateMetadata as generateSEOMetadata, pageSEO, generateStructuredData } from "@/lib/seo";
 import ClientWrapper from "@/components/ClientWrapper";
+import Script from "next/script";
+import { Orbitron, Exo_2 } from "next/font/google";
 
 export const metadata: Metadata = generateSEOMetadata(pageSEO.home);
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  display: "swap",
+  variable: "--font-orbitron",
+});
+
+const exo2 = Exo_2({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-exo2",
+});
 
 // Composant de chargement fluide
 function LoadingFallback() {
@@ -31,13 +48,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr" className={`dark ${orbitron.variable} ${exo2.variable}`}>
       <head>
-        {/* Google Fonts - Orbitron et Exo 2 */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-        
         {/* Métadonnées SEO avancées */}
         <meta name="theme-color" content="#000000" />
         <meta name="msapplication-TileColor" content="#000000" />
@@ -66,10 +78,6 @@ export default function RootLayout({
           as="image"
           type="image/png"
         />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
         {/* Structured Data */}
         <script
           type="application/ld+json"
@@ -106,20 +114,21 @@ export default function RootLayout({
           }
         `}</style>
         
-        {/* Google tag (gtag.js) pour Google Ads */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17494474378"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-17494474378');
-            `,
-          }}
-        />
       </head>
-      <body suppressHydrationWarning className="transition-all duration-300 antialiased">
+      <body suppressHydrationWarning className="transition-colors duration-300 antialiased">
+        {/* Google tag (gtag.js) pour Google Ads */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17494474378"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17494474378');
+          `}
+        </Script>
         <SEOOptimizer>
           <Suspense fallback={<LoadingFallback />}>
             <LanguageProvider>

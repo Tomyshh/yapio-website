@@ -16,18 +16,17 @@ function ModernBackgroundComponent() {
 
       {/* Accent unique (primary) - très discret */}
       <div
-        className="absolute -top-[35%] -left-[25%] w-[70%] h-[70%] blur-[60px] opacity-60 will-change-transform"
+        className="modern-bg-accent absolute -top-[35%] -left-[25%] w-[85%] h-[85%] md:w-[70%] md:h-[70%] blur-[28px] md:blur-[60px] opacity-50 md:opacity-60 will-change-transform"
         style={{
           background:
             'radial-gradient(circle at 30% 30%, rgba(119,55,233,0.20) 0%, rgba(119,55,233,0.06) 35%, transparent 70%)',
-          animation: 'modernFlow 22s ease-in-out infinite alternate',
           transform: 'translateZ(0)',
         }}
       />
 
       {/* Fill neutre pour la profondeur */}
       <div
-        className="absolute -bottom-[40%] -right-[30%] w-[80%] h-[80%] blur-[70px] opacity-50"
+        className="absolute -bottom-[40%] -right-[30%] w-[95%] h-[95%] md:w-[80%] md:h-[80%] blur-[32px] md:blur-[70px] opacity-45 md:opacity-50"
         style={{
           background:
             'radial-gradient(circle at 60% 60%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 35%, transparent 70%)',

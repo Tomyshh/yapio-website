@@ -1,46 +1,27 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
 import { Users, Trophy, Clock, Heart, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
 import MagneticButton from './MagneticButton';
+import ParallaxBackground from './ParallaxBackground';
+import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 
 export default function About() {
   const { t, isLoading } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [scrollTargetReady, setScrollTargetReady] = useState(false);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // N'attacher la ref à useScroll qu'après hydratation (évite "Target ref is defined but not hydrated")
-  useLayoutEffect(() => {
-    if (!isMounted) return;
-    const id = requestAnimationFrame(() => {
-      setScrollTargetReady(!!sectionRef.current);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [isMounted]);
-
-  const { scrollYProgress } = useScroll({
-    target: scrollTargetReady ? sectionRef : undefined,
-    offset: ['start end', 'end start'],
-  });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const performanceMode = usePerformanceMode();
   
   // Vérification de sécurité pour éviter les erreurs pendant l'hydratation
   if (isLoading || !t?.about?.stats) {
     return (
-      <section id="about" className="py-20 relative overflow-hidden">
+      <section id="about" className="py-20 relative overflow-hidden cv-auto">
         <ModernBackground />
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="text-center">
@@ -84,11 +65,17 @@ export default function About() {
   };
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden">
+    <section id="about" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden cv-auto">
       {/* Arrière-plan moderne avec parallax */}
-      <motion.div className="absolute -inset-[30%]" style={{ y: backgroundY }}>
-        <ModernBackground />
-      </motion.div>
+      {performanceMode ? (
+        <div className="absolute -inset-[30%]">
+          <ModernBackground />
+        </div>
+      ) : (
+        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '20%']}>
+          <ModernBackground />
+        </ParallaxBackground>
+      )}
 
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Header */}

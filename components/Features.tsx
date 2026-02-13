@@ -1,37 +1,18 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useRef } from 'react';
 import { Shield, Zap, HeadphonesIcon, Sparkles, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
+import ParallaxBackground from './ParallaxBackground';
+import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 
 export default function Features() {
   const { t, isLoading } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [scrollTargetReady, setScrollTargetReady] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // N'attacher la ref à useScroll qu'après hydratation (évite "Target ref is defined but not hydrated")
-  useLayoutEffect(() => {
-    if (!isMounted) return;
-    const id = requestAnimationFrame(() => {
-      setScrollTargetReady(!!sectionRef.current);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [isMounted]);
-
-  const { scrollYProgress } = useScroll({
-    target: scrollTargetReady ? sectionRef : undefined,
-    offset: ['start end', 'end start'],
-  });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
+  const performanceMode = usePerformanceMode();
 
   // Protection contre les erreurs d'hydratation
   if (isLoading || !t?.features) {
@@ -104,9 +85,15 @@ export default function Features() {
   return (
     <section ref={sectionRef} className="py-20 lg:py-28 relative overflow-hidden">
       {/* Arrière-plan moderne avec parallax */}
-      <motion.div className="absolute -inset-[30%]" style={{ y: backgroundY }}>
-        <ModernBackground />
-      </motion.div>
+      {performanceMode ? (
+        <div className="absolute -inset-[30%]">
+          <ModernBackground />
+        </div>
+      ) : (
+        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '15%']}>
+          <ModernBackground />
+        </ParallaxBackground>
+      )}
 
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}

@@ -1,39 +1,20 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
 import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164, YAPIO_WHATSAPP_PHONE } from '@/lib/contact';
+import ParallaxBackground from './ParallaxBackground';
+import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 
 export default function Contact() {
   const { t, isLoading } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [scrollTargetReady, setScrollTargetReady] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // N'attacher la ref à useScroll qu'après hydratation (évite "Target ref is defined but not hydrated")
-  useLayoutEffect(() => {
-    if (!isMounted) return;
-    const id = requestAnimationFrame(() => {
-      setScrollTargetReady(!!sectionRef.current);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [isMounted]);
-
-  const { scrollYProgress } = useScroll({
-    target: scrollTargetReady ? sectionRef : undefined,
-    offset: ['start end', 'end start'],
-  });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
+  const performanceMode = usePerformanceMode();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -101,7 +82,7 @@ export default function Contact() {
   // Protection contre les erreurs d'hydratation
   if (isLoading || !t?.contact) {
     return (
-      <section id="contact" className="py-20 relative overflow-hidden">
+      <section id="contact" className="py-20 relative overflow-hidden cv-auto">
         <ModernBackground />
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="text-center mb-16">
@@ -152,11 +133,17 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden">
+    <section id="contact" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden cv-auto">
       {/* Arrière-plan moderne avec parallax */}
-      <motion.div className="absolute -inset-[30%]" style={{ y: backgroundY }}>
-        <ModernBackground />
-      </motion.div>
+      {performanceMode ? (
+        <div className="absolute -inset-[30%]">
+          <ModernBackground />
+        </div>
+      ) : (
+        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '15%']}>
+          <ModernBackground />
+        </ParallaxBackground>
+      )}
       
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}

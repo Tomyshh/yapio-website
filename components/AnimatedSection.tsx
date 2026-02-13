@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView, Variants } from 'framer-motion';
+import { motion, useInView, Variants, useReducedMotion } from 'framer-motion';
 import { useRef, ReactNode } from 'react';
 
 type AnimationType = 
@@ -74,13 +74,18 @@ export default function AnimatedSection({
 }: AnimatedSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once, amount: threshold });
+  const reduceMotion = useReducedMotion();
+
+  // Le blur via `filter` est cher (surtout sur mobile). En mode réduit, on remplace par une anim simple.
+  const resolvedAnimation: AnimationType =
+    reduceMotion && animation === 'blur' ? 'fadeUp' : animation;
 
   return (
     <motion.div
       ref={ref}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      variants={animationVariants[animation]}
+      variants={animationVariants[resolvedAnimation]}
       transition={{
         duration,
         delay,

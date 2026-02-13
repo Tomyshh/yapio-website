@@ -1,43 +1,23 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ArrowUpRight, ExternalLink, Sparkles } from 'lucide-react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import ModernBackground from './ModernBackground';
 import AnimatedSection from './AnimatedSection';
 import MagneticButton from './MagneticButton';
 import { getLocalizedProjects } from '@/lib/projects';
+import ParallaxBackground from './ParallaxBackground';
+import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 
 export default function Portfolio() {
   const { t } = useLanguage();
-  const [isMounted, setIsMounted] = useState(false);
-  const [scrollTargetReady, setScrollTargetReady] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const performanceMode = usePerformanceMode();
   useInView(sectionRef, { once: false, amount: 0.3 });
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // N'attacher la ref à useScroll qu'après hydratation (évite "Target ref is defined but not hydrated")
-  useLayoutEffect(() => {
-    if (!isMounted) return;
-    const id = requestAnimationFrame(() => {
-      setScrollTargetReady(!!sectionRef.current);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [isMounted]);
-
-  const { scrollYProgress } = useScroll({
-    target: scrollTargetReady ? sectionRef : undefined,
-    offset: ['start end', 'end start'],
-  });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   // Liste des projets (source unique: lib/projects.ts)
   const projects = getLocalizedProjects(t);
@@ -46,22 +26,22 @@ export default function Portfolio() {
     <section 
       id="portfolio" 
       ref={sectionRef}
-      className="py-24 lg:py-32 relative overflow-hidden min-h-screen"
+      className="py-24 lg:py-32 relative overflow-hidden min-h-screen cv-auto"
     >
       {/* Arrière-plan avec effet parallax */}
-      <motion.div 
-        className="absolute -inset-[30%]"
-        style={{ y: backgroundY }}
-      >
-        <ModernBackground />
-      </motion.div>
+      {performanceMode ? (
+        <div className="absolute -inset-[30%]">
+          <ModernBackground />
+        </div>
+      ) : (
+        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '30%']}>
+          <ModernBackground />
+        </ParallaxBackground>
+      )}
 
       {/* Particules décoratives (retirées pour un rendu plus pro) */}
       
-      <motion.div 
-        className="max-w-7xl mx-auto section-padding relative z-10"
-        style={{ opacity }}
-      >
+      <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header avec animation */}
         <AnimatedSection animation="fadeUp" className="text-center mb-16 lg:mb-20">
           <motion.div 
@@ -160,7 +140,7 @@ export default function Portfolio() {
             </MagneticButton>
           </div>
         </AnimatedSection>
-      </motion.div>
+      </div>
     </section>
   );
 }

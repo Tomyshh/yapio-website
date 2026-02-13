@@ -22,12 +22,21 @@ export default function Navigation() {
   const isProjectsPage = pathname === '/projects' || pathname.startsWith('/projects/');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        setIsScrolled(window.scrollY > 20);
+      });
     };
-    handleScroll(); // Check initial state
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    onScroll(); // état initial
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   // Fermer le menu mobile lors du changement de page
@@ -74,7 +83,7 @@ export default function Navigation() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled ? 'py-2' : 'py-3'
-      } backdrop-blur-xl bg-black/65`}
+      } glass-strong bg-black/65`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
