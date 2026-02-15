@@ -3,7 +3,7 @@ import { PROJECTS } from '@/lib/projects'
 
 export const dynamic = 'force-static'
 
-const baseUrl = 'https://yapio.io'
+const baseUrl = 'https://www.yapio.io'
 
 /**
  * Génère lastModified à partir de l'année du projet (31 décembre de l'année)

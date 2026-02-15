@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export const dynamic = 'force-static'
 
-const baseUrl = 'https://yapio.io'
+const baseUrl = 'https://www.yapio.io'
 
 /**
  * robots.txt optimisé pour le référencement :

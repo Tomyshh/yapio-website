@@ -7,7 +7,7 @@ import {
   generateBreadcrumbList,
 } from '@/lib/seo';
 
-const baseUrl = 'https://yapio.io';
+const baseUrl = 'https://www.yapio.io';
 
 interface PageProps {
   params: Promise<{

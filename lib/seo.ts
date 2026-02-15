@@ -12,7 +12,7 @@ export interface SEOConfig {
   structuredData?: unknown
 }
 
-const baseUrl = 'https://yapio.io'
+const baseUrl = 'https://www.yapio.io'
 const siteName = 'YAPIO'
 const defaultImage = '/branding/fulllogo_nobuffer.png'
 
