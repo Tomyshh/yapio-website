@@ -16,6 +16,13 @@ const baseUrl = 'https://yapio.io'
 const siteName = 'YAPIO'
 const defaultImage = '/branding/fulllogo_nobuffer.png'
 
+/** Retourne une URL absolue pour les images (OG, Twitter). */
+function absoluteImageUrl(ogImage: string): string {
+  if (ogImage.startsWith('http://') || ogImage.startsWith('https://')) return ogImage
+  const path = ogImage.startsWith('/') ? ogImage : `/${ogImage}`
+  return `${baseUrl}${path}`
+}
+
 export function generateMetadata({
   title,
   description,
@@ -27,6 +34,7 @@ export function generateMetadata({
 }: SEOConfig): Metadata {
   const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`
   const canonicalUrl = canonical || baseUrl
+  const imageUrl = absoluteImageUrl(ogImage)
 
   const metadata: Metadata = {
     title: fullTitle,
@@ -56,31 +64,42 @@ export function generateMetadata({
       siteName,
       images: [
         {
-          url: ogImage,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: title,
+          type: 'image/png',
         },
       ],
       locale: 'fr_FR',
+      alternateLocale: ['en_US', 'he_IL'],
       type: ogType,
     },
     twitter: {
       card: 'summary_large_image',
+      site: '@yapio_dev',
+      creator: '@yapio_dev',
       title: fullTitle,
       description,
-      images: [ogImage],
-      creator: '@yapio_dev', // Remplacez par votre handle Twitter
+      images: [imageUrl],
     },
     robots: noIndex ? 'noindex, nofollow' : 'index, follow',
-    verification: {
-      google: '', // Ajoutez votre code de vérification Google
-      yandex: '', // Ajoutez votre code de vérification Yandex si nécessaire
-      yahoo: '', // Ajoutez votre code de vérification Yahoo si nécessaire
-    },
+    ...(buildVerification()),
   }
 
   return metadata
+}
+
+function buildVerification(): { verification?: Metadata['verification'] } {
+  const google = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
+  const yandex = process.env.NEXT_PUBLIC_YANDEX_VERIFICATION?.trim()
+  const bing = process.env.NEXT_PUBLIC_BING_VERIFICATION?.trim()
+  if (!google && !yandex && !bing) return {}
+  const verification: NonNullable<Metadata['verification']> = {}
+  if (google) verification.google = google
+  if (yandex) verification.yandex = yandex
+  if (bing) verification.other = { 'msvalidate.01': bing }
+  return { verification }
 }
 
 type StructuredDataInput = Record<string, unknown> & {
@@ -132,6 +151,7 @@ export function generateStructuredData(
         ...baseStructuredData,
         name: 'YAPIO',
         url: baseUrl,
+        inLanguage: ['fr', 'en', 'he'],
         description: 'Services numériques : applications mobiles et web, IA, logiciels sur mesure',
         publisher: {
           '@type': 'Organization',
@@ -202,6 +222,7 @@ export function generateStructuredData(
         name: data.title ?? '',
         description: data.description ?? '',
         url: data.url ?? baseUrl,
+        inLanguage: 'fr',
         isPartOf: {
           '@type': 'WebSite',
           name: 'YAPIO',
@@ -236,6 +257,22 @@ export function generateStructuredData(
 
     default:
       return baseStructuredData
+  }
+}
+
+/** Génère un BreadcrumbList JSON-LD pour les pages internes (SEO). */
+export function generateBreadcrumbList(
+  items: Array<{ name: string; url: string }>
+): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
   }
 }
 

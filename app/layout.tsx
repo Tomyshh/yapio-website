@@ -56,6 +56,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+        <meta name="geo.region" content="FR" />
+        <meta name="referrer" content="origin-when-cross-origin" />
         
         {/* Icônes optimisées */}
         <link rel="icon" type="image/png" sizes="16x16" href="/branding/icononly_transparent_nobuffer.png" />

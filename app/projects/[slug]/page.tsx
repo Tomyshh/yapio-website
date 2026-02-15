@@ -1,7 +1,13 @@
 import { Metadata } from 'next';
 import ProjectDetailPage from './ProjectDetailPage';
 import { PROJECTS } from '@/lib/projects';
-import { generateMetadata as generateSEOMetadata } from '@/lib/seo';
+import {
+  generateMetadata as generateSEOMetadata,
+  generateStructuredData,
+  generateBreadcrumbList,
+} from '@/lib/seo';
+
+const baseUrl = 'https://yapio.io';
 
 interface PageProps {
   params: Promise<{
@@ -29,8 +35,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return generateSEOMetadata({
     title: `${projectName} - Projet`,
     description,
-    canonical: `https://yapio.io/projects/${slug}/`,
+    canonical: `${baseUrl}/projects/${slug}/`,
     ogImage,
+    ogType: 'article',
     keywords: [
       'projet',
       'portfolio',
@@ -51,6 +58,37 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  return <ProjectDetailPage slug={slug} />;
+  const project = PROJECTS.find((p) => p.slug === slug);
+  const projectName =
+    project?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+  const pageUrl = `${baseUrl}/projects/${slug}/`;
+
+  const breadcrumb = generateBreadcrumbList([
+    { name: 'Accueil', url: baseUrl },
+    { name: 'Projets', url: `${baseUrl}/projects/` },
+    { name: projectName, url: pageUrl },
+  ]);
+
+  const webPageStructuredData = generateStructuredData('WebPage', {
+    title: `${projectName} - Projet`,
+    description:
+      project?.fallbackDescription ||
+      `Découvrez notre projet ${projectName} : développement web, applications mobiles et solutions sur mesure.`,
+    url: pageUrl,
+  });
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageStructuredData) }}
+      />
+      <ProjectDetailPage slug={slug} />
+    </>
+  );
 }
 
