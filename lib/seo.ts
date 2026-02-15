@@ -155,7 +155,7 @@ export function generateStructuredData(
           'Développement d’applications mobiles, CRM et logiciels sur mesure, solutions IA et intégrations (API, webhooks). Contact direct par téléphone.',
         image: `${baseUrl}${defaultImage}`,
         telephone: YAPIO_PHONE_E164,
-        email: 'tomyyapp@gmail.com',
+        email: 'tom@yapio.io',
         serviceType: [
           'Développement d’applications mobiles',
           'Développement CRM',

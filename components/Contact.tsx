@@ -100,8 +100,8 @@ export default function Contact() {
     {
       icon: Mail,
       label: 'Email',
-      value: 'tomyyapp@gmail.com',
-      href: 'mailto:tomyyapp@gmail.com',
+      value: 'tom@yapio.io',
+      href: 'mailto:tom@yapio.io',
       color: 'from-primary to-primary-600',
     },
     {
