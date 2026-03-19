@@ -287,7 +287,7 @@ export default function ProjectsPageClient() {
               <div className="grid grid-cols-3 gap-8 text-center">
                 {[
                   { value: '20+', label: 'Clients satisfaits', color: 'from-blue-400 to-cyan-400' },
-                  { value: '10+', label: 'Projets réalisés', color: 'from-purple-400 to-pink-400' },
+                  { value: '30+', label: 'Projets réalisés', color: 'from-purple-400 to-pink-400' },
                   { value: '100%', label: 'Satisfaction', color: 'from-green-400 to-emerald-400' },
                 ].map((stat, index) => (
                   <motion.div

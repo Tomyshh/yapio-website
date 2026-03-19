@@ -1,5 +1,7 @@
 'use client';
 
+import { getFirebaseAnalytics, logEvent as firebaseLogEvent, isFirebaseConfigured } from './firebase';
+
 // Configuration des outils d'analytics et SEO
 export const analyticsConfig = {
   googleAnalytics: {
@@ -16,6 +18,9 @@ export const analyticsConfig = {
   },
   hotjar: {
     siteId: process.env.NEXT_PUBLIC_HOTJAR_SITE_ID || '', // ID Hotjar
+  },
+  firebase: {
+    enabled: isFirebaseConfigured(), // Firebase Analytics activé si configuré
   },
 };
 
@@ -127,8 +132,26 @@ export const initHotjar = () => {
   document.head.appendChild(script);
 };
 
+// Initialiser Firebase Analytics
+export const initFirebaseAnalytics = async () => {
+  if (typeof window === 'undefined' || !analyticsConfig.firebase.enabled) {
+    return;
+  }
+
+  try {
+    await getFirebaseAnalytics();
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Firebase Analytics] Initialisé avec succès');
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[Firebase Analytics] Erreur lors de l\'initialisation:', error);
+    }
+  }
+};
+
 // Événements personnalisés pour le tracking
-export const trackEvent = (eventName: string, parameters: Record<string, unknown> = {}) => {
+export const trackEvent = async (eventName: string, parameters: Record<string, unknown> = {}) => {
   if (typeof window === 'undefined') return;
 
   // Google Analytics 4
@@ -143,6 +166,18 @@ export const trackEvent = (eventName: string, parameters: Record<string, unknown
       ...parameters,
     });
   }
+
+  // Firebase Analytics
+  if (analyticsConfig.firebase.enabled) {
+    try {
+      await firebaseLogEvent(eventName, parameters);
+    } catch (error) {
+      // Erreur silencieuse pour ne pas interrompre les autres analytics
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[Firebase Analytics] Erreur lors du tracking:', error);
+      }
+    }
+  }
 };
 
 // Tracking des Core Web Vitals
@@ -153,8 +188,8 @@ export type WebVitalsMetric = {
   delta?: number;
 };
 
-export const trackWebVitals = (metric: WebVitalsMetric) => {
-  trackEvent(metric.name, {
+export const trackWebVitals = async (metric: WebVitalsMetric) => {
+  await trackEvent(metric.name, {
     event_category: 'Web Vitals',
     value: Math.round(metric.value),
     metric_id: metric.id,
@@ -164,8 +199,8 @@ export const trackWebVitals = (metric: WebVitalsMetric) => {
 };
 
 // Tracking des erreurs
-export const trackError = (error: Error, errorInfo?: unknown) => {
-  trackEvent('exception', {
+export const trackError = async (error: Error, errorInfo?: unknown) => {
+  await trackEvent('exception', {
     description: error.message,
     fatal: false,
     error_info: errorInfo ? JSON.stringify(errorInfo) : undefined,
@@ -173,8 +208,8 @@ export const trackError = (error: Error, errorInfo?: unknown) => {
 };
 
 // Tracking de la performance de navigation
-export const trackNavigation = (from: string, to: string, duration?: number) => {
-  trackEvent('page_navigation', {
+export const trackNavigation = async (from: string, to: string, duration?: number) => {
+  await trackEvent('page_navigation', {
     from_page: from,
     to_page: to,
     navigation_duration: duration,
@@ -182,8 +217,8 @@ export const trackNavigation = (from: string, to: string, duration?: number) => 
 };
 
 // Tracking des interactions utilisateur
-export const trackUserInteraction = (element: string, action: string, value?: string) => {
-  trackEvent('user_interaction', {
+export const trackUserInteraction = async (element: string, action: string, value?: string) => {
+  await trackEvent('user_interaction', {
     element_type: element,
     action_type: action,
     element_value: value,
@@ -191,7 +226,7 @@ export const trackUserInteraction = (element: string, action: string, value?: st
 };
 
 // Initialisation complète des outils d'analytics
-export const initAllAnalytics = () => {
+export const initAllAnalytics = async () => {
   if (typeof window === 'undefined') return;
 
   // Attendre le consentement des cookies si nécessaire
@@ -202,6 +237,9 @@ export const initAllAnalytics = () => {
     initGTM();
     initClarity();
     initHotjar();
+    
+    // Initialiser Firebase Analytics (asynchrone)
+    await initFirebaseAnalytics();
 
     // Tracking automatique des erreurs
     window.addEventListener('error', (event) => {

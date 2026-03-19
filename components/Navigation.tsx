@@ -1,43 +1,80 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Menu, X, Globe, ChevronDown, Phone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/lib/translations';
-import { ResponsiveLogo } from './Logo';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
 
+type HomeSection = 'home' | 'services' | 'about' | 'contact';
+
+function getDocumentTop(el: HTMLElement | null): number {
+  if (!el) return Infinity;
+  return el.getBoundingClientRect().top + window.scrollY;
+}
+
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [homeSection, setHomeSection] = useState<HomeSection>('home');
   const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
 
   // Déterminer si nous sommes sur la page d'accueil
   const isHomePage = pathname === '/';
   const isProjectsPage = pathname === '/projects' || pathname.startsWith('/projects/');
+  const isBlogPage = pathname.startsWith('/blog');
 
+  // Scroll : barre rétractée + section active sur la home (#services, #about, #contact)
   useEffect(() => {
     let raf = 0;
-    const onScroll = () => {
+    const update = () => {
       if (raf) return;
       raf = window.requestAnimationFrame(() => {
         raf = 0;
         setIsScrolled(window.scrollY > 20);
+
+        if (pathname !== '/') {
+          return;
+        }
+
+        const headerOffset = 96;
+        const activateAfter = 56;
+        const y = window.scrollY + headerOffset;
+
+        const sTop = getDocumentTop(document.getElementById('services'));
+        const aTop = getDocumentTop(document.getElementById('about'));
+        const cTop = getDocumentTop(document.getElementById('contact'));
+
+        let next: HomeSection = 'home';
+        if (y >= cTop - activateAfter) next = 'contact';
+        else if (y >= aTop - activateAfter) next = 'about';
+        else if (y >= sTop - activateAfter) next = 'services';
+
+        setHomeSection((prev) => (prev === next ? prev : next));
       });
     };
 
-    onScroll(); // état initial
-    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+    // Après navigation client (ex. / → /#services), le DOM peut être prêt un tick plus tard
+    const t = window.setTimeout(update, 0);
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('hashchange', update);
+    window.addEventListener('resize', update, { passive: true });
+
     return () => {
+      window.clearTimeout(t);
       if (raf) window.cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('hashchange', update);
+      window.removeEventListener('resize', update);
     };
-  }, []);
+  }, [pathname]);
 
   // Fermer le menu mobile lors du changement de page
   useEffect(() => {
@@ -50,98 +87,112 @@ export default function Navigation() {
     { code: 'he', name: 'עברית', flag: '🇮🇱' },
   ];
 
-  // Navigation items - maintenant avec des pages dédiées
+  // Navigation items — sur la home, l’actif suit la section visible (scroll + hash)
   const navItems = [
-    { 
-      href: '/', 
+    {
+      href: '/',
       label: t.nav.home,
-      isActive: isHomePage
+      isActive: isHomePage && homeSection === 'home',
     },
-    { 
-      href: isHomePage ? '#services' : '/#services', 
+    {
+      href: isHomePage ? '#services' : '/#services',
       label: t.nav.services,
-      isActive: false
+      isActive: isHomePage && homeSection === 'services',
     },
-    { 
-      href: '/projects', 
+    {
+      href: '/projects',
       label: t.nav.portfolio,
-      isActive: isProjectsPage
+      isActive: isProjectsPage,
     },
-    { 
-      href: isHomePage ? '#about' : '/#about', 
+    {
+      href: '/blog/',
+      label: t.nav.blog,
+      isActive: isBlogPage,
+    },
+    {
+      href: isHomePage ? '#about' : '/#about',
       label: t.nav.about,
-      isActive: false
+      isActive: isHomePage && homeSection === 'about',
     },
-    { 
-      href: isHomePage ? '#contact' : '/#contact', 
+    {
+      href: isHomePage ? '#contact' : '/#contact',
       label: t.nav.contact,
-      isActive: false
+      isActive: isHomePage && homeSection === 'contact',
     },
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? 'py-2' : 'py-3'
-      } glass-strong bg-black/65`}
+    <header
+      role="banner"
+      className={`main-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
+        isScrolled ? 'header-scrolled py-2' : 'py-3'
+      }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.div 
-            className="flex items-center"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Link href="/" className="flex items-center group">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
+        {/* Logo (design: .logo) — icononly_transparent_nobuffer.png */}
+        <motion.div
+          className="logo"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Link href="/" className="flex items-center group">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center"
+            >
+              <Image
+                src="/branding/icononly_transparent_nobuffer.png"
+                alt="YAPIO"
+                width={40}
+                height={40}
+                className="object-contain w-10 h-10"
+                priority
+              />
+            </motion.div>
+          </Link>
+        </motion.div>
+
+        {/* Desktop Navigation (design: nav) */}
+        <nav className="hidden md:flex items-center">
+          {/* Nav Links */}
+          <div className="flex items-center gap-1">
+            {navItems.map((item, index) => (
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                key={item.href}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
               >
-                <ResponsiveLogo />
-              </motion.div>
-            </Link>
-          </motion.div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center">
-            {/* Nav Links */}
-            <div className="flex items-center gap-1">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                <Link
+                  href={item.href}
+                  data-active={item.isActive ? 'true' : undefined}
+                  className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                    item.isActive
+                      ? 'text-white'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
                 >
-                  <Link
-                    href={item.href}
-                    className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
-                      item.isActive
-                        ? 'text-white'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    <span className="relative z-10">{item.label}</span>
-                    {item.isActive && (
-                      <motion.span
-                        layoutId="activeNav"
-                        className="absolute left-1/2 -bottom-0.5 h-1 w-1 -translate-x-1/2 rounded-full bg-primary"
-                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+                  <span className="relative z-10">{item.label}</span>
+                  {item.isActive && (
+                    <motion.span
+                      layoutId="activeNav"
+                      className="absolute left-1/2 -bottom-0.5 h-1 w-1 -translate-x-1/2 rounded-full bg-primary"
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                </Link>
+              </motion.div>
+            ))}
+          </div>
 
-            {/* Actions */}
-            <div className="flex items-center ml-4 gap-2">
+            {/* Actions (design: nav-actions) */}
+            <div className="nav-actions flex items-center ml-4 gap-2">
               {/* Call button */}
               <motion.a
                 href={`tel:${YAPIO_PHONE_E164}`}
-                className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300"
+                className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
@@ -154,7 +205,7 @@ export default function Navigation() {
               <div className="relative">
                 <motion.button
                   onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white transition-all duration-300"
+                  className="flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -203,18 +254,18 @@ export default function Navigation() {
               >
                 <Link
                   href={isHomePage ? "#contact" : "/#contact"}
-                  className="relative overflow-hidden px-5 py-2.5 rounded-full bg-primary hover:bg-primary-600 text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 border border-primary/30"
+                  className="cta-button relative overflow-hidden px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 border"
                 >
                   <span className="relative z-10">{t.nav.getQuote}</span>
                 </Link>
               </motion.div>
             </div>
-          </div>
+        </nav>
 
-          {/* Mobile menu button */}
+        {/* Mobile menu button */}
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all"
+            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 transition-all"
             whileTap={{ scale: 0.9 }}
           >
             <AnimatePresence mode="wait">
@@ -241,7 +292,6 @@ export default function Navigation() {
               )}
             </AnimatePresence>
           </motion.button>
-        </div>
 
         {/* Mobile Navigation */}
         <AnimatePresence>
@@ -344,6 +394,6 @@ export default function Navigation() {
           onClick={() => setShowLangMenu(false)}
         />
       )}
-    </nav>
+    </header>
   );
 }

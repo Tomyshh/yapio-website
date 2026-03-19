@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { YAPIO_PHONE_E164, YAPIO_WHATSAPP_PHONE } from './contact'
+import type { BlogArticle } from '@/lib/blog-articles'
 
 export interface SEOConfig {
   title: string
@@ -417,6 +418,32 @@ export const pageSEO = {
       }),
     ],
   },
+  blog: {
+    title: 'AI Automation & LLM Process Automation Blog | YAPIO',
+    description:
+      'Expert articles on AI automation, process automation, LangChain, n8n, Claude, AI bots, and LLM implementation strategies that save time and grow revenue.',
+    keywords: [
+      'AI automation',
+      'process automation',
+      'LLM automation',
+      'LangChain',
+      'n8n',
+      'Claude',
+      'workflow automation',
+      'AI implementation',
+      'make money with AI',
+      'YAPIO',
+    ],
+    canonical: `${baseUrl}/blog/`,
+    structuredData: [
+      generateStructuredData('WebPage', {
+        title: 'Blog — AI automation & process automation',
+        description: 'Articles on LLM automation, n8n, LangChain, and monetizing AI workflows.',
+        url: `${baseUrl}/blog/`,
+        inLanguage: ['en', 'fr', 'he'],
+      }),
+    ],
+  },
   terms: {
     title: 'Conditions d\'utilisation - YAPIO',
     description: 'Conditions d\'utilisation des services YAPIO. Droits, obligations et conditions générales.',
@@ -437,4 +464,123 @@ export const pageSEO = {
       }),
     ],
   },
+}
+
+/**
+ * Blog : métadonnées orientées marché anglophone en priorité (canonical + x-default en),
+ * puis hreflang fr et he — aligné avec les bonnes pratiques multilingues Google.
+ */
+export function generateBlogIndexMetadata(): Metadata {
+  const seo = pageSEO.blog
+  const path = '/blog/'
+  const en = `${baseUrl}${path}?lang=en`
+  const fr = `${baseUrl}${path}?lang=fr`
+  const he = `${baseUrl}${path}?lang=he`
+  const imageUrl = absoluteImageUrl(defaultImage)
+
+  return {
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords.join(', '),
+    authors: [{ name: 'YAPIO', url: baseUrl }],
+    creator: 'YAPIO',
+    publisher: 'YAPIO',
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: en,
+      languages: {
+        'x-default': en,
+        en,
+        fr,
+        he,
+      },
+    },
+    openGraph: {
+      title: seo.title,
+      description: seo.description,
+      url: en,
+      siteName,
+      type: 'website',
+      locale: 'en_US',
+      alternateLocale: ['fr_FR', 'he_IL'],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: seo.title,
+          type: 'image/png',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@yapio_dev',
+      creator: '@yapio_dev',
+      title: seo.title,
+      description: seo.description,
+      images: [imageUrl],
+    },
+    robots: 'index, follow',
+    ...(buildVerification()),
+  }
+}
+
+export function generateBlogArticleMetadata(article: BlogArticle): Metadata {
+  const { seo } = article
+  const path = `/blog/${article.slug}/`
+  const en = `${baseUrl}${path}?lang=en`
+  const fr = `${baseUrl}${path}?lang=fr`
+  const he = `${baseUrl}${path}?lang=he`
+  const imageUrl = absoluteImageUrl(article.image)
+  const fullTitle = seo.title.includes(siteName) ? seo.title : `${seo.title} | ${siteName}`
+
+  return {
+    title: fullTitle,
+    description: seo.description,
+    keywords: seo.keywords.join(', '),
+    authors: [{ name: 'YAPIO', url: baseUrl }],
+    creator: 'YAPIO',
+    publisher: 'YAPIO',
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: en,
+      languages: {
+        'x-default': en,
+        en,
+        fr,
+        he,
+      },
+    },
+    openGraph: {
+      title: fullTitle,
+      description: seo.description,
+      url: en,
+      siteName,
+      type: 'article',
+      publishedTime: `${article.published}T08:00:00.000Z`,
+      modifiedTime: `${article.published}T08:00:00.000Z`,
+      locale: 'en_US',
+      alternateLocale: ['fr_FR', 'he_IL'],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.imageAlt.en,
+          type: 'image/jpeg',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@yapio_dev',
+      creator: '@yapio_dev',
+      title: fullTitle,
+      description: seo.description,
+      images: [imageUrl],
+    },
+    robots: 'index, follow',
+    ...(buildVerification()),
+  }
 }

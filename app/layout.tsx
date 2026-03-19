@@ -7,6 +7,7 @@ import SEOOptimizer from "@/components/SEOOptimizer";
 import { SEODebuggerTrigger } from "@/components/SEODebugger";
 import { generateMetadata as generateSEOMetadata, pageSEO, generateStructuredData } from "@/lib/seo";
 import ClientWrapper from "@/components/ClientWrapper";
+import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 import Script from "next/script";
 import { Orbitron, Exo_2 } from "next/font/google";
 
@@ -139,6 +140,7 @@ export default function RootLayout({
               </ClientWrapper>
             </LanguageProvider>
           </Suspense>
+          <FirebaseAnalytics />
           <WhatsAppButton />
           <SEODebuggerTrigger />
         </SEOOptimizer>

@@ -1,29 +1,21 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { Smartphone, Globe, Sparkles, Code } from 'lucide-react';
+import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ModernBackground from './ModernBackground';
-import { motion } from 'framer-motion';
-import AnimatedSection from './AnimatedSection';
-import ParallaxBackground from './ParallaxBackground';
-import { usePerformanceMode } from '@/hooks/usePerformanceMode';
+import FeatureShaderCards from '@/components/ui/feature-shader-cards';
+import type { Feature } from '@/components/ui/feature-shader-cards';
 
 export default function Services() {
   const { t, isLoading } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const performanceMode = usePerformanceMode();
 
-  // Protection contre les erreurs d'hydratation
   if (isLoading || !t?.services) {
     return (
-      <section id="services" className="py-20 relative overflow-hidden cv-auto">
-        <ModernBackground />
+      <section id="services" className="py-20 relative overflow-hidden cv-auto min-h-screen">
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="text-center mb-16">
             <div className="animate-pulse">
-              <div className="h-12 bg-gray-700 rounded w-64 mx-auto mb-4"></div>
-              <div className="h-6 bg-gray-700 rounded w-96 mx-auto"></div>
+              <div className="h-12 bg-gray-700 rounded w-64 mx-auto mb-4" />
+              <div className="h-6 bg-gray-700 rounded w-96 mx-auto" />
             </div>
           </div>
         </div>
@@ -31,132 +23,77 @@ export default function Services() {
     );
   }
 
-  const services = [
+  const features: Feature[] = [
     {
-      icon: Smartphone,
-      title: t.services.mobile.title,
-      description: t.services.mobile.description,
-      gradient: 'from-primary to-primary-600',
-      iconBg: 'bg-primary/10',
-      delay: 0,
+      title: t.services?.mobile?.title ?? 'Applications Mobiles',
+      description: t.services?.mobile?.description ?? '',
+      href: '/services/mobile',
+      icon: (
+        <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zM7 4V3h10v1H7zM7 18V6h10v12H7z" />
+        </svg>
+      ),
     },
     {
-      icon: Globe,
-      title: t.services.desktop.title,
-      description: t.services.desktop.description,
-      gradient: 'from-primary to-primary-600',
-      iconBg: 'bg-primary/10',
-      delay: 0.1,
+      title: t.services?.desktop?.title ?? 'Applications Web',
+      description: t.services?.desktop?.description ?? '',
+      href: '/services/web-apps',
+      icon: (
+        <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z" />
+        </svg>
+      ),
     },
     {
-      icon: Sparkles,
-      title: t.services.web.title,
-      description: t.services.web.description,
-      gradient: 'from-primary to-primary-600',
-      iconBg: 'bg-primary/10',
-      delay: 0.2,
+      title: t.services?.web?.title ?? 'Intégration IA',
+      description: t.services?.web?.description ?? '',
+      href: '/services/ai-integration',
+      icon: (
+        <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      ),
     },
     {
-      icon: Code,
-      title: t.services.consulting.title,
-      description: t.services.consulting.description,
-      gradient: 'from-primary to-primary-600',
-      iconBg: 'bg-primary/10',
-      delay: 0.3,
+      title: t.services?.consulting?.title ?? 'Logiciels Sur Mesure',
+      description: t.services?.consulting?.description ?? '',
+      href: '/services/custom-software',
+      icon: (
+        <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
+        </svg>
+      ),
+    },
+    {
+      title: t.services?.website?.title ?? 'Site Internet',
+      description: t.services?.website?.description ?? 'Sites vitrines et e‑commerce sur mesure : design moderne, SEO, performance et hébergement sécurisé.',
+      href: '/services/website',
+      icon: (
+        <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+        </svg>
+      ),
+    },
+    {
+      title: t.services?.automation?.title ?? 'Automatisation de Processus',
+      description: t.services?.automation?.description ?? '',
+      href: '/services/process-automation',
+      icon: (
+        <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+        </svg>
+      ),
     },
   ];
 
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut' as const,
-      },
-    },
-  };
-
   return (
-    <section id="services" ref={sectionRef} className="py-20 lg:py-28 relative overflow-hidden cv-auto">
-      {/* Arrière-plan moderne avec parallax */}
-      {performanceMode ? (
-        <div className="absolute -inset-[30%]">
-          <ModernBackground />
-        </div>
-      ) : (
-        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '20%']}>
-          <ModernBackground />
-        </ParallaxBackground>
-      )}
-      
-      <div className="max-w-7xl mx-auto section-padding relative z-10">
-        {/* Section header */}
-        <AnimatedSection animation="fadeUp" className="text-center mb-12 lg:mb-16">
-          <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Code className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">{t.services.badge}</span>
-          </motion.div>
-
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-overcame-bold">
-            <span className="gradient-text">{t.services.title}</span>
-          </h2>
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-            {t.services.subtitle}
-          </p>
-        </AnimatedSection>
-
-        {/* Services grid avec animations */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <motion.div
-                key={index}
-                variants={cardVariants}
-                custom={index}
-              >
-                <div className="glass rounded-2xl p-8 h-full relative overflow-hidden border border-white/10">
-                  {/* Icon */}
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} p-3 mb-6`}>
-                    <Icon className="w-full h-full text-white" />
-                  </div>
-                  
-                  {/* Title */}
-                  <h3 className="text-xl font-semibold mb-3 text-white">
-                    {service.title}
-                  </h3>
-                  
-                  {/* Description */}
-                  <p className="text-gray-400 leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </div>
-    </section>
+    <FeatureShaderCards
+      id="services"
+      sectionTitle={t.services?.title ?? 'Nos Services'}
+      sectionSubtitle={t.services?.subtitle ?? ''}
+      badge={t.services?.badge ?? ''}
+      features={features}
+      learnMoreLabel={t.services?.learnMore ?? 'En savoir plus'}
+    />
   );
 }

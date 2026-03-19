@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ArrowRight, ChevronDown, Sparkles, Check } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { GlowLogo } from './Logo';
-import ModernBackground from './ModernBackground';
+import GlowyWavesHeroBackground from '@/components/ui/glowy-waves-hero-background';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import MagneticButton from './MagneticButton';
 import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
@@ -39,11 +39,8 @@ function HeroAnimated() {
   // Utiliser le scroll global sans ref pour éviter les erreurs d'hydratation
   const { scrollYProgress } = useScroll();
 
-  // Effets Parallax basés sur le scroll global
+  // Parallax du fond uniquement (contenu et carte restent opaques et stables au scroll)
   const backgroundY = useTransform(scrollYProgress, [0, 0.3], ['0%', '50%']);
-  const textY = useTransform(scrollYProgress, [0, 0.3], ['0%', '100%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.15], [1, 0.8]);
 
   // Variants pour les animations
   const containerVariants = {
@@ -93,13 +90,10 @@ function HeroAnimated() {
         className="absolute -inset-[30%]"
         style={{ y: backgroundY }}
       >
-        <ModernBackground />
+        <GlowyWavesHeroBackground />
       </motion.div>
 
-      <motion.div 
-        className="max-w-7xl mx-auto section-padding relative z-10 pt-28 md:pt-32 pb-16 md:pb-20"
-        style={{ y: textY, opacity, scale }}
-      >
+      <div className="max-w-7xl mx-auto section-padding relative z-10 pt-28 md:pt-32 pb-16 md:pb-20">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center"
           variants={containerVariants}
@@ -223,7 +217,7 @@ function HeroAnimated() {
             </div>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Gradient de transition vers la section suivante */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark to-transparent pointer-events-none" />
@@ -256,7 +250,7 @@ function HeroStatic() {
     <section id="home" className="min-h-screen relative overflow-hidden">
       {/* Fond statique (sans parallax) */}
       <div className="absolute -inset-[30%]">
-        <ModernBackground />
+        <GlowyWavesHeroBackground />
       </div>
 
       <div className="max-w-7xl mx-auto section-padding relative z-10 pt-28 md:pt-32 pb-16 md:pb-20">

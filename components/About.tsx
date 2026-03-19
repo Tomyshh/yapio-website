@@ -37,7 +37,7 @@ export default function About() {
   
   const stats = [
     { icon: Users, value: '20+', label: t.about.stats.clients, color: 'from-primary to-primary-600' },
-    { icon: Trophy, value: '10+', label: t.about.stats.projects, color: 'from-primary to-primary-600' },
+    { icon: Trophy, value: '30+', label: t.about.stats.projects, color: 'from-primary to-primary-600' },
     { icon: Clock, value: '8+', label: t.about.stats.experience, color: 'from-primary to-primary-600' },
     { icon: Heart, value: '100%', label: t.about.stats.passion, color: 'from-primary to-primary-600' },
   ];
