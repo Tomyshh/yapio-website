@@ -44,18 +44,14 @@ export default function Portfolio() {
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header avec animation */}
         <AnimatedSection animation="fadeUp" className="text-center mb-16 lg:mb-20">
-          <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">{t.clients?.trustSection?.title || 'Projets réalisés'}</span>
-          </motion.div>
+          {t.clients?.trustSection?.title && (
+            <p className="text-sm font-medium text-primary mb-6">{t.clients.trustSection.title}</p>
+          )}
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-overcame-bold">
-            <span className="gradient-text">{t.clients?.title || 'Nos Projets'}</span>
+          <h2 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
+            {t.clients?.title || 'Nos Projets'}
           </h2>
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             {t.clients?.subtitle || 'Découvrez nos réalisations'}
           </p>
         </AnimatedSection>
