@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
@@ -19,11 +19,14 @@ interface OptimizedImageProps {
   onLoad?: () => void;
 }
 
-/**
- * Composant Image optimisé avec lazy loading et placeholder
- * Charge les images uniquement quand elles sont visibles dans le viewport
- * Optimisé pour les performances avec will-change et gestion d'erreurs
- */
+/** Encode les segments de chemin (espaces, etc.) pour les fichiers dans /public */
+function safeImageSrc(src: string): string {
+  if (src.startsWith('http://') || src.startsWith('https://')) return src;
+  if (!src.startsWith('/')) return src;
+  const segments = src.split('/').filter(Boolean);
+  return '/' + segments.map((s) => encodeURIComponent(s)).join('/');
+}
+
 export const OptimizedImage = React.memo(function OptimizedImage({
   src,
   alt,
@@ -41,23 +44,26 @@ export const OptimizedImage = React.memo(function OptimizedImage({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(priority);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Utiliser Intersection Observer uniquement si pas priority
-  const { elementRef, isIntersecting } = useIntersectionObserver({
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const { connectRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.01,
-    rootMargin: '100px', // Commencer à charger 100px avant d'être visible
+    rootMargin: '100px',
     triggerOnce: true,
   });
 
-  // Combiner les refs
-  useEffect(() => {
-    if (containerRef.current && !priority) {
-      (elementRef as React.MutableRefObject<HTMLElement | null>).current = containerRef.current;
-    }
-  }, [elementRef, priority]);
+  const setContainerRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef.current = node;
+      if (!priority) {
+        connectRef(node);
+      } else {
+        connectRef(null);
+      }
+    },
+    [priority, connectRef]
+  );
 
-  // Déclencher le chargement quand visible
   useEffect(() => {
     if (!priority && isIntersecting && !shouldLoad) {
       setShouldLoad(true);
@@ -74,11 +80,12 @@ export const OptimizedImage = React.memo(function OptimizedImage({
     setIsLoaded(false);
   };
 
-  // Placeholder simple pendant le chargement
+  const resolvedSrc = safeImageSrc(src);
+
   if (!shouldLoad) {
     return (
       <div
-        ref={containerRef}
+        ref={setContainerRef}
         className={`bg-gray-800/30 ${className}`}
         style={fill ? { position: 'absolute', inset: 0 } : { width, height }}
         aria-label={alt}
@@ -87,10 +94,10 @@ export const OptimizedImage = React.memo(function OptimizedImage({
     );
   }
 
-  // Gestion d'erreur
   if (hasError) {
     return (
       <div
+        ref={setContainerRef}
         className={`bg-gray-800/50 flex items-center justify-center ${className}`}
         style={fill ? { position: 'absolute', inset: 0 } : { width, height }}
         aria-label={alt}
@@ -102,7 +109,7 @@ export const OptimizedImage = React.memo(function OptimizedImage({
   }
 
   const imageProps = {
-    src,
+    src: resolvedSrc,
     alt,
     className: `${className} transition-opacity duration-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`,
     onLoad: handleLoad,
@@ -111,25 +118,21 @@ export const OptimizedImage = React.memo(function OptimizedImage({
     ...(fill ? { fill: true, sizes } : { width, height }),
     ...(placeholder === 'blur' && blurDataURL ? { placeholder: 'blur' as const, blurDataURL } : {}),
     loading: priority ? ('eager' as const) : ('lazy' as const),
-    // Optimisations de performance
     decoding: 'async' as const,
     fetchPriority: priority ? ('high' as const) : ('auto' as const),
   };
 
   return (
     <div
-      ref={containerRef}
+      ref={setContainerRef}
       className="relative"
       style={fill ? { position: 'absolute', inset: 0, willChange: 'contents' } : { willChange: 'contents' }}
     >
       <Image {...imageProps} />
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-gray-800/30" />
-      )}
+      {!isLoaded && <div className="absolute inset-0 bg-gray-800/30" />}
     </div>
   );
 }, (prevProps, nextProps) => {
-  // Comparaison optimisée pour éviter les re-renders
   return (
     prevProps.src === nextProps.src &&
     prevProps.alt === nextProps.alt &&

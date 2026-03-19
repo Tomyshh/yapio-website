@@ -1,19 +1,12 @@
 'use client';
 
 import { ReactNode } from 'react';
-import dynamic from 'next/dynamic';
-
-// Import dynamique du SmoothScroll uniquement
-const SmoothScroll = dynamic(() => import('./SmoothScroll'), { ssr: false });
 
 interface ClientWrapperProps {
   children: ReactNode;
 }
 
+/** Enveloppe client — scroll natif (sans Lenis) pour de meilleures perfs, notamment sous Windows. */
 export default function ClientWrapper({ children }: ClientWrapperProps) {
-  return (
-    <SmoothScroll>
-      {children}
-    </SmoothScroll>
-  );
+  return <>{children}</>;
 }

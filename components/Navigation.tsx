@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Menu, X, Globe, ChevronDown, Phone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -10,7 +10,14 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
 
-type HomeSection = 'home' | 'services' | 'about' | 'contact';
+type HomeSection = 'home' | 'services' | 'about' | 'testimonials' | 'contact';
+
+type SectionTops = {
+  services: number;
+  about: number;
+  testimonials: number;
+  contact: number;
+};
 
 function getDocumentTop(el: HTMLElement | null): number {
   if (!el) return Infinity;
@@ -22,6 +29,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [homeSection, setHomeSection] = useState<HomeSection>('home');
+  const sectionTopsRef = useRef<SectionTops | null>(null);
   const { language, setLanguage, t } = useLanguage();
   const pathname = usePathname();
 
@@ -33,6 +41,20 @@ export default function Navigation() {
   // Scroll : barre rétractée + section active sur la home (#services, #about, #contact)
   useEffect(() => {
     let raf = 0;
+
+    const refreshSectionTops = () => {
+      if (pathname !== '/') {
+        sectionTopsRef.current = null;
+        return;
+      }
+      sectionTopsRef.current = {
+        services: getDocumentTop(document.getElementById('services')),
+        about: getDocumentTop(document.getElementById('about')),
+        testimonials: getDocumentTop(document.getElementById('testimonials')),
+        contact: getDocumentTop(document.getElementById('contact')),
+      };
+    };
+
     const update = () => {
       if (raf) return;
       raf = window.requestAnimationFrame(() => {
@@ -43,36 +65,44 @@ export default function Navigation() {
           return;
         }
 
+        const tops = sectionTopsRef.current;
+        if (!tops) return;
+
         const headerOffset = 96;
         const activateAfter = 56;
         const y = window.scrollY + headerOffset;
 
-        const sTop = getDocumentTop(document.getElementById('services'));
-        const aTop = getDocumentTop(document.getElementById('about'));
-        const cTop = getDocumentTop(document.getElementById('contact'));
-
         let next: HomeSection = 'home';
-        if (y >= cTop - activateAfter) next = 'contact';
-        else if (y >= aTop - activateAfter) next = 'about';
-        else if (y >= sTop - activateAfter) next = 'services';
+        if (y >= tops.contact - activateAfter) next = 'contact';
+        else if (y >= tops.testimonials - activateAfter) next = 'testimonials';
+        else if (y >= tops.about - activateAfter) next = 'about';
+        else if (y >= tops.services - activateAfter) next = 'services';
 
         setHomeSection((prev) => (prev === next ? prev : next));
       });
     };
 
-    update();
-    // Après navigation client (ex. / → /#services), le DOM peut être prêt un tick plus tard
-    const t = window.setTimeout(update, 0);
+    refreshSectionTops();
+    const t = window.setTimeout(() => {
+      refreshSectionTops();
+      update();
+    }, 0);
+
+    const onResizeOrHash = () => {
+      refreshSectionTops();
+      update();
+    };
+
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('hashchange', update);
-    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('hashchange', onResizeOrHash);
+    window.addEventListener('resize', onResizeOrHash, { passive: true });
 
     return () => {
       window.clearTimeout(t);
       if (raf) window.cancelAnimationFrame(raf);
       window.removeEventListener('scroll', update);
-      window.removeEventListener('hashchange', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('hashchange', onResizeOrHash);
+      window.removeEventListener('resize', onResizeOrHash);
     };
   }, [pathname]);
 
@@ -155,6 +185,11 @@ export default function Navigation() {
       href: isHomePage ? '#about' : '/#about',
       label: t.nav.about,
       isActive: isHomePage && homeSection === 'about',
+    },
+    {
+      href: isHomePage ? '#testimonials' : '/#testimonials',
+      label: t.nav.testimonials,
+      isActive: isHomePage && homeSection === 'testimonials',
     },
     {
       href: isHomePage ? '#contact' : '/#contact',
@@ -444,7 +479,7 @@ export default function Navigation() {
                     className="space-y-3"
                   >
                     <p className="text-xs uppercase tracking-wider text-gray-500 px-4 mb-2">
-                      {t.nav.language || 'Langue'}
+                      {t.nav.language}
                     </p>
                     <div className="grid grid-cols-3 gap-2">
                       {languages.map((lang) => (

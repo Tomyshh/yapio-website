@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Users, Trophy, Clock, Heart, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
 import MagneticButton from './MagneticButton';
@@ -15,7 +15,6 @@ import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 export default function About() {
   const { t, isLoading } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const performanceMode = usePerformanceMode();
   
   // Vérification de sécurité pour éviter les erreurs pendant l'hydratation
@@ -182,7 +181,8 @@ export default function About() {
             className="grid grid-cols-2 gap-4 lg:gap-6"
             variants={containerVariants}
             initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
           >
             {stats.map((stat, index) => {
               const Icon = stat.icon;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 interface UseIntersectionObserverOptions {
   threshold?: number;
@@ -8,24 +8,29 @@ interface UseIntersectionObserverOptions {
   triggerOnce?: boolean;
 }
 
-// Version ultra-optimisée de l'intersection observer
+/**
+ * observe() s'exécute quand `connectRef` reçoit un nœud DOM — évite la course entre
+ * deux useEffect (ref non encore posée au premier passage).
+ */
 export function useIntersectionObserver({
   threshold = 0.1,
   rootMargin = '50px',
   triggerOnce = true,
 }: UseIntersectionObserverOptions = {}) {
+  const [target, setTarget] = useState<HTMLElement | null>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
-  const elementRef = useRef<HTMLElement>(null);
-  
-  // Mémorisation de l'observer pour éviter les re-créations
+
+  const connectRef = useCallback((node: HTMLElement | null) => {
+    setTarget(node);
+  }, []);
+
   const observer = useMemo(() => {
     if (typeof window === 'undefined') return null;
-    
+
     return new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsIntersecting(true);
-          // Si triggerOnce, on disconnecte immédiatement
           if (triggerOnce) {
             observer?.disconnect();
           }
@@ -38,34 +43,29 @@ export function useIntersectionObserver({
   }, [threshold, rootMargin, triggerOnce]);
 
   useEffect(() => {
-    const element = elementRef.current;
-    if (!element || !observer) return;
-
-    observer.observe(element);
-
+    if (!target || !observer) return;
+    observer.observe(target);
     return () => observer.disconnect();
-  }, [observer]);
+  }, [observer, target]);
 
-  return { elementRef, isIntersecting };
+  return { connectRef, isIntersecting };
 }
 
-// Hook simplifié pour les animations échelonnées
 export function useStaggeredAnimation(itemCount: number, delay: number = 50) {
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(() => 
+  const [visibleItems, setVisibleItems] = useState<boolean[]>(() =>
     new Array(itemCount).fill(false)
   );
-  const { elementRef, isIntersecting } = useIntersectionObserver();
+  const { connectRef, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
     if (isIntersecting) {
-      // Animation plus rapide et plus fluide
       const timer = setTimeout(() => {
         setVisibleItems(new Array(itemCount).fill(true));
       }, delay);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isIntersecting, itemCount, delay]);
 
-  return { elementRef, visibleItems };
+  return { connectRef, visibleItems };
 }

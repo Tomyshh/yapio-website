@@ -8,8 +8,10 @@ export const translations = {
       portfolio: 'Projets',
       blog: 'Blog',
       about: 'À propos',
+      testimonials: 'Témoignages',
       contact: 'Contact',
       getQuote: 'Demander un devis',
+      language: 'Langue',
     },
     blogPage: {
       tagline: 'Automatisation IA & processus',
@@ -123,7 +125,10 @@ export const translations = {
     },
     clients: {
       title: 'Nos Projets',
-      subtitle: 'Découvrez nos réalisations et projets digitaux',
+      subtitle: 'Une expérience à chaque contexte — du sur-mesure à l’échelle',
+      homeSummary:
+        'Au fil des années, nous avons livré une très large gamme de projets numériques : applications mobiles et web, outils métiers, intégrations IA, plateformes de contenu et bien d’autres environnements. Chaque mission est différente ; ce qui reste commun, c’est une exécution soignée et adaptée aux objectifs réels de nos partenaires. Quelques logos ci-dessous illustrent cette diversité — les études de cas détaillées se trouvent sur la page Projets.',
+      viewOtherProjects: 'Voir d’autres projets',
       viewMore: 'Voir',
       capturesLabel: 'Captures d\'écran',
       trustSection: {
@@ -197,6 +202,55 @@ export const translations = {
         web: 'Intégration IA',
         consulting: 'Logiciel Sur Mesure',
         other: 'Autre',
+      },
+    },
+    testimonials: {
+      badge: 'Témoignages clients',
+      title: 'Ce que disent nos clients',
+      subtitle: 'Découvrez les expériences de nos partenaires qui nous font confiance pour leurs projets digitaux',
+      translationLabel: 'Traduction:',
+    },
+    expertise: {
+      title: 'L\'expertise au cœur de nos solutions',
+      subtitle:
+        'Data Scientists, ML Engineers, Prompt Engineers, Data Engineers, PM IA, éthique et MLOps : une équipe complète pour identifier vos problèmes, les résoudre et déployer les meilleures solutions chez vous.',
+      badge: 'Notre expertise',
+      schemaTitle: 'Cartographie des rôles',
+      schemaSubtitle: 'De la donnée au produit IA — une chaîne claire, collaborative et mesurable.',
+      roles: [
+        {
+          title: 'Data Scientist',
+          tagline: 'Hypothèses, modèles et preuves de valeur sur vos données.',
+        },
+        {
+          title: 'Machine Learning Engineer',
+          tagline: 'Passage du prototype à un système fiable, testable et scalable.',
+        },
+        {
+          title: 'Prompt Engineer',
+          tagline: 'Prompts, agents et garde-fous pour des sorties LLM utiles et stables.',
+        },
+        {
+          title: 'Data Engineer',
+          tagline: 'Pipelines, qualité des données et fondations prêtes pour l’IA.',
+        },
+        {
+          title: 'IA Product Manager',
+          tagline: 'Priorisation, adoption utilisateur et alignement business / tech.',
+        },
+        {
+          title: 'Éthicien IA',
+          tagline: 'Biais, transparence et usage responsable dans vos cas d’usage.',
+        },
+        {
+          title: 'MLOps Engineer',
+          tagline: 'CI/CD des modèles, monitoring et fiabilité en production.',
+        },
+      ],
+      cta: {
+        title: 'Prêt à transformer vos données en avantage concurrentiel ?',
+        description: 'Discutons de vos défis et découvrons ensemble comment notre expertise peut propulser votre entreprise vers de nouveaux sommets.',
+        button: 'Parlons de votre projet',
       },
     },
     about: {
@@ -395,8 +449,10 @@ export const translations = {
       portfolio: 'Projects',
       blog: 'Blog',
       about: 'About',
+      testimonials: 'Testimonials',
       contact: 'Contact',
       getQuote: 'Get a Quote',
+      language: 'Language',
     },
     blogPage: {
       tagline: 'AI & process automation',
@@ -510,7 +566,10 @@ export const translations = {
     },
     clients: {
       title: 'Our Projects',
-      subtitle: 'Discover our digital achievements and projects',
+      subtitle: 'Every context is different — custom work at scale',
+      homeSummary:
+        'Over the years we have shipped a wide spectrum of digital work: mobile and web apps, business tooling, AI integrations, content platforms and many other environments. Each engagement is unique; what stays consistent is careful execution aligned with real business goals. The logos below hint at that diversity — full case studies are on the Projects page.',
+      viewOtherProjects: 'View other projects',
       viewMore: 'View',
       capturesLabel: 'Screenshots',
       trustSection: {
@@ -584,6 +643,55 @@ export const translations = {
         web: 'AI Integration',
         consulting: 'Custom Software',
         other: 'Other',
+      },
+    },
+    testimonials: {
+      badge: 'Client testimonials',
+      title: 'What Our Clients Say',
+      subtitle: 'Discover the experiences of our partners who trust us for their digital projects',
+      translationLabel: 'Translation:',
+    },
+    expertise: {
+      title: 'Expertise at the heart of our solutions',
+      subtitle:
+        'Data Scientists, ML Engineers, Prompt Engineers, Data Engineers, AI PMs, ethics, and MLOps: a full team to surface problems, solve them, and ship the best solutions on your side.',
+      badge: 'Our expertise',
+      schemaTitle: 'Role map',
+      schemaSubtitle: 'From data to AI product — a clear, collaborative, measurable chain.',
+      roles: [
+        {
+          title: 'Data Scientist',
+          tagline: 'Hypotheses, modeling, and proof of value on your data.',
+        },
+        {
+          title: 'Machine Learning Engineer',
+          tagline: 'From prototype to a reliable, testable, scalable system.',
+        },
+        {
+          title: 'Prompt Engineer',
+          tagline: 'Prompts, agents, and guardrails for useful, stable LLM outputs.',
+        },
+        {
+          title: 'Data Engineer',
+          tagline: 'Pipelines, data quality, and foundations ready for AI.',
+        },
+        {
+          title: 'AI Product Manager',
+          tagline: 'Prioritization, user adoption, and business / tech alignment.',
+        },
+        {
+          title: 'AI Ethicist',
+          tagline: 'Bias, transparency, and responsible use in your use cases.',
+        },
+        {
+          title: 'MLOps Engineer',
+          tagline: 'Model CI/CD, monitoring, and reliability in production.',
+        },
+      ],
+      cta: {
+        title: 'Ready to transform your data into a competitive advantage?',
+        description: 'Let\'s discuss your challenges and discover together how our expertise can propel your business to new heights.',
+        button: 'Let\'s talk about your project',
       },
     },
     about: {
@@ -782,8 +890,10 @@ export const translations = {
       portfolio: 'פרויקטים',
       blog: 'בלוג',
       about: 'אודות',
+      testimonials: 'המלצות',
       contact: 'צור קשר',
       getQuote: 'קבל הצעת מחיר',
+      language: 'שפה',
     },
     blogPage: {
       tagline: 'אוטומציית בינה מלאכותית ותהליכים',
@@ -897,7 +1007,10 @@ export const translations = {
     },
     clients: {
       title: 'הפרויקטים שלנו',
-      subtitle: 'גלה את ההישגים והפרויקטים הדיגיטליים שלנו',
+      subtitle: 'כל הקשר שונה — עבודה מותאמת אישית בקנה מידה',
+      homeSummary:
+        'לאורך השנים סיפקנו מגוון רחב של פרויקטים דיגיטליים: אפליקציות מובייל ואינטרנט, כלי ארגון, שילובי AI, פלטפורמות תוכן וסביבות נוספות. לכל שיתוף פעולה מאפיינים משלו; הקו המשותף הוא ביצוע קפדני המיושר למטרות העסקיות. הלוגואים למטה נותנים טעימה מהמגוון — תיאורים מלאים נמצאים בדף הפרויקטים.',
+      viewOtherProjects: 'לפרויקטים נוספים',
       viewMore: 'ראה',
       capturesLabel: 'צילומי מסך',
       trustSection: {
@@ -971,6 +1084,55 @@ export const translations = {
         web: 'שילוב בינה מלאכותית',
         consulting: 'תוכנה מותאמת אישית',
         other: 'אחר',
+      },
+    },
+    testimonials: {
+      badge: 'המלצות לקוחות',
+      title: 'מה הלקוחות שלנו אומרים',
+      subtitle: 'גלה את החוויות של השותפים שלנו שסומכים עלינו לפרויקטים הדיגיטליים שלהם',
+      translationLabel: 'תרגום:',
+    },
+    expertise: {
+      title: 'המומחיות בלב הפתרונות שלנו',
+      subtitle:
+        'Data Scientists, מהנדסי ML, מהנדסי פרומפטים, מהנדסי נתונים, מנהלי מוצר IA, אתיקה ו-MLOps: צוות מלא לאיתור בעיות, פתרון והטמעת הפתרונות הטובים ביותר אצלכם.',
+      badge: 'המומחיות שלנו',
+      schemaTitle: 'מפת תפקידים',
+      schemaSubtitle: 'מנתונים למוצר AI — שרשרת ברורה, שיתופית וניתנת למדידה.',
+      roles: [
+        {
+          title: 'Data Scientist',
+          tagline: 'השערות, מודלים והוכחת ערך על הנתונים שלך.',
+        },
+        {
+          title: 'Machine Learning Engineer',
+          tagline: 'מאב טיפוס למערכת אמינה, ניתנת לבדיקה ולהרחבה.',
+        },
+        {
+          title: 'Prompt Engineer',
+          tagline: 'פרומפטים, סוכנים והגנות לפלט LLM שימושי ויציב.',
+        },
+        {
+          title: 'Data Engineer',
+          tagline: 'צינורות נתונים, איכות ותשתית מוכנה ל-AI.',
+        },
+        {
+          title: 'מנהל מוצר IA',
+          tagline: 'תיעדוף, אימוץ משתמשים ויישור עסקי־טכנולוגי.',
+        },
+        {
+          title: 'אתיקאי AI',
+          tagline: 'הטיות, שקיפות ושימוש אחראי בתרחישים שלך.',
+        },
+        {
+          title: 'MLOps Engineer',
+          tagline: 'CI/CD למודלים, ניטור ואמינות בייצור.',
+        },
+      ],
+      cta: {
+        title: 'מוכן להפוך את הנתונים שלך ליתרון תחרותי?',
+        description: 'בוא נדבר על האתגרים שלך ונגלה יחד איך המומחיות שלנו יכולה להניע את העסק שלך קדימה.',
+        button: 'בוא נדבר על הפרויקט שלך',
       },
     },
     about: {

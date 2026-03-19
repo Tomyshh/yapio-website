@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useRef, useMemo } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ArrowUpRight, ExternalLink, Sparkles } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
 import ModernBackground from './ModernBackground';
 import AnimatedSection from './AnimatedSection';
@@ -20,16 +19,19 @@ export default function Portfolio() {
   const performanceMode = usePerformanceMode();
   useInView(sectionRef, { once: false, amount: 0.3 });
 
-  // Liste des projets (source unique: lib/projects.ts) - mémorisée
-  const projects = useMemo(() => getLocalizedProjects(t), [t]);
+  const projects = useMemo(() => {
+    const list = getLocalizedProjects(t);
+    return [...list]
+      .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
+      .slice(0, 5);
+  }, [t]);
 
   return (
-    <section 
-      id="portfolio" 
+    <section
+      id="portfolio"
       ref={sectionRef}
       className="py-24 lg:py-32 relative overflow-hidden min-h-screen cv-auto"
     >
-      {/* Arrière-plan avec effet parallax */}
       {performanceMode ? (
         <div className="absolute -inset-[30%]">
           <ModernBackground />
@@ -40,100 +42,68 @@ export default function Portfolio() {
         </ParallaxBackground>
       )}
 
-      {/* Particules décoratives (retirées pour un rendu plus pro) */}
-      
       <div className="max-w-7xl mx-auto section-padding relative z-10">
-        {/* Section header avec animation */}
-        <AnimatedSection animation="fadeUp" className="text-center mb-16 lg:mb-20">
+        <AnimatedSection animation="fadeUp" className="text-center mb-12 lg:mb-16">
           {t.clients?.trustSection?.title && (
             <p className="text-sm font-medium text-primary mb-6">{t.clients.trustSection.title}</p>
           )}
-          
+
           <h2 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
             {t.clients?.title || 'Nos Projets'}
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            {t.clients?.subtitle || 'Découvrez nos réalisations'}
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
+            {t.clients?.subtitle}
+          </p>
+          <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed text-pretty">
+            {t.clients?.homeSummary}
           </p>
         </AnimatedSection>
 
-        {/* Grille de projets (plus simple / épurée) */}
-        <AnimatedSection animation="fadeUp" delay={0.1} className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AnimatedSection animation="fadeUp" delay={0.08} className="max-w-4xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-5 py-4">
             {projects.map((project, idx) => (
               <motion.div
                 key={project.slug}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.3, delay: Math.min(idx * 0.03, 0.15) }}
+                initial={{ opacity: 0, scale: 0.85 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.35, delay: Math.min(idx * 0.04, 0.28) }}
               >
-                <div className="glass rounded-2xl overflow-hidden border border-white/10 hover:border-white/15 transition-colors duration-300">
-                  {/* Preview logo sur fond noir */}
-                  <div className="relative h-44 bg-black overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-black via-black/85 to-black/70" />
-                    <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.12),transparent_55%)]" />
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="group block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
+                  aria-label={`${t.projects?.viewProject || 'Voir le projet'} — ${project.name}`}
+                >
+                  <div
+                    className="relative w-[4.5rem] h-[4.5rem] md:w-[5.25rem] md:h-[5.25rem] rounded-full overflow-hidden
+                      bg-gradient-to-br from-white/[0.12] to-white/[0.03] border border-white/15
+                      shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-sm
+                      transition-all duration-300 group-hover:border-primary/40 group-hover:shadow-[0_12px_40px_rgba(138,92,246,0.2)] group-hover:scale-[1.05]"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.2),transparent_55%)] opacity-80 pointer-events-none" />
                     <OptimizedImage
                       src={project.logo}
-                      alt={project.alt}
+                      alt=""
                       fill
-                      className="object-contain p-10 opacity-95 drop-shadow-2xl"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      priority={idx < 3}
+                      className="object-contain p-3 md:p-3.5 opacity-[0.98] drop-shadow-lg transition-opacity duration-300 group-hover:opacity-100"
+                      sizes="(max-width: 768px) 4.5rem, 5.25rem"
+                      priority
                       quality={90}
                     />
                   </div>
-
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-white">{project.name}</h3>
-                    <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    <div className="mt-5 flex items-stretch gap-2">
-                      <Link
-                        href={`/projects/${project.slug}`}
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 hover:border-white/18 text-white font-semibold text-sm transition-all duration-300"
-                      >
-                        <span>{t.clients?.viewMore || 'Voir le projet'}</span>
-                        <ArrowUpRight className="w-4 h-4" />
-                      </Link>
-
-                      {project.externalUrl ? (
-                        <a
-                          href={project.externalUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-11 rounded-xl bg-white/5 hover:bg-white/10 border border-white/12 hover:border-white/18 text-white/90 hover:text-white flex items-center justify-center transition-all duration-300"
-                          aria-label={`Ouvrir ${project.name} (lien externe)`}
-                          title="Ouvrir le lien externe"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      ) : (
-                        <div
-                          aria-disabled="true"
-                          className="w-11 rounded-xl bg-white/5 border border-white/10 text-gray-500 flex items-center justify-center opacity-60 cursor-not-allowed select-none"
-                          title="Lien externe indisponible"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-12">
             <MagneticButton
               as="a"
               href="/projects"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary-600 text-white font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 border border-primary/30"
               strength={0.15}
             >
-              <span>Voir tous les projets</span>
+              <span>{t.clients?.viewOtherProjects || 'Voir d\'autres projets'}</span>
               <ArrowUpRight className="w-5 h-5" />
             </MagneticButton>
           </div>

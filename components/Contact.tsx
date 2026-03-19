@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ModernBackground from './ModernBackground';
 import { motion } from 'framer-motion';
@@ -102,35 +102,38 @@ export default function Contact() {
       label: 'Email',
       value: 'tom@yapio.io',
       href: 'mailto:tom@yapio.io',
-      color: 'from-primary to-primary-600',
     },
     {
       icon: Phone,
       label: 'Phone',
       value: YAPIO_PHONE_DISPLAY,
       href: `tel:${YAPIO_PHONE_E164}`,
-      color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: MessageSquare,
       label: 'WhatsApp',
       value: YAPIO_PHONE_DISPLAY,
       href: `https://wa.me/${YAPIO_WHATSAPP_PHONE}`,
-      color: 'from-primary to-primary-600',
     },
     {
       icon: MapPin,
       label: 'Location',
       value: 'Worldwide Service',
       href: null,
-      color: 'from-primary to-primary-600',
     },
-  ];
+  ] as const;
 
-  const inputVariants = {
-    focus: { scale: 1.02, borderColor: '#7737E9' },
-    blur: { scale: 1, borderColor: 'rgba(255,255,255,0.1)' },
-  };
+  /** Style champs — aligné surfaces du site (globals: --surface, --border) */
+  const fieldClass =
+    'w-full rounded-xl bg-white/[0.03] border border-white/[0.08] px-4 py-3.5 text-[15px] leading-snug text-white ' +
+    'placeholder:text-gray-500 placeholder:opacity-70 ' +
+    'transition-[border-color,box-shadow,background-color] duration-200 ease-out ' +
+    'hover:border-white/[0.12] hover:bg-white/[0.04] ' +
+    'focus:border-primary/45 focus:bg-white/[0.045] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-0 ' +
+    'disabled:opacity-50 disabled:cursor-not-allowed';
+
+  const labelClass =
+    'block text-[11px] font-medium uppercase tracking-[0.14em] text-gray-500 mb-2.5';
 
   return (
     <section id="contact" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden cv-auto">
@@ -165,36 +168,45 @@ export default function Contact() {
           <AnimatedSection animation="fadeRight">
             <div className="space-y-6">
               <TiltCard maxTilt={5}>
-                <motion.div 
-                  className="glass rounded-2xl p-8 lg:p-10"
-                  whileHover={{ y: -5 }}
+                <motion.div
+                  className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 backdrop-blur-xl lg:p-10"
+                  whileHover={{ y: -4 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 28 }}
                 >
-                  <h3 className="text-2xl font-semibold mb-8 text-white">
+                  <div
+                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent"
+                    aria-hidden
+                  />
+                  <div className="relative z-10">
+                  <h3 className="text-xl md:text-2xl font-light text-white mb-8 tracking-tight">
                     {t.contact.infoTitle}
                   </h3>
                   
-                  <div className="space-y-6">
+                  <div className="divide-y divide-white/[0.06]">
                     {contactInfo.map((info, index) => {
                       const Icon = info.icon;
                       const content = (
-                        <motion.div 
-                          className="flex items-center space-x-4 p-4 rounded-xl transition-all duration-300 hover:bg-white/5 group"
-                          initial={{ opacity: 0, x: -20 }}
+                        <motion.div
+                          className="group flex items-center gap-4 py-5 first:pt-0 last:pb-0 transition-colors"
+                          initial={{ opacity: 0, x: -12 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
-                          transition={{ delay: index * 0.1 }}
-                          whileHover={{ x: 10 }}
+                          transition={{ delay: index * 0.06, duration: 0.35 }}
                         >
-                          <motion.div 
-                            className={`w-14 h-14 rounded-xl bg-gradient-to-br ${info.color} p-3`}
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            transition={{ type: 'spring', stiffness: 300 }}
+                          <div
+                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/[0.1] bg-white/[0.03] text-gray-400 transition-colors group-hover:border-white/[0.14] group-hover:bg-white/[0.05] group-hover:text-gray-200"
+                            aria-hidden
                           >
-                            <Icon className="w-full h-full text-white" />
-                          </motion.div>
-                          <div>
-                            <p className="text-gray-400 text-sm">{t.contact.infoLabels[info.label as keyof typeof t.contact.infoLabels]}</p>
-                            <p className="text-white text-lg font-medium group-hover:text-primary transition-colors" dir="ltr">
+                            <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-gray-500">
+                              {t.contact.infoLabels[info.label as keyof typeof t.contact.infoLabels]}
+                            </p>
+                            <p
+                              className="mt-1 text-base font-normal text-white/95 transition-colors group-hover:text-white md:text-[17px]"
+                              dir="ltr"
+                            >
                               {info.value}
                             </p>
                           </div>
@@ -209,6 +221,7 @@ export default function Contact() {
                         <div key={index}>{content}</div>
                       );
                     })}
+                  </div>
                   </div>
                 </motion.div>
               </TiltCard>
@@ -235,104 +248,128 @@ export default function Contact() {
           {/* Contact Form */}
           <AnimatedSection animation="fadeLeft">
             <TiltCard maxTilt={3}>
-              <motion.div 
-                className="glass rounded-2xl p-8 lg:p-10"
-                whileHover={{ y: -5 }}
+              <motion.div
+                className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-xl md:p-8 lg:p-10"
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 28 }}
               >
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Accent supérieur discret */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent"
+                  aria-hidden
+                />
+
+                <form onSubmit={handleSubmit} className="relative z-10 space-y-5 md:space-y-6">
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-5 md:gap-y-5">
                     {[
-                      { name: 'name', label: t.contact.form.name, type: 'text', required: true },
-                      { name: 'email', label: t.contact.form.email, type: 'email', required: true },
-                      { name: 'phone', label: t.contact.form.phone, type: 'tel', required: false },
-                      { name: 'company', label: t.contact.form.company, type: 'text', required: false },
+                      { name: 'name', label: t.contact.form.name, type: 'text', required: true, autoComplete: 'name' as const },
+                      { name: 'email', label: t.contact.form.email, type: 'email', required: true, autoComplete: 'email' as const },
+                      { name: 'phone', label: t.contact.form.phone, type: 'tel', required: false, autoComplete: 'tel' as const },
+                      { name: 'company', label: t.contact.form.company, type: 'text', required: false, autoComplete: 'organization' as const },
                     ].map((field, index) => (
                       <motion.div
                         key={field.name}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: index * 0.06, duration: 0.35 }}
                       >
-                        <label htmlFor={field.name} className="block text-sm font-medium text-gray-300 mb-2">
+                        <label htmlFor={field.name} className={labelClass}>
                           {field.label}
+                          {field.required && <span className="ml-1 text-primary/80">*</span>}
                         </label>
-                        <motion.input
+                        <input
                           type={field.type}
                           id={field.name}
                           name={field.name}
                           value={formData[field.name as keyof typeof formData]}
                           onChange={handleChange}
                           required={field.required}
+                          autoComplete={field.autoComplete}
                           onFocus={() => setFocusedField(field.name)}
                           onBlur={() => setFocusedField(null)}
-                          className="w-full px-4 py-3 bg-dark-200/50 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white transition-all duration-300"
-                          animate={focusedField === field.name ? 'focus' : 'blur'}
-                          variants={inputVariants}
+                          className={`${fieldClass} ${focusedField === field.name ? 'border-primary/40 ring-2 ring-primary/15' : ''}`}
                           dir={field.type === 'tel' ? 'ltr' : undefined}
                         />
                       </motion.div>
                     ))}
                   </div>
-                  
+
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
+                    transition={{ delay: 0.28, duration: 0.35 }}
                   >
-                    <label htmlFor="projectType" className="block text-sm font-medium text-gray-300 mb-2">
+                    <label htmlFor="projectType" className={labelClass}>
                       {t.contact.form.projectType}
+                      <span className="ml-1 text-primary/80">*</span>
                     </label>
-                    <motion.select
-                      id="projectType"
-                      name="projectType"
-                      value={formData.projectType}
-                      onChange={handleChange}
-                      required
-                      onFocus={() => setFocusedField('projectType')}
-                      onBlur={() => setFocusedField(null)}
-                      className="w-full px-4 py-3 bg-dark-200/50 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white transition-all duration-300"
-                      animate={focusedField === 'projectType' ? 'focus' : 'blur'}
-                      variants={inputVariants}
-                    >
-                      <option value="">{t.contact.form.selectPlaceholder}</option>
-                      <option value="mobile">{t.contact.projectTypes.mobile}</option>
-                      <option value="desktop">{t.contact.projectTypes.desktop}</option>
-                      <option value="web">{t.contact.projectTypes.web}</option>
-                      <option value="consulting">{t.contact.projectTypes.consulting}</option>
-                      <option value="other">{t.contact.projectTypes.other}</option>
-                    </motion.select>
+                    <div className="relative">
+                      <select
+                        id="projectType"
+                        name="projectType"
+                        value={formData.projectType}
+                        onChange={handleChange}
+                        required
+                        onFocus={() => setFocusedField('projectType')}
+                        onBlur={() => setFocusedField(null)}
+                        className={`${fieldClass} cursor-pointer appearance-none pr-11 ${focusedField === 'projectType' ? 'border-primary/40 ring-2 ring-primary/15' : ''}`}
+                      >
+                        <option value="" className="bg-[#0f0f0f] text-gray-400">
+                          {t.contact.form.selectPlaceholder}
+                        </option>
+                        <option value="mobile" className="bg-[#0f0f0f] text-white">
+                          {t.contact.projectTypes.mobile}
+                        </option>
+                        <option value="desktop" className="bg-[#0f0f0f] text-white">
+                          {t.contact.projectTypes.desktop}
+                        </option>
+                        <option value="web" className="bg-[#0f0f0f] text-white">
+                          {t.contact.projectTypes.web}
+                        </option>
+                        <option value="consulting" className="bg-[#0f0f0f] text-white">
+                          {t.contact.projectTypes.consulting}
+                        </option>
+                        <option value="other" className="bg-[#0f0f0f] text-white">
+                          {t.contact.projectTypes.other}
+                        </option>
+                      </select>
+                      <ChevronDown
+                        className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
+                        strokeWidth={2}
+                        aria-hidden
+                      />
+                    </div>
                   </motion.div>
-                  
+
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: 0.34, duration: 0.35 }}
                   >
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                    <label htmlFor="message" className={labelClass}>
                       {t.contact.form.message}
+                      <span className="ml-1 text-primary/80">*</span>
                     </label>
-                    <motion.textarea
+                    <textarea
                       id="message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      rows={4}
+                      rows={5}
                       required
                       onFocus={() => setFocusedField('message')}
                       onBlur={() => setFocusedField(null)}
-                      className="w-full px-4 py-3 bg-dark-200/50 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white resize-none transition-all duration-300"
-                      animate={focusedField === 'message' ? 'focus' : 'blur'}
-                      variants={inputVariants}
+                      className={`${fieldClass} min-h-[140px] resize-y leading-relaxed ${focusedField === 'message' ? 'border-primary/40 ring-2 ring-primary/15' : ''}`}
                     />
                   </motion.div>
                   
                   {/* Messages de retour avec animation */}
                   {submitStatus === 'success' && (
-                    <motion.div 
-                      className="p-4 bg-green-500/20 border border-green-500/50 rounded-xl text-green-300 flex items-center space-x-3"
+                    <motion.div
+                      className="flex items-center gap-3 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.08] p-4 text-sm text-emerald-200/95"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ type: 'spring', stiffness: 200 }}
@@ -343,8 +380,8 @@ export default function Contact() {
                   )}
                   
                   {submitStatus === 'error' && (
-                    <motion.div 
-                      className="p-4 bg-red-500/20 border border-red-500/50 rounded-xl text-red-300 flex items-center space-x-3"
+                    <motion.div
+                      className="flex items-center gap-3 rounded-xl border border-red-500/25 bg-red-500/[0.08] p-4 text-sm text-red-200/95"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ type: 'spring', stiffness: 200 }}
@@ -357,9 +394,9 @@ export default function Contact() {
                   <motion.button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full gradient-primary text-white px-6 py-4 rounded-xl font-semibold shadow-lg shadow-primary/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center group"
-                    whileHover={{ scale: 1.02, boxShadow: '0 20px 40px rgba(119, 55, 233, 0.3)' }}
-                    whileTap={{ scale: 0.98 }}
+                    className="group mt-2 flex w-full items-center justify-center rounded-full gradient-primary px-8 py-3.5 text-[15px] font-semibold text-white shadow-lg shadow-primary/20 transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(119,55,233,0.28)] disabled:cursor-not-allowed disabled:opacity-50"
+                    whileHover={isSubmitting ? undefined : { scale: 1.01 }}
+                    whileTap={isSubmitting ? undefined : { scale: 0.99 }}
                   >
                     {isSubmitting ? (
                       <motion.div

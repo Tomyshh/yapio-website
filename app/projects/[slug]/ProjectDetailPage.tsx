@@ -517,29 +517,30 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                     className="group relative"
                   >
                     {/* Bulle de projet */}
-                    <div className="relative aspect-square">
-                      {/* Cercle principal */}
-                      <div className={`relative w-full h-full rounded-full glass border ${otherProject.border_color} overflow-hidden backdrop-blur-sm group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-5`}>
-                        {/* Logo du projet */}
-                        <div className="relative w-full h-full">
-                          <OptimizedImage
-                            src={otherProject.logo_url}
-                            alt={`Logo ${otherProject.name}`}
-                            fill
-                            className="object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500"
-                            sizes="(max-width: 768px) 50vw, 25vw"
-                            quality={85}
-                          />
-                        </div>
-                        
-                        {/* Overlay au survol */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${otherProject.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                      </div>
+                    <div className="pb-7 md:pb-8">
+                      <div className="relative aspect-square">
+                        {/* Cercle principal — zone logo fixe (%) pour taille visuelle uniforme et marge intérieure */}
+                        <div className={`relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border glass backdrop-blur-sm ${otherProject.border_color} transition-all duration-300 group-hover:scale-105`}>
+                          <div className="relative aspect-square w-[52%] max-w-[7.5rem] shrink-0">
+                            <OptimizedImage
+                              src={otherProject.logo_url}
+                              alt={`Logo ${otherProject.name}`}
+                              fill
+                              className="object-contain object-center drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.04]"
+                              sizes="(max-width: 768px) 26vw, 7.5rem"
+                              quality={85}
+                            />
+                          </div>
 
-                      {/* Indicateur "Voir le projet" */}
-                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                        <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${otherProject.color} text-black text-xs font-bold whitespace-nowrap shadow-lg`}>
-                          {t.projects?.viewProject || 'Voir le projet'}
+                          {/* Overlay au survol */}
+                          <div className={`pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br ${otherProject.color} opacity-0 transition-opacity duration-500 group-hover:opacity-10`} />
+                        </div>
+
+                        {/* Indicateur "Voir le projet" — sous la bulle pour éviter le chevauchement */}
+                        <div className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 translate-y-1">
+                          <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${otherProject.color} text-black text-xs font-bold whitespace-nowrap shadow-lg`}>
+                            {t.projects?.viewProject || 'Voir le projet'}
+                          </div>
                         </div>
                       </div>
                     </div>
