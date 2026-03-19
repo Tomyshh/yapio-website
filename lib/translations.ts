@@ -12,6 +12,8 @@ export const translations = {
       contact: 'Contact',
       getQuote: 'Demander un devis',
       language: 'Langue',
+      ariaMainNav: 'Navigation principale',
+      ariaMobileMenu: 'Menu de navigation',
     },
     blogPage: {
       tagline: 'Automatisation IA & processus',
@@ -453,6 +455,8 @@ export const translations = {
       contact: 'Contact',
       getQuote: 'Get a Quote',
       language: 'Language',
+      ariaMainNav: 'Main navigation',
+      ariaMobileMenu: 'Navigation menu',
     },
     blogPage: {
       tagline: 'AI & process automation',
@@ -894,6 +898,8 @@ export const translations = {
       contact: 'צור קשר',
       getQuote: 'קבל הצעת מחיר',
       language: 'שפה',
+      ariaMainNav: 'ניווט ראשי',
+      ariaMobileMenu: 'תפריט ניווט',
     },
     blogPage: {
       tagline: 'אוטומציית בינה מלאכותית ותהליכים',

@@ -21,16 +21,27 @@ export default function Hero() {
         <GlowyWavesHeroBackground />
       </div>
 
-      <div className="max-w-7xl mx-auto section-padding relative z-10 pt-28 md:pt-32 pb-16 md:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div className="max-w-7xl mx-auto section-padding relative z-10 pt-[max(7rem,calc(env(safe-area-inset-top,0px)+5.5rem))] md:pt-32 pb-16 md:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-7">
-            <div className="flex items-center gap-4">
-              <GlowLogo
-                variant="full"
-                size="lg"
-                theme="white"
-                className="opacity-95"
-              />
+            {/* Mobile : icône seule (évite doublon avec le logo header) ; desktop : logo complet */}
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="md:hidden shrink-0">
+                <GlowLogo
+                  variant="icon"
+                  size="md"
+                  theme="white"
+                  className="opacity-95"
+                />
+              </div>
+              <div className="hidden md:block">
+                <GlowLogo
+                  variant="full"
+                  size="lg"
+                  theme="white"
+                  className="opacity-95"
+                />
+              </div>
               <span className="hidden md:inline-block text-xs tracking-[0.2em] uppercase text-gray-500">
                 {t.hero.studio}
               </span>
@@ -44,50 +55,52 @@ export default function Hero() {
             </div>
 
             <div className="mt-6">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-overcame-bold leading-[1.05] text-white">
+              <h1 className="text-[1.65rem] sm:text-3xl md:text-6xl lg:text-7xl font-overcame-bold leading-[1.08] sm:leading-[1.05] text-white text-balance">
                 <span className="block">{t.hero?.title || 'Services Numériques sur Mesure'}</span>
               </h1>
               <div className="mt-6 h-px hairline" />
             </div>
 
             <div className="mt-6">
-              <p className="text-lg md:text-2xl text-gray-300 leading-relaxed">
+              <p className="text-base sm:text-lg md:text-2xl text-gray-300 leading-relaxed text-pretty">
                 {t.hero?.subtitle || 'Applications • IA • Logiciels'}
               </p>
-              <p className="mt-4 text-base md:text-lg text-gray-400 max-w-2xl leading-relaxed">
+              <p className="mt-4 text-sm sm:text-base md:text-lg text-gray-400 max-w-2xl leading-relaxed text-pretty">
                 {t.hero?.description || 'Nous transformons vos idées en solutions digitales performantes.'}
               </p>
             </div>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <div className="mt-8 sm:mt-10 flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-4">
               <MagneticButton
                 as="a"
                 href="#contact"
-                className="bg-primary hover:bg-primary-600 text-white px-8 py-4 rounded-full text-base md:text-lg font-semibold shadow-lg shadow-primary/25 flex items-center justify-center group border border-primary/30"
+                className="bg-primary hover:bg-primary-600 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-base md:text-lg font-semibold shadow-lg shadow-primary/25 w-full md:w-auto flex items-center justify-center group border border-primary/30 min-h-[48px]"
                 strength={0.22}
               >
                 <span>{t.hero?.cta || 'Démarrer votre projet'}</span>
-                <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform duration-200" />
+                <ArrowRight className="ms-3 shrink-0 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 transition-transform duration-200" />
               </MagneticButton>
 
-              <MagneticButton
-                as="a"
-                href="#services"
-                className="glass text-white px-8 py-4 rounded-full text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10"
-                strength={0.22}
-              >
-                <span>{t.hero.secondaryCta}</span>
-              </MagneticButton>
+              <div className="grid grid-cols-2 md:contents gap-3 md:gap-0 w-full md:w-auto">
+                <MagneticButton
+                  as="a"
+                  href="#services"
+                  className="glass text-white px-4 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10 min-h-[48px] w-full"
+                  strength={0.22}
+                >
+                  <span className="text-center leading-tight">{t.hero.secondaryCta}</span>
+                </MagneticButton>
 
-              <MagneticButton
-                as="a"
-                href={`tel:${YAPIO_PHONE_E164}`}
-                className="glass text-white px-8 py-4 rounded-full text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10"
-                strength={0.22}
-                aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
-              >
-                <span>{t.hero.callCta || 'Appeler'}</span>
-              </MagneticButton>
+                <MagneticButton
+                  as="a"
+                  href={`tel:${YAPIO_PHONE_E164}`}
+                  className="glass text-white px-4 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10 min-h-[48px] w-full"
+                  strength={0.22}
+                  aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                >
+                  <span>{t.hero.callCta || 'Appeler'}</span>
+                </MagneticButton>
+              </div>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">

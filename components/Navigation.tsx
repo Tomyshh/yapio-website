@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Menu, X, Globe, ChevronDown, Phone } from 'lucide-react';
+import { X, Globe, ChevronDown, Phone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/lib/translations';
 import { usePathname } from 'next/navigation';
@@ -30,7 +30,8 @@ export default function Navigation() {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [homeSection, setHomeSection] = useState<HomeSection>('home');
   const sectionTopsRef = useRef<SectionTops | null>(null);
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, dir } = useLanguage();
+  const isRtl = dir === 'rtl';
   const pathname = usePathname();
 
   // Déterminer si nous sommes sur la page d'accueil
@@ -232,7 +233,7 @@ export default function Navigation() {
         </motion.div>
 
         {/* Desktop Navigation (design: nav) */}
-        <nav className="hidden md:flex items-center">
+        <nav className="hidden md:flex items-center" aria-label={t.nav.ariaMainNav}>
           {/* Nav Links */}
           <div className="flex items-center gap-1">
             {navItems.map((item, index) => (
@@ -294,7 +295,7 @@ export default function Navigation() {
                 <AnimatePresence>
                   {showLangMenu && (
                     <motion.div 
-                      className="absolute top-full mt-2 right-0 backdrop-blur-xl bg-black/80 border border-white/10 rounded-xl shadow-2xl py-2 min-w-[140px] overflow-hidden"
+                      className="absolute top-full mt-2 end-0 backdrop-blur-xl bg-black/80 border border-white/10 rounded-xl shadow-2xl py-2 min-w-[140px] overflow-hidden"
                       initial={{ opacity: 0, y: -10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -398,10 +399,15 @@ export default function Navigation() {
 
               {/* Side Drawer */}
               <motion.div
-                className="md:hidden fixed top-0 right-0 h-full w-[85vw] max-w-sm bg-gradient-to-b from-black via-black to-gray-900 border-l border-white/10 shadow-2xl z-50 overflow-y-auto"
-                initial={{ x: '100%' }}
+                role="dialog"
+                aria-modal="true"
+                aria-label={t.nav.ariaMobileMenu}
+                className={`md:hidden fixed top-0 h-full w-[min(100vw-3rem,24rem)] max-w-sm bg-gradient-to-b from-black via-black to-gray-900 shadow-2xl z-50 overflow-y-auto border-white/10 ${
+                  isRtl ? 'left-0 border-r' : 'right-0 border-l'
+                }`}
+                initial={{ x: isRtl ? '-100%' : '100%' }}
                 animate={{ x: 0 }}
-                exit={{ x: '100%' }}
+                exit={{ x: isRtl ? '-100%' : '100%' }}
                 transition={{ 
                   type: 'spring', 
                   damping: 30, 
@@ -445,7 +451,7 @@ export default function Navigation() {
                   {navItems.map((item, index) => (
                     <motion.div
                       key={item.href}
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: isRtl ? -20 : 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ 
                         delay: index * 0.05,

@@ -7,13 +7,12 @@ import { YAPIO_WHATSAPP_PHONE } from '@/lib/contact';
 function WhatsAppButtonContent() {
   return (
     <div
+      className="whatsapp-fab-wrap"
       style={{
         position: 'fixed',
-        bottom: '24px',
-        right: '24px',
-        zIndex: 2147483647, // Maximum z-index possible
-        width: '64px',
-        height: '64px',
+        zIndex: 2147483647,
+        width: '56px',
+        height: '56px',
       }}
     >
       <a

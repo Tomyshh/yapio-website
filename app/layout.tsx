@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Suspense } from "react";
@@ -12,6 +12,13 @@ import Script from "next/script";
 import { Orbitron, Exo_2 } from "next/font/google";
 
 export const metadata: Metadata = generateSEOMetadata(pageSEO.home);
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#000000",
+};
 
 const orbitron = Orbitron({
   subsets: ["latin"],
