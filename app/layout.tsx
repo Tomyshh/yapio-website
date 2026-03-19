@@ -4,12 +4,12 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Suspense } from "react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SEOOptimizer from "@/components/SEOOptimizer";
-import { SEODebuggerTrigger } from "@/components/SEODebugger";
+import SEODebuggerLazy from "@/components/SEODebuggerLazy";
 import { generateMetadata as generateSEOMetadata, pageSEO, generateStructuredData } from "@/lib/seo";
 import ClientWrapper from "@/components/ClientWrapper";
 import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 import Script from "next/script";
-import { Orbitron, Exo_2 } from "next/font/google";
+import { Orbitron } from "next/font/google";
 
 export const metadata: Metadata = generateSEOMetadata(pageSEO.home);
 
@@ -20,19 +20,14 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
+/* Un seul poids (900) : seul .font-overcame-bold est utilisé dans l’app — moins de fichiers téléchargés */
 const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
+  weight: ["900"],
   display: "swap",
   variable: "--font-orbitron",
-});
-
-const exo2 = Exo_2({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-exo2",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 // Composant de chargement fluide
@@ -56,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`dark ${orbitron.variable} ${exo2.variable}`}>
+    <html lang="fr" className={`dark ${orbitron.variable}`}>
       <head>
         {/* Métadonnées SEO avancées */}
         <meta name="theme-color" content="#000000" />
@@ -129,9 +124,9 @@ export default function RootLayout({
         {/* Google tag (gtag.js) pour Google Ads */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17494474378"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="gtag-init" strategy="afterInteractive">
+        <Script id="gtag-init" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -149,7 +144,7 @@ export default function RootLayout({
           </Suspense>
           <FirebaseAnalytics />
           <WhatsAppButton />
-          <SEODebuggerTrigger />
+          <SEODebuggerLazy />
         </SEOOptimizer>
       </body>
     </html>

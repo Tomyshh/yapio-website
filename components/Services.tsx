@@ -1,9 +1,13 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useLanguage } from '@/contexts/LanguageContext';
-import FeatureShaderCards from '@/components/ui/feature-shader-cards';
 import type { Feature } from '@/components/ui/feature-shader-cards';
+
+const FeatureShaderCards = dynamic(() => import('@/components/ui/feature-shader-cards'), {
+  ssr: true,
+});
 
 export default function Services() {
   const { t, isLoading } = useLanguage();

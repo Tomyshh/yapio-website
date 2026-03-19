@@ -38,19 +38,28 @@ export function GlowyWavesHeroBackground() {
 
     let animationId: number;
     let time = 0;
+    let logicalW = window.innerWidth;
+    let logicalH = window.innerHeight;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mouseInfluence = prefersReducedMotion ? 10 : 70;
     const influenceRadius = prefersReducedMotion ? 160 : 320;
     const smoothing = prefersReducedMotion ? 0.04 : 0.1;
 
+    /** DPR plafonné à 2 : moins de pixels sur écrans 3x, rendu plus net que 1x CSS seul */
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      logicalW = window.innerWidth;
+      logicalH = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(logicalW * dpr);
+      canvas.height = Math.floor(logicalH * dpr);
+      canvas.style.width = `${logicalW}px`;
+      canvas.style.height = `${logicalH}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const recenterMouse = () => {
-      const centerPoint = { x: canvas.width / 2, y: canvas.height / 2 };
+      const centerPoint = { x: logicalW / 2, y: logicalH / 2 };
       mouseRef.current = centerPoint;
       targetMouseRef.current = centerPoint;
     };
@@ -70,9 +79,9 @@ export function GlowyWavesHeroBackground() {
       ctx.save();
       ctx.beginPath();
 
-      for (let x = 0; x <= canvas.width; x += 4) {
+      for (let x = 0; x <= logicalW; x += 4) {
         const dx = x - mouseRef.current.x;
-        const dy = canvas.height / 2 - mouseRef.current.y;
+        const dy = logicalH / 2 - mouseRef.current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         const influence = Math.max(0, 1 - distance / influenceRadius);
         const mouseEffect =
@@ -81,7 +90,7 @@ export function GlowyWavesHeroBackground() {
           Math.sin(time * 0.001 + x * 0.01 + wave.offset);
 
         const y =
-          canvas.height / 2 +
+          logicalH / 2 +
           Math.sin(x * wave.frequency + time * 0.002 + wave.offset) * wave.amplitude +
           Math.sin(x * wave.frequency * 0.4 + time * 0.003) * (wave.amplitude * 0.45) +
           mouseEffect;
@@ -99,16 +108,20 @@ export function GlowyWavesHeroBackground() {
       ctx.restore();
     };
 
+    let running = true;
+
     const animate = () => {
+      if (!running) return;
+
       time += 1;
       mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * smoothing;
       mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * smoothing;
 
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      const gradient = ctx.createLinearGradient(0, 0, 0, logicalH);
       gradient.addColorStop(0, BG_TOP);
       gradient.addColorStop(1, BG_BOTTOM);
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, logicalW, logicalH);
 
       ctx.globalAlpha = 1;
       ctx.shadowBlur = 0;
@@ -117,17 +130,42 @@ export function GlowyWavesHeroBackground() {
       animationId = window.requestAnimationFrame(animate);
     };
 
+    const startLoop = () => {
+      if (running) return;
+      running = true;
+      animationId = window.requestAnimationFrame(animate);
+    };
+
+    const stopLoop = () => {
+      running = false;
+      cancelAnimationFrame(animationId);
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stopLoop();
+      } else {
+        startLoop();
+      }
+    };
+
     resizeCanvas();
     recenterMouse();
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
-    animationId = window.requestAnimationFrame(animate);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    if (!document.hidden) {
+      animationId = window.requestAnimationFrame(animate);
+    } else {
+      running = false;
+    }
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       cancelAnimationFrame(animationId);
     };
   }, []);

@@ -27,7 +27,13 @@ const nextConfig: NextConfig = {
 
   // Configuration du build pour l'optimisation
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'react-intersection-observer'],
+    optimizePackageImports: [
+      'lucide-react',
+      'framer-motion',
+      'react-intersection-observer',
+      '@supabase/supabase-js',
+      '@paper-design/shaders-react',
+    ],
     // Optimiser les imports pour réduire la taille du bundle
     optimizeCss: true,
   },

@@ -108,6 +108,11 @@ export const OptimizedImage = React.memo(function OptimizedImage({
     );
   }
 
+  const fillSizes =
+    fill && !sizes
+      ? '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+      : sizes;
+
   const imageProps = {
     src: resolvedSrc,
     alt,
@@ -115,12 +120,14 @@ export const OptimizedImage = React.memo(function OptimizedImage({
     onLoad: handleLoad,
     onError: handleError,
     quality,
-    ...(fill ? { fill: true, sizes } : { width, height }),
+    ...(fill ? { fill: true, sizes: fillSizes } : { width, height }),
     ...(placeholder === 'blur' && blurDataURL ? { placeholder: 'blur' as const, blurDataURL } : {}),
     loading: priority ? ('eager' as const) : ('lazy' as const),
     decoding: 'async' as const,
     fetchPriority: priority ? ('high' as const) : ('auto' as const),
   };
+
+  const { alt: altText, ...imagePropsRest } = imageProps;
 
   return (
     <div
@@ -128,7 +135,7 @@ export const OptimizedImage = React.memo(function OptimizedImage({
       className="relative"
       style={fill ? { position: 'absolute', inset: 0, willChange: 'contents' } : { willChange: 'contents' }}
     >
-      <Image {...imageProps} />
+      <Image alt={altText} {...imagePropsRest} />
       {!isLoaded && <div className="absolute inset-0 bg-gray-800/30" />}
     </div>
   );
@@ -137,6 +144,11 @@ export const OptimizedImage = React.memo(function OptimizedImage({
     prevProps.src === nextProps.src &&
     prevProps.alt === nextProps.alt &&
     prevProps.priority === nextProps.priority &&
-    prevProps.className === nextProps.className
+    prevProps.className === nextProps.className &&
+    prevProps.fill === nextProps.fill &&
+    prevProps.sizes === nextProps.sizes &&
+    prevProps.quality === nextProps.quality &&
+    prevProps.width === nextProps.width &&
+    prevProps.height === nextProps.height
   );
 });

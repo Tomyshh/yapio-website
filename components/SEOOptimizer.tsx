@@ -40,9 +40,23 @@ function SEOOptimizerComponent({ children }: SEOOptimizerProps) {
       }
     };
 
-    // Exécution différée pour ne pas bloquer le rendu
-    const timer = setTimeout(optimizeCore, 1000);
-    return () => clearTimeout(timer);
+    let idleId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(optimizeCore, { timeout: 2500 });
+    } else if (typeof window !== 'undefined') {
+      timeoutId = setTimeout(optimizeCore, 800);
+    }
+
+    return () => {
+      if (idleId !== undefined && typeof window !== 'undefined' && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
 
   return <>{children}</>;

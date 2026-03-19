@@ -1,7 +1,7 @@
 'use client';
 
-import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
+import type { Analytics } from 'firebase/analytics';
+import type { FirebaseApp } from 'firebase/app';
 
 // Configuration Firebase depuis les variables d'environnement
 const firebaseConfig = {
@@ -14,21 +14,18 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Singleton pour l'application Firebase
 let app: FirebaseApp | undefined;
 let analytics: Analytics | null = null;
+let appInitPromise: Promise<FirebaseApp | undefined> | null = null;
 
 /**
- * Initialise Firebase App (singleton pattern)
- * @returns L'instance Firebase App ou undefined si la configuration est incomplète
+ * Initialise Firebase App (singleton) — import dynamique pour ne pas alourdir le bundle initial.
  */
-export const getFirebaseApp = (): FirebaseApp | undefined => {
-  // Vérifier si Firebase est déjà initialisé
+async function ensureFirebaseApp(): Promise<FirebaseApp | undefined> {
   if (app) {
     return app;
   }
 
-  // Vérifier si la configuration est complète
   if (
     !firebaseConfig.apiKey ||
     !firebaseConfig.authDomain ||
@@ -40,55 +37,57 @@ export const getFirebaseApp = (): FirebaseApp | undefined => {
     return undefined;
   }
 
-  // Vérifier si une app existe déjà (évite les doubles initialisations)
-  const existingApps = getApps();
-  if (existingApps.length > 0) {
-    app = existingApps[0];
-    return app;
+  if (appInitPromise) {
+    return appInitPromise;
   }
 
-  // Initialiser Firebase
-  try {
-    app = initializeApp(firebaseConfig);
-    return app;
-  } catch (error) {
-    console.error('[Firebase] Erreur lors de l\'initialisation:', error);
-    return undefined;
-  }
-};
+  appInitPromise = (async () => {
+    try {
+      const { initializeApp, getApps } = await import('firebase/app');
+      const existingApps = getApps();
+      if (existingApps.length > 0) {
+        app = existingApps[0];
+        return app;
+      }
+      app = initializeApp(firebaseConfig);
+      return app;
+    } catch (error) {
+      console.error('[Firebase] Erreur lors de l\'initialisation:', error);
+      return undefined;
+    }
+  })();
+
+  return appInitPromise;
+}
 
 /**
  * Initialise Firebase Analytics (uniquement côté client)
- * @returns L'instance Analytics ou null si non supporté/indisponible
  */
 export const getFirebaseAnalytics = async (): Promise<Analytics | null> => {
-  // Ne fonctionne que côté client
   if (typeof window === 'undefined') {
     return null;
   }
 
-  // Si déjà initialisé, retourner l'instance existante
   if (analytics) {
     return analytics;
   }
 
-  // Vérifier si Analytics est supporté par le navigateur
-  const supported = await isSupported();
-  if (!supported) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('[Firebase Analytics] Non supporté par ce navigateur.');
-    }
-    return null;
-  }
-
-  // Initialiser l'app Firebase si nécessaire
-  const firebaseApp = getFirebaseApp();
-  if (!firebaseApp) {
-    return null;
-  }
-
-  // Initialiser Analytics
   try {
+    const { getAnalytics, isSupported } = await import('firebase/analytics');
+
+    const supported = await isSupported();
+    if (!supported) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[Firebase Analytics] Non supporté par ce navigateur.');
+      }
+      return null;
+    }
+
+    const firebaseApp = await ensureFirebaseApp();
+    if (!firebaseApp) {
+      return null;
+    }
+
     analytics = getAnalytics(firebaseApp);
     return analytics;
   } catch (error) {
@@ -121,7 +120,6 @@ export const logEvent = async (
     const analyticsInstance = await getFirebaseAnalytics();
     if (!analyticsInstance) return;
 
-    // Utiliser le SDK Firebase Analytics
     const { logEvent: firebaseLogEvent } = await import('firebase/analytics');
     firebaseLogEvent(analyticsInstance, eventName, eventParams);
   } catch (error) {
