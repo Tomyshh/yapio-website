@@ -206,7 +206,12 @@ export default function Navigation() {
         isScrolled ? 'header-scrolled py-2' : 'py-3'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
+      <div
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-3 min-w-0 ${
+          /* RTL mobile : logo à gauche, menu à droite (habitude iOS / cohérent avec LTR) */
+          isRtl ? 'max-md:flex-row-reverse' : ''
+        }`}
+      >
         {/* Logo (design: .logo) — icononly_transparent_nobuffer.png */}
         <motion.div
           className="logo"
@@ -343,7 +348,7 @@ export default function Navigation() {
         {/* Mobile menu button - Hamburger moderne */}
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          className={`md:hidden relative w-12 h-12 flex items-center justify-center rounded-xl border backdrop-blur-sm transition-all duration-300 z-50 ${
+          className={`md:hidden relative w-12 h-12 flex items-center justify-center rounded-xl border transition-all duration-300 z-50 bg-zinc-950/80 ${
             isOpen
               ? 'border-primary/40 bg-primary/10 text-white shadow-lg shadow-primary/20'
               : 'border-white/10 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 hover:border-white/20'
@@ -388,7 +393,7 @@ export default function Navigation() {
             <>
               {/* Overlay sombre avec animation */}
               <motion.div
-                className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+                className="md:hidden fixed inset-0 bg-black/75 z-40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -420,7 +425,7 @@ export default function Navigation() {
                 }}
               >
                 {/* Header du drawer avec logo */}
-                <div className="sticky top-0 z-10 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-5 flex items-center justify-between">
+                <div className="sticky top-0 z-10 bg-zinc-950 border-b border-white/10 px-6 py-5 flex items-center justify-between">
                   <Link 
                     href="/" 
                     onClick={() => setIsOpen(false)}
@@ -541,7 +546,7 @@ export default function Navigation() {
                 </div>
 
                 {/* Footer du drawer */}
-                <div className="sticky bottom-0 px-6 py-4 bg-black/40 backdrop-blur-xl border-t border-white/10 mt-auto">
+                <div className="sticky bottom-0 px-6 py-4 bg-zinc-950 border-t border-white/10 mt-auto">
                   <p className="text-xs text-center text-gray-500">
                     © {new Date().getFullYear()} YAPIO
                   </p>

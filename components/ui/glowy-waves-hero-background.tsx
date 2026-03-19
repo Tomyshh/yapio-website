@@ -24,6 +24,15 @@ const VIOLET_WAVE_PALETTE: WaveConfig[] = [
 const BG_TOP = '#050508';
 const BG_BOTTOM = 'rgba(5, 5, 12, 0.98)';
 
+function isLowPerformanceMode(): boolean {
+  if (typeof window === 'undefined') return true;
+  return (
+    window.innerWidth < 768 ||
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
 export function GlowyWavesHeroBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mouseRef = useRef<Point>({ x: 0, y: 0 });
@@ -33,24 +42,26 @@ export function GlowyWavesHeroBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return undefined;
 
     let animationId: number;
     let time = 0;
     let logicalW = window.innerWidth;
     let logicalH = window.innerHeight;
+    let lowPerf = isLowPerformanceMode();
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const mouseInfluence = prefersReducedMotion ? 10 : 70;
+    const mouseInfluence = prefersReducedMotion || lowPerf ? 0 : 70;
     const influenceRadius = prefersReducedMotion ? 160 : 320;
-    const smoothing = prefersReducedMotion ? 0.04 : 0.1;
+    const smoothing = prefersReducedMotion || lowPerf ? 0 : 0.1;
 
-    /** DPR plafonné à 2 : moins de pixels sur écrans 3x, rendu plus net que 1x CSS seul */
     const resizeCanvas = () => {
       logicalW = window.innerWidth;
       logicalH = window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      lowPerf = isLowPerformanceMode();
+      const dprCap = lowPerf ? 1.25 : 2;
+      const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
       canvas.width = Math.floor(logicalW * dpr);
       canvas.height = Math.floor(logicalH * dpr);
       canvas.style.width = `${logicalW}px`;
@@ -70,16 +81,21 @@ export function GlowyWavesHeroBackground() {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (lowPerf || mouseInfluence === 0) return;
       targetMouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const handleMouseLeave = () => recenterMouse();
 
+    const waves = () => (lowPerf ? VIOLET_WAVE_PALETTE.slice(0, 2) : VIOLET_WAVE_PALETTE);
+    const stepX = () => (lowPerf ? 12 : 4);
+
     const drawWave = (wave: WaveConfig) => {
       ctx.save();
       ctx.beginPath();
 
-      for (let x = 0; x <= logicalW; x += 4) {
+      const sx = stepX();
+      for (let x = 0; x <= logicalW; x += sx) {
         const dx = x - mouseRef.current.x;
         const dy = logicalH / 2 - mouseRef.current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -99,11 +115,16 @@ export function GlowyWavesHeroBackground() {
         else ctx.lineTo(x, y);
       }
 
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = lowPerf ? 1.5 : 2.5;
       ctx.strokeStyle = wave.color;
       ctx.globalAlpha = wave.opacity;
-      ctx.shadowBlur = 35;
-      ctx.shadowColor = wave.color;
+      /* shadowBlur sur canvas = très coût sur mobile GPU */
+      if (!lowPerf) {
+        ctx.shadowBlur = 35;
+        ctx.shadowColor = wave.color;
+      } else {
+        ctx.shadowBlur = 0;
+      }
       ctx.stroke();
       ctx.restore();
     };
@@ -117,6 +138,12 @@ export function GlowyWavesHeroBackground() {
       mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * smoothing;
       mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * smoothing;
 
+      /* Mobile : ne repeint qu’un frame sur deux (moins de charge GPU) */
+      if (lowPerf && time % 2 !== 0) {
+        animationId = window.requestAnimationFrame(animate);
+        return;
+      }
+
       const gradient = ctx.createLinearGradient(0, 0, 0, logicalH);
       gradient.addColorStop(0, BG_TOP);
       gradient.addColorStop(1, BG_BOTTOM);
@@ -125,7 +152,7 @@ export function GlowyWavesHeroBackground() {
 
       ctx.globalAlpha = 1;
       ctx.shadowBlur = 0;
-      VIOLET_WAVE_PALETTE.forEach(drawWave);
+      waves().forEach(drawWave);
 
       animationId = window.requestAnimationFrame(animate);
     };
@@ -152,8 +179,10 @@ export function GlowyWavesHeroBackground() {
     resizeCanvas();
     recenterMouse();
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
+    if (!lowPerf && mouseInfluence > 0) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseleave', handleMouseLeave);
+    }
     document.addEventListener('visibilitychange', onVisibilityChange);
     if (!document.hidden) {
       animationId = window.requestAnimationFrame(animate);
@@ -177,8 +206,8 @@ export function GlowyWavesHeroBackground() {
         className="absolute inset-0 h-full w-full"
         aria-hidden="true"
       />
-      {/* Orbes de lumière violet (style Yapio) */}
-      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      {/* Orbes : blur CSS très lourd sur mobile — desktop uniquement */}
+      <div className="absolute inset-0 hidden md:block overflow-hidden" aria-hidden="true">
         <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#7737E9]/[0.06] blur-[140px]" />
         <div className="absolute bottom-0 right-0 h-[360px] w-[360px] rounded-full bg-[#7737E9]/[0.04] blur-[120px]" />
         <div className="absolute top-1/2 left-1/4 h-[400px] w-[400px] rounded-full bg-[#7737E9]/[0.05] blur-[150px]" />

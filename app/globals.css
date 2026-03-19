@@ -655,11 +655,11 @@ body {
     mix-blend-mode: overlay;
   }
   
-  /* Section padding + safe area iPhone / encoches */
+  /* Section padding + safe area iPhone / encoches (mobile : marges un peu plus généreuses) */
   .section-padding {
     @apply px-4 sm:px-6 lg:px-8;
-    padding-left: max(1rem, env(safe-area-inset-left, 0px));
-    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
   }
   @media (min-width: 640px) {
     .section-padding {

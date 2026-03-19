@@ -13,7 +13,8 @@ import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164 } from '@/lib/contact';
  * mais sans translation du fond au scroll (meilleures perfs Windows / scroll natif).
  */
 export default function Hero() {
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
+  const isRtl = dir === 'rtl';
 
   return (
     <section id="home" className="min-h-screen relative overflow-hidden">
@@ -21,35 +22,29 @@ export default function Hero() {
         <GlowyWavesHeroBackground />
       </div>
 
-      <div className="max-w-7xl mx-auto section-padding relative z-10 pt-[max(7rem,calc(env(safe-area-inset-top,0px)+5.5rem))] md:pt-32 pb-16 md:pb-20">
+      <div className="max-w-7xl mx-auto section-padding relative z-10 pt-[max(7rem,calc(env(safe-area-inset-top,0px)+5.5rem))] md:pt-32 pb-24 max-md:pb-32 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-14 items-center">
-          <div className="lg:col-span-7">
-            {/* Mobile : icône seule (évite doublon avec le logo header) ; desktop : logo complet */}
-            <div className="flex items-center gap-3 md:gap-4">
-              <div className="md:hidden shrink-0">
-                <GlowLogo
-                  variant="icon"
-                  size="md"
-                  theme="white"
-                  className="opacity-95"
-                />
-              </div>
-              <div className="hidden md:block">
-                <GlowLogo
-                  variant="full"
-                  size="lg"
-                  theme="white"
-                  className="opacity-95"
-                />
-              </div>
-              <span className="hidden md:inline-block text-xs tracking-[0.2em] uppercase text-gray-500">
+          <div
+            className={`lg:col-span-7 max-md:max-w-[min(100%,24rem)] max-md:mx-auto md:max-w-none md:mx-0 md:text-start ${
+              isRtl ? 'max-md:text-center' : 'max-md:text-start'
+            }`}
+          >
+            {/* Desktop seulement : logo hero (mobile = doublon visuel + PNG lourd) */}
+            <div className="hidden md:flex items-center gap-4">
+              <GlowLogo
+                variant="full"
+                size="lg"
+                theme="white"
+                className="opacity-95"
+              />
+              <span className="text-xs tracking-[0.2em] uppercase text-gray-500">
                 {t.hero.studio}
               </span>
             </div>
 
-            <div className="mt-8">
-              <div className="eyebrow w-fit">
-                <Sparkles className="w-4 h-4 text-primary" />
+            <div className="mt-6 md:mt-8">
+              <div className={`eyebrow w-fit ${isRtl ? 'max-md:mx-auto' : ''}`}>
+                <Sparkles className="w-4 h-4 text-primary shrink-0" />
                 <span>{t.hero.eyebrow}</span>
               </div>
             </div>
@@ -70,15 +65,15 @@ export default function Hero() {
               </p>
             </div>
 
-            <div className="mt-8 sm:mt-10 flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-4">
+            <div className="mt-8 sm:mt-10 flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-4 max-md:items-stretch">
               <MagneticButton
                 as="a"
                 href="#contact"
-                className="bg-primary hover:bg-primary-600 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-base md:text-lg font-semibold shadow-lg shadow-primary/25 w-full md:w-auto flex items-center justify-center group border border-primary/30 min-h-[48px]"
+                className="bg-primary hover:bg-primary-600 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-base md:text-lg font-semibold shadow-lg shadow-primary/25 w-full md:w-auto inline-flex items-center justify-center gap-3 group border border-primary/30 min-h-[48px]"
                 strength={0.22}
               >
                 <span>{t.hero?.cta || 'Démarrer votre projet'}</span>
-                <ArrowRight className="ms-3 shrink-0 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1 transition-transform duration-200" />
+                <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1 transition-transform duration-200" />
               </MagneticButton>
 
               <div className="grid grid-cols-2 md:contents gap-3 md:gap-0 w-full md:w-auto">
@@ -103,16 +98,24 @@ export default function Hero() {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400">
+            <div
+              className={`mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 ${
+                isRtl ? 'max-md:justify-center' : ''
+              }`}
+            >
               <span className="inline-flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-white/30" /> {t.hero.pills.deadlines}</span>
               <span className="inline-flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-white/30" /> {t.hero.pills.maintainable}</span>
               <span className="inline-flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-white/30" /> {t.hero.pills.support}</span>
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="glass rounded-3xl p-7 md:p-8 border border-white/10 relative overflow-hidden">
-              <div className="absolute inset-0 pointer-events-none">
+          <div className="lg:col-span-5 max-lg:mt-4">
+            <div
+              className={`glass rounded-3xl p-6 sm:p-7 md:p-8 border border-white/10 relative overflow-hidden max-md:max-w-[min(100%,24rem)] md:mx-0 ${
+                isRtl ? 'max-md:mx-auto' : 'max-md:mx-0'
+              }`}
+            >
+              <div className="absolute inset-0 pointer-events-none hidden md:block">
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 blur-3xl" />
               </div>
               <div className="relative z-10">

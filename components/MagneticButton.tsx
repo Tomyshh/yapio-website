@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useRef, ReactNode, MouseEvent } from 'react';
+import { useCoarsePointer } from '@/hooks/useCoarsePointer';
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -25,7 +26,8 @@ export default function MagneticButton({
   type = 'button',
 }: MagneticButtonProps) {
   const ref = useRef<HTMLElement>(null);
-  
+  const coarsePointer = useCoarsePointer();
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
@@ -54,6 +56,26 @@ export default function MagneticButton({
     x.set(0);
     y.set(0);
   };
+
+  /* Mobile / tactile : pas de spring Framer + pas d’écoute mouse = scroll et taps plus fluides */
+  if (coarsePointer) {
+    const staticClass = `magnetic-btn ${className} active:scale-[0.98] transition-transform duration-150`;
+    if (as === 'a' && href) {
+      return (
+        <a href={href} className={staticClass}>
+          {children}
+        </a>
+      );
+    }
+    if (as === 'button') {
+      return (
+        <button type={type} onClick={onClick} className={staticClass}>
+          {children}
+        </button>
+      );
+    }
+    return <div className={staticClass}>{children}</div>;
+  }
 
   const motionProps = {
     style: { x: xSpring, y: ySpring },
