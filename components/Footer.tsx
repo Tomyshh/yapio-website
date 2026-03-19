@@ -80,7 +80,7 @@ export default function Footer() {
                   <span className="text-[11px] uppercase tracking-wider text-gray-500 group-hover:text-gray-400">
                     {t.footer.phoneIsrael}
                   </span>
-                  <span className="font-medium tabular-nums">{YAPIO_PHONE_ISRAEL_DISPLAY}</span>
+                  <span className="font-medium tabular-nums" dir="ltr">{YAPIO_PHONE_ISRAEL_DISPLAY}</span>
                 </motion.a>
               </li>
               <li className="hidden sm:flex text-white/15 select-none" aria-hidden>

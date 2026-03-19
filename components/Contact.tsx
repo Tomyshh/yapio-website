@@ -194,7 +194,7 @@ export default function Contact() {
                           </motion.div>
                           <div>
                             <p className="text-gray-400 text-sm">{t.contact.infoLabels[info.label as keyof typeof t.contact.infoLabels]}</p>
-                            <p className="text-white text-lg font-medium group-hover:text-primary transition-colors">
+                            <p className="text-white text-lg font-medium group-hover:text-primary transition-colors" dir="ltr">
                               {info.value}
                             </p>
                           </div>
@@ -269,6 +269,7 @@ export default function Contact() {
                           className="w-full px-4 py-3 bg-dark-200/50 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white transition-all duration-300"
                           animate={focusedField === field.name ? 'focus' : 'blur'}
                           variants={inputVariants}
+                          dir={field.type === 'tel' ? 'ltr' : undefined}
                         />
                       </motion.div>
                     ))}

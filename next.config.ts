@@ -103,7 +103,12 @@ const nextConfig: NextConfig = {
   // Configuration du build pour l'optimisation
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'react-intersection-observer'],
+    // Optimiser les imports pour réduire la taille du bundle
+    optimizeCss: true,
   },
+  
+  // Optimisations de performance
+  swcMinify: true,
 
   // Configuration Turbopack (stable)
   turbopack: {

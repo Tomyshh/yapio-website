@@ -10,6 +10,7 @@ import ModernBackground from '@/components/ModernBackground';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { getLocalizedProjects } from '@/lib/projects';
+import { OptimizedImage } from '@/components/OptimizedImage';
 
 interface ProjectImage {
   id: string;
@@ -226,12 +227,14 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       <div className="relative w-10 h-10">
                         {/* Cercle principal (sobre) */}
                         <div className={`relative w-full h-full rounded-full bg-black/40 backdrop-blur-sm border ${otherProject.border_color} overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-2`}>
-                          <Image
+                          <OptimizedImage
                             src={otherProject.logo_url}
                             alt={`Logo ${otherProject.name}`}
                             width={32}
                             height={32}
                             className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+                            sizes="32px"
+                            quality={75}
                           />
                         </div>
 
@@ -271,13 +274,14 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                 <div className="relative group">
                   <div className="absolute -inset-6 rounded-full bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,0.10),transparent_60%)]" />
                   <div className="relative w-44 h-44 md:w-52 md:h-52">
-                    <Image
+                    <OptimizedImage
                       src={project.logo_url}
                       alt={`Logo ${project.name}`}
                       fill
                       className="object-contain drop-shadow-xl"
                       sizes="(max-width: 768px) 176px, 208px"
                       priority
+                      quality={90}
                     />
                   </div>
                 </div>
@@ -409,12 +413,13 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Image
+                      <OptimizedImage
                         src={img.image_url}
                         alt={img.alt_text || `${project.name} - Desktop ${imgIndex + 1}`}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, 50vw"
+                        quality={85}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -453,12 +458,13 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       whileHover={{ scale: 1.03, y: -3 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Image
+                      <OptimizedImage
                         src={img.image_url}
                         alt={img.alt_text || `${project.name} - Mobile ${imgIndex + 1}`}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 768px) 176px, 208px"
+                        quality={85}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -516,12 +522,13 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       <div className={`relative w-full h-full rounded-full glass border ${otherProject.border_color} overflow-hidden backdrop-blur-sm group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-5`}>
                         {/* Logo du projet */}
                         <div className="relative w-full h-full">
-                          <Image
+                          <OptimizedImage
                             src={otherProject.logo_url}
                             alt={`Logo ${otherProject.name}`}
                             fill
                             className="object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500"
                             sizes="(max-width: 768px) 50vw, 25vw"
+                            quality={85}
                           />
                         </div>
                         

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -12,6 +12,7 @@ import MagneticButton from './MagneticButton';
 import { getLocalizedProjects } from '@/lib/projects';
 import ParallaxBackground from './ParallaxBackground';
 import { usePerformanceMode } from '@/hooks/usePerformanceMode';
+import { OptimizedImage } from './OptimizedImage';
 
 export default function Portfolio() {
   const { t } = useLanguage();
@@ -19,8 +20,8 @@ export default function Portfolio() {
   const performanceMode = usePerformanceMode();
   useInView(sectionRef, { once: false, amount: 0.3 });
 
-  // Liste des projets (source unique: lib/projects.ts)
-  const projects = getLocalizedProjects(t);
+  // Liste des projets (source unique: lib/projects.ts) - mémorisée
+  const projects = useMemo(() => getLocalizedProjects(t), [t]);
 
   return (
     <section 
@@ -62,23 +63,24 @@ export default function Portfolio() {
             {projects.map((project, idx) => (
               <motion.div
                 key={project.slug}
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.4, delay: Math.min(idx * 0.04, 0.2) }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.3, delay: Math.min(idx * 0.03, 0.15) }}
               >
                 <div className="glass rounded-2xl overflow-hidden border border-white/10 hover:border-white/15 transition-colors duration-300">
                   {/* Preview logo sur fond noir */}
                   <div className="relative h-44 bg-black overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-black via-black/85 to-black/70" />
                     <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.12),transparent_55%)]" />
-                    <Image
+                    <OptimizedImage
                       src={project.logo}
                       alt={project.alt}
                       fill
                       className="object-contain p-10 opacity-95 drop-shadow-2xl"
                       sizes="(max-width: 768px) 100vw, 33vw"
                       priority={idx < 3}
+                      quality={90}
                     />
                   </div>
 

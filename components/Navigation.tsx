@@ -81,6 +81,48 @@ export default function Navigation() {
     setIsOpen(false);
   }, [pathname]);
 
+  // Verrouiller le scroll du body quand le menu mobile est ouvert
+  useEffect(() => {
+    if (isOpen) {
+      // Sauvegarder la position du scroll
+      const scrollY = window.scrollY;
+      const body = document.body;
+      const html = document.documentElement;
+      
+      // Appliquer les styles pour bloquer le scroll
+      body.style.position = 'fixed';
+      body.style.top = `-${scrollY}px`;
+      body.style.width = '100%';
+      body.style.overflow = 'hidden';
+      body.classList.add('menu-open');
+      
+      // Pour iOS Safari
+      html.style.overflow = 'hidden';
+      html.style.position = 'fixed';
+      html.style.width = '100%';
+      html.style.height = '100%';
+      
+      return () => {
+        // Restaurer le scroll
+        const savedScrollY = body.style.top;
+        body.style.position = '';
+        body.style.top = '';
+        body.style.width = '';
+        body.style.overflow = '';
+        body.classList.remove('menu-open');
+        
+        html.style.overflow = '';
+        html.style.position = '';
+        html.style.width = '';
+        html.style.height = '';
+        
+        if (savedScrollY) {
+          window.scrollTo(0, parseInt(savedScrollY || '0') * -1);
+        }
+      };
+    }
+  }, [isOpen]);
+
   const languages: { code: Language; name: string; flag: string }[] = [
     { code: 'fr', name: 'Français', flag: '🇫🇷' },
     { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -198,7 +240,7 @@ export default function Navigation() {
                 aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
               >
                 <Phone size={16} />
-                <span className="text-sm font-medium">{YAPIO_PHONE_DISPLAY}</span>
+                <span className="text-sm font-medium" dir="ltr">{YAPIO_PHONE_DISPLAY}</span>
               </motion.a>
 
               {/* Language Selector */}
@@ -262,127 +304,209 @@ export default function Navigation() {
             </div>
         </nav>
 
-        {/* Mobile menu button */}
-          <motion.button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 transition-all"
-            whileTap={{ scale: 0.9 }}
-          >
-            <AnimatePresence mode="wait">
-              {isOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X size={20} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu size={20} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
+        {/* Mobile menu button - Hamburger moderne */}
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`md:hidden relative w-12 h-12 flex items-center justify-center rounded-xl border backdrop-blur-sm transition-all duration-300 z-50 ${
+            isOpen
+              ? 'border-primary/40 bg-primary/10 text-white shadow-lg shadow-primary/20'
+              : 'border-white/10 bg-white/5 text-gray-300 hover:text-white hover:bg-white/10 hover:border-white/20'
+          }`}
+          whileTap={{ scale: 0.95 }}
+          whileHover={!isOpen ? { scale: 1.05 } : {}}
+          aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={isOpen}
+        >
+          <div className="relative w-6 h-5 flex flex-col justify-between">
+            <motion.span
+              className="absolute top-0 left-0 w-full h-0.5 bg-current rounded-full origin-center"
+              animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            />
+            <motion.span
+              className="absolute top-1/2 left-0 w-full h-0.5 bg-current rounded-full origin-center -translate-y-1/2"
+              animate={isOpen ? { opacity: 0, scale: 0 } : { opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            />
+            <motion.span
+              className="absolute bottom-0 left-0 w-full h-0.5 bg-current rounded-full origin-center"
+              animate={isOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            />
+          </div>
+          {/* Effet de glow quand ouvert */}
           {isOpen && (
             <motion.div
-              className="md:hidden mt-4 overflow-hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+              className="absolute inset-0 rounded-xl bg-primary/20 blur-xl -z-10"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1.2 }}
+              exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.3 }}
-            >
-              <div className="backdrop-blur-xl bg-black/70 border border-white/10 rounded-2xl p-4 space-y-2">
-                {navItems.map((item, index) => (
-                  <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
+            />
+          )}
+        </motion.button>
+
+        {/* Mobile Navigation - Side Drawer */}
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              {/* Overlay sombre avec animation */}
+              <motion.div
+                className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                onClick={() => setIsOpen(false)}
+                aria-hidden="true"
+              />
+
+              {/* Side Drawer */}
+              <motion.div
+                className="md:hidden fixed top-0 right-0 h-full w-[85vw] max-w-sm bg-gradient-to-b from-black via-black to-gray-900 border-l border-white/10 shadow-2xl z-50 overflow-y-auto"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ 
+                  type: 'spring', 
+                  damping: 30, 
+                  stiffness: 300,
+                  duration: 0.4
+                }}
+                style={{ 
+                  WebkitOverflowScrolling: 'touch',
+                  overscrollBehavior: 'contain'
+                }}
+              >
+                {/* Header du drawer avec logo */}
+                <div className="sticky top-0 z-10 bg-black/80 backdrop-blur-xl border-b border-white/10 px-6 py-5 flex items-center justify-between">
+                  <Link 
+                    href="/" 
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3"
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`block px-4 py-3 rounded-xl transition-all duration-300 ${
-                        item.isActive
-                          ? 'bg-white/5 text-white border border-primary/30'
-                          : 'text-gray-300 hover:text-white hover:bg-white/5'
-                      }`}
+                    <Image
+                      src="/branding/icononly_transparent_nobuffer.png"
+                      alt="YAPIO"
+                      width={32}
+                      height={32}
+                      className="object-contain"
+                      priority
+                    />
+                    <span className="text-white font-semibold text-lg">YAPIO</span>
+                  </Link>
+                  <motion.button
+                    onClick={() => setIsOpen(false)}
+                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
+                    whileTap={{ scale: 0.9 }}
+                    aria-label="Fermer le menu"
+                  >
+                    <X size={20} />
+                  </motion.button>
+                </div>
+
+                {/* Contenu du menu */}
+                <div className="px-6 py-6 space-y-2">
+                  {navItems.map((item, index) => (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        delay: index * 0.05,
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 25
+                      }}
                     >
-                      {item.label}
-                    </Link>
-                  </motion.div>
-                ))}
-                
-                {/* Mobile Language Selector */}
-                <motion.div 
-                  className="pt-2 border-t border-white/10"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.25 }}
-                >
-                  <div className="flex gap-2 px-2">
-                    {languages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setLanguage(lang.code);
-                        }}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl transition-all ${
-                          language === lang.code
-                            ? 'bg-primary text-white'
-                            : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`block px-4 py-3.5 rounded-xl transition-all duration-300 text-base font-medium ${
+                          item.isActive
+                            ? 'bg-primary/20 text-white border border-primary/40 shadow-lg shadow-primary/10'
+                            : 'text-gray-300 hover:text-white hover:bg-white/5 active:bg-white/10'
                         }`}
                       >
-                        <span>{lang.flag}</span>
-                        <span className="text-sm">{lang.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-                
-                {/* Mobile CTA */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <Link
-                    href={isHomePage ? "#contact" : "/#contact"}
-                    onClick={() => setIsOpen(false)}
-                    className="block text-center bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all border border-primary/30"
-                  >
-                    {t.nav.getQuote}
-                  </Link>
-                </motion.div>
+                        {item.label}
+                      </Link>
+                    </motion.div>
+                  ))}
+                  
+                  {/* Séparateur */}
+                  <div className="my-6 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-                {/* Mobile Call */}
-                <motion.a
-                  href={`tel:${YAPIO_PHONE_E164}`}
-                  className="block text-center bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl font-semibold transition-all border border-white/10"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 }}
-                  aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
-                >
-                  <span className="inline-flex items-center justify-center gap-2">
-                    <Phone size={18} />
-                    {YAPIO_PHONE_DISPLAY}
-                  </span>
-                </motion.a>
-              </div>
-            </motion.div>
+                  {/* Language Selector Mobile */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-3"
+                  >
+                    <p className="text-xs uppercase tracking-wider text-gray-500 px-4 mb-2">
+                      {t.nav.language || 'Langue'}
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {languages.map((lang) => (
+                        <motion.button
+                          key={lang.code}
+                          onClick={() => {
+                            setLanguage(lang.code);
+                          }}
+                          className={`flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-xl transition-all text-sm font-medium ${
+                            language === lang.code
+                              ? 'bg-primary text-white shadow-lg shadow-primary/20 border border-primary/40'
+                              : 'bg-white/5 text-gray-300 hover:bg-white/10 active:bg-white/15 border border-white/10'
+                          }`}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <span className="text-2xl">{lang.flag}</span>
+                          <span className="text-xs">{lang.name}</span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+
+                  {/* CTA Button Mobile */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 }}
+                    className="pt-4"
+                  >
+                    <Link
+                      href={isHomePage ? "#contact" : "/#contact"}
+                      onClick={() => setIsOpen(false)}
+                      className="block w-full text-center bg-primary hover:bg-primary-600 text-white px-6 py-4 rounded-xl font-semibold text-base shadow-lg shadow-primary/30 hover:shadow-primary/40 transition-all border border-primary/40 active:scale-[0.98]"
+                    >
+                      {t.nav.getQuote}
+                    </Link>
+                  </motion.div>
+
+                  {/* Call Button Mobile */}
+                  <motion.a
+                    href={`tel:${YAPIO_PHONE_E164}`}
+                    className="block w-full text-center bg-white/5 hover:bg-white/10 text-white px-6 py-4 rounded-xl font-semibold text-base transition-all border border-white/10 active:scale-[0.98] mt-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                  >
+                    <span className="inline-flex items-center justify-center gap-2" dir="ltr">
+                      <Phone size={18} />
+                      {YAPIO_PHONE_DISPLAY}
+                    </span>
+                  </motion.a>
+                </div>
+
+                {/* Footer du drawer */}
+                <div className="sticky bottom-0 px-6 py-4 bg-black/40 backdrop-blur-xl border-t border-white/10 mt-auto">
+                  <p className="text-xs text-center text-gray-500">
+                    © {new Date().getFullYear()} YAPIO
+                  </p>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>

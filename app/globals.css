@@ -1095,3 +1095,113 @@ body {
   content-visibility: auto;
   contain-intrinsic-size: 900px;
 }
+
+/* ================================
+   MOBILE MENU OPTIMIZATIONS
+   ================================ */
+
+/* Amélioration des interactions tactiles sur mobile */
+@media (pointer: coarse), (max-width: 768px) {
+  /* Zone de touch optimale (minimum 44x44px selon Apple/Google) */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    -webkit-tap-highlight-color: rgba(119, 55, 55, 0.1);
+    tap-highlight-color: rgba(119, 55, 55, 0.1);
+  }
+
+  /* Amélioration du scroll sur iOS */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Menu latéral mobile - optimisations */
+  .main-header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Empêcher le zoom sur double-tap pour les boutons */
+  button,
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Amélioration de la lisibilité sur petits écrans */
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
+/* Safe area pour les appareils avec encoche (iPhone X+) */
+@supports (padding: max(0px)) {
+  .main-header {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Optimisation du menu drawer mobile */
+@media (max-width: 768px) {
+  /* Smooth scroll pour le drawer */
+  [class*="drawer"],
+  [class*="side-menu"] {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(119, 55, 233, 0.3) transparent;
+  }
+
+  [class*="drawer"]::-webkit-scrollbar,
+  [class*="side-menu"]::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  [class*="drawer"]::-webkit-scrollbar-thumb,
+  [class*="side-menu"]::-webkit-scrollbar-thumb {
+    background: rgba(119, 55, 233, 0.3);
+    border-radius: 2px;
+  }
+
+  /* Amélioration de la performance des animations sur mobile */
+  .main-header button {
+    will-change: transform;
+  }
+
+  /* Réduction des effets de blur sur mobile pour les performances */
+  [class*="backdrop-blur"] {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+}
+
+/* Prévention du pull-to-refresh sur iOS dans le drawer */
+@media (max-width: 768px) {
+  body.menu-open {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+    touch-action: none;
+    -webkit-overflow-scrolling: auto;
+  }
+}
+
+/* Amélioration de l'accessibilité tactile */
+@media (hover: none) and (pointer: coarse) {
+  /* Zones de touch plus grandes sur mobile */
+  a, button {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Feedback visuel amélioré pour le touch */
+  button:active,
+  a:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+  }
+}
