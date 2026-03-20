@@ -2,31 +2,50 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ArrowUpRight, Sparkles, Monitor, Smartphone, X, ZoomIn, ExternalLink } from 'lucide-react';
+import { Sparkles, Monitor, Smartphone, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ModernBackground from '@/components/ModernBackground';
 import AnimatedSection from '@/components/AnimatedSection';
-import { TiltCard } from '@/components/MagneticButton';
 import { PROJECTS } from '@/lib/projects';
-import { OptimizedImage } from '@/components/OptimizedImage';
 import { ProjectCard } from '@/components/ProjectCard';
 import { preloadProjectLogos } from '@/lib/imagePreloader';
 
-const categories = [
-  { id: 'all', label: 'Tous', icon: Sparkles },
-  { id: 'web', label: 'Web', icon: Monitor },
-  { id: 'mobile', label: 'Mobile', icon: Smartphone },
-  { id: 'ia', label: 'IA', icon: Sparkles },
-];
-
 export default function ProjectsPageClient() {
   const { t } = useLanguage();
-  const router = useRouter();
+
+  const categories = useMemo(
+    () => [
+      { id: 'all' as const, label: t.projects.filters.all, icon: Sparkles },
+      { id: 'web' as const, label: t.projects.filters.web, icon: Monitor },
+      { id: 'mobile' as const, label: t.projects.filters.mobile, icon: Smartphone },
+      { id: 'ia' as const, label: t.projects.filters.ai, icon: Sparkles },
+    ],
+    [t],
+  );
+
+  const statsRow = useMemo(
+    () => [
+      {
+        value: '20+',
+        label: t.clients.trustSection.stats.clients,
+        color: 'from-blue-400 to-cyan-400',
+      },
+      {
+        value: '30+',
+        label: t.clients.trustSection.stats.projects,
+        color: 'from-purple-400 to-pink-400',
+      },
+      {
+        value: '100%',
+        label: t.clients.trustSection.stats.satisfaction,
+        color: 'from-green-400 to-emerald-400',
+      },
+    ],
+    [t],
+  );
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxImage, setLightboxImage] = useState<{ url: string; alt: string; type: 'desktop' | 'mobile' } | null>(null);
 
@@ -89,13 +108,13 @@ export default function ProjectsPageClient() {
         {/* Header */}
         <div className="max-w-7xl mx-auto section-padding">
           <AnimatedSection animation="fadeUp" className="text-center mb-12">
-            <p className="text-sm font-medium text-primary mb-6">Portfolio</p>
+            <p className="text-sm font-medium text-primary mb-6">{t.projects.pageEyebrow}</p>
 
             <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
-              {t.clients?.title || 'Nos Projets'}
+              {t.clients.title}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              {t.clients?.subtitle || 'Découvrez nos réalisations et projets digitaux'}
+              {t.clients.subtitle}
             </p>
           </AnimatedSection>
 
@@ -144,11 +163,7 @@ export default function ProjectsPageClient() {
           <AnimatedSection animation="fadeUp" delay={0.4} className="mt-20">
             <div className="glass rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
               <div className="grid grid-cols-3 gap-8 text-center">
-                {[
-                  { value: '20+', label: 'Clients satisfaits', color: 'from-blue-400 to-cyan-400' },
-                  { value: '30+', label: 'Projets réalisés', color: 'from-purple-400 to-pink-400' },
-                  { value: '100%', label: 'Satisfaction', color: 'from-green-400 to-emerald-400' },
-                ].map((stat, index) => (
+                {statsRow.map((stat, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
@@ -190,9 +205,11 @@ export default function ProjectsPageClient() {
               exit={{ scale: 0.8, opacity: 0 }}
             >
               <motion.button
+                type="button"
                 onClick={closeLightbox}
                 className="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
                 whileHover={{ scale: 1.1 }}
+                aria-label={t.projects.closeImageAria}
               >
                 <X className="w-5 h-5 text-white" />
               </motion.button>

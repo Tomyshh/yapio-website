@@ -29,13 +29,13 @@ export default function ServiceDetail() {
   if (!slug || !serviceKey || !isValidSlug) {
     return (
       <main className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <p className="text-gray-400 mb-6">Service non trouvé.</p>
+        <p className="text-gray-400 mb-6">{t.servicePage.notFound}</p>
         <Link
           href="/#services"
           className="inline-flex items-center gap-2 text-primary hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour aux services
+          {t.servicePage.backToServices}
         </Link>
       </main>
     );
@@ -44,7 +44,7 @@ export default function ServiceDetail() {
   if (isLoading || !t?.services) {
     return (
       <main className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-pulse text-gray-500">Chargement…</div>
+        <div className="animate-pulse text-gray-500">{t.servicePage.loading}</div>
       </main>
     );
   }
@@ -57,10 +57,10 @@ export default function ServiceDetail() {
   if (!service) {
     return (
       <main className="min-h-[60vh] flex flex-col items-center justify-center px-4">
-        <p className="text-gray-400 mb-6">Service non trouvé.</p>
+        <p className="text-gray-400 mb-6">{t.servicePage.notFound}</p>
         <Link href="/#services" className="inline-flex items-center gap-2 text-primary hover:underline">
           <ArrowLeft className="w-4 h-4" />
-          Retour aux services
+          {t.servicePage.backToServices}
         </Link>
       </main>
     );
@@ -119,7 +119,7 @@ export default function ServiceDetail() {
       {/* Métriques — bandeau minimal, sans bloc gris (fusion avec le hero) */}
       <section
         className="relative z-20 -mt-10 md:-mt-14 px-4 pb-4 md:pb-6 bg-dark"
-        aria-label="Indicateurs clés"
+        aria-label={t.servicePage.metricsAria}
       >
         <div className="relative max-w-3xl mx-auto pt-2">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-5 sm:gap-0 sm:py-3 border-t border-white/[0.07]">

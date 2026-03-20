@@ -1,20 +1,41 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare, ChevronDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ModernBackground from './ModernBackground';
 import { motion } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
 import { YAPIO_PHONE_DISPLAY, YAPIO_PHONE_E164, YAPIO_WHATSAPP_PHONE } from '@/lib/contact';
-import ParallaxBackground from './ParallaxBackground';
-import { usePerformanceMode } from '@/hooks/usePerformanceMode';
+import type { ContactFormErrorCode } from '@/lib/supabase';
+import { translations } from '@/lib/translations';
+
+function messageForContactError(
+  code: ContactFormErrorCode | undefined,
+  t: (typeof translations)['fr'],
+): string {
+  if (!code) return t.contact.form.error;
+  const e = t.contact.form.errors;
+  switch (code) {
+    case 'SUPABASE_NOT_CONFIGURED':
+      return e.notConfigured;
+    case 'VALIDATION_REQUIRED_FIELDS':
+      return e.requiredFields;
+    case 'VALIDATION_EMAIL':
+      return e.invalidEmail;
+    case 'DB_PERMISSION':
+      return e.dbPermission;
+    case 'SUBMIT_FAILED':
+      return e.submitFailed;
+    case 'UNEXPECTED':
+      return t.contact.form.unexpectedError;
+    default:
+      return t.contact.form.error;
+  }
+}
 
 export default function Contact() {
   const { t, isLoading } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const performanceMode = usePerformanceMode();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -56,8 +77,8 @@ export default function Contact() {
 
       if (result.success) {
         setSubmitStatus('success');
-        setSubmitMessage(result.message);
-        
+        setSubmitMessage('');
+
         setFormData({
           name: '',
           email: '',
@@ -68,12 +89,12 @@ export default function Contact() {
         });
       } else {
         setSubmitStatus('error');
-        setSubmitMessage(result.message);
+        setSubmitMessage(messageForContactError(result.errorCode, t));
       }
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      console.error('Contact form submit error:', error);
       setSubmitStatus('error');
-      setSubmitMessage('Une erreur inattendue est survenue. Veuillez réessayer.');
+      setSubmitMessage(t.contact.form.unexpectedError);
     } finally {
       setIsSubmitting(false);
     }
@@ -82,8 +103,7 @@ export default function Contact() {
   // Protection contre les erreurs d'hydratation
   if (isLoading || !t?.contact) {
     return (
-      <section id="contact" className="py-20 relative overflow-hidden cv-auto">
-        <ModernBackground />
+      <section id="contact" className="py-20 relative cv-auto">
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="text-center mb-16">
             <div className="animate-pulse">
@@ -118,7 +138,7 @@ export default function Contact() {
     {
       icon: MapPin,
       label: 'Location',
-      value: 'Worldwide Service',
+      value: t.contact.worldwideService,
       href: null,
     },
   ] as const;
@@ -136,18 +156,7 @@ export default function Contact() {
     'block text-[11px] font-medium uppercase tracking-[0.14em] text-gray-500 mb-2.5';
 
   return (
-    <section id="contact" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden cv-auto">
-      {/* Arrière-plan moderne avec parallax */}
-      {performanceMode ? (
-        <div className="absolute -inset-[30%]">
-          <ModernBackground />
-        </div>
-      ) : (
-        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '15%']}>
-          <ModernBackground />
-        </ParallaxBackground>
-      )}
-      
+    <section id="contact" className="py-24 lg:py-32 relative cv-auto">
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Section header */}
         <AnimatedSection animation="fadeUp" className="text-center mb-16 lg:mb-20">
@@ -163,13 +172,13 @@ export default function Contact() {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 gap-12 py-2 lg:grid-cols-2 lg:gap-16">
           {/* Contact Info */}
           <AnimatedSection animation="fadeRight">
             <div className="space-y-6">
               <TiltCard maxTilt={5}>
                 <motion.div
-                  className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 backdrop-blur-xl lg:p-10"
+                  className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-9 backdrop-blur-xl sm:p-10 lg:p-11"
                   whileHover={{ y: -4 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 28 }}
                 >
@@ -178,33 +187,33 @@ export default function Contact() {
                     aria-hidden
                   />
                   <div className="relative z-10">
-                  <h3 className="text-xl md:text-2xl font-light text-white mb-8 tracking-tight">
+                  <h3 className="text-xl md:text-2xl font-light text-white mb-8 tracking-tight md:mb-9">
                     {t.contact.infoTitle}
                   </h3>
-                  
-                  <div className="divide-y divide-white/[0.06]">
+
+                  <ul className="m-0 list-none p-0" role="list">
                     {contactInfo.map((info, index) => {
                       const Icon = info.icon;
-                      const content = (
+                      const row = (
                         <motion.div
-                          className="group flex items-center gap-4 py-5 first:pt-0 last:pb-0 transition-colors"
+                          className="group flex items-center gap-4 sm:gap-5 md:gap-6"
                           initial={{ opacity: 0, x: -12 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
                           transition={{ delay: index * 0.06, duration: 0.35 }}
                         >
                           <div
-                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/[0.1] bg-white/[0.03] text-gray-400 transition-colors group-hover:border-white/[0.14] group-hover:bg-white/[0.05] group-hover:text-gray-200"
+                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] text-gray-400 transition-colors group-hover:border-primary/25 group-hover:bg-white/[0.05] group-hover:text-gray-200 sm:h-12 sm:w-12"
                             aria-hidden
                           >
-                            <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
+                            <Icon className="h-[18px] w-[18px] sm:h-[19px] sm:w-[19px]" strokeWidth={1.5} />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-gray-500">
+                            <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-gray-500 sm:text-[11px]">
                               {t.contact.infoLabels[info.label as keyof typeof t.contact.infoLabels]}
                             </p>
                             <p
-                              className="mt-1 text-base font-normal text-white/95 transition-colors group-hover:text-white md:text-[17px]"
+                              className="mt-1.5 text-[15px] font-normal leading-relaxed text-white/95 transition-colors group-hover:text-white sm:text-base md:text-[17px]"
                               dir="ltr"
                             >
                               {info.value}
@@ -213,15 +222,34 @@ export default function Contact() {
                         </motion.div>
                       );
 
-                      return info.href ? (
-                        <a key={index} href={info.href} target={info.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
-                          {content}
-                        </a>
-                      ) : (
-                        <div key={index}>{content}</div>
+                      const itemClass =
+                        'rounded-xl py-5 transition-colors hover:bg-white/[0.025] sm:py-6' +
+                        (index > 0 ? ' border-t border-white/[0.08]' : '');
+
+                      const interactiveFocus =
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40';
+                      /* Même gouttière que les <a> (-mx + px) pour aligner l’icône / le texte sur les lignes non cliquables */
+                      const rowGutterClass =
+                        'block rounded-xl px-2 py-0.5 -mx-2 sm:px-2.5 sm:-mx-2.5';
+
+                      return (
+                        <li key={index} className={itemClass}>
+                          {info.href ? (
+                            <a
+                              href={info.href}
+                              target={info.href.startsWith('http') ? '_blank' : undefined}
+                              rel="noopener noreferrer"
+                              className={`${rowGutterClass} ${interactiveFocus}`}
+                            >
+                              {row}
+                            </a>
+                          ) : (
+                            <div className={rowGutterClass}>{row}</div>
+                          )}
+                        </li>
                       );
                     })}
-                  </div>
+                  </ul>
                   </div>
                 </motion.div>
               </TiltCard>

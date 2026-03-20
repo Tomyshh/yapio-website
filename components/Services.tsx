@@ -29,8 +29,8 @@ export default function Services() {
 
   const features: Feature[] = [
     {
-      title: t.services?.mobile?.title ?? 'Applications Mobiles',
-      description: t.services?.mobile?.description ?? '',
+      title: t.services.mobile.title,
+      description: t.services.mobile.description,
       href: '/services/mobile',
       icon: (
         <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -39,8 +39,8 @@ export default function Services() {
       ),
     },
     {
-      title: t.services?.desktop?.title ?? 'Applications Web',
-      description: t.services?.desktop?.description ?? '',
+      title: t.services.desktop.title,
+      description: t.services.desktop.description,
       href: '/services/web-apps',
       icon: (
         <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -49,8 +49,8 @@ export default function Services() {
       ),
     },
     {
-      title: t.services?.web?.title ?? 'Intégration IA',
-      description: t.services?.web?.description ?? '',
+      title: t.services.web.title,
+      description: t.services.web.description,
       href: '/services/ai-integration',
       icon: (
         <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -59,8 +59,8 @@ export default function Services() {
       ),
     },
     {
-      title: t.services?.consulting?.title ?? 'Logiciels Sur Mesure',
-      description: t.services?.consulting?.description ?? '',
+      title: t.services.consulting.title,
+      description: t.services.consulting.description,
       href: '/services/custom-software',
       icon: (
         <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -69,8 +69,8 @@ export default function Services() {
       ),
     },
     {
-      title: t.services?.website?.title ?? 'Site Internet',
-      description: t.services?.website?.description ?? 'Sites vitrines et e‑commerce sur mesure : design moderne, SEO, performance et hébergement sécurisé.',
+      title: t.services.website.title,
+      description: t.services.website.description,
       href: '/services/website',
       icon: (
         <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -79,8 +79,8 @@ export default function Services() {
       ),
     },
     {
-      title: t.services?.automation?.title ?? 'Automatisation de Processus',
-      description: t.services?.automation?.description ?? '',
+      title: t.services.automation.title,
+      description: t.services.automation.description,
       href: '/services/process-automation',
       icon: (
         <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -93,11 +93,11 @@ export default function Services() {
   return (
     <FeatureShaderCards
       id="services"
-      sectionTitle={t.services?.title ?? 'Nos Services'}
-      sectionSubtitle={t.services?.subtitle ?? ''}
-      badge={t.services?.badge ?? ''}
+      sectionTitle={t.services.title}
+      sectionSubtitle={t.services.subtitle}
+      badge={t.services.badge}
       features={features}
-      learnMoreLabel={t.services?.learnMore ?? 'En savoir plus'}
+      learnMoreLabel={t.services.learnMore}
     />
   );
 }

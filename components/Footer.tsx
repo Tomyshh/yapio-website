@@ -5,7 +5,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Logo from './Logo';
 import Link from 'next/link';
 import Image from 'next/image';
-import ModernBackground from './ModernBackground';
 import { motion } from 'framer-motion';
 import {
   YAPIO_PHONE_ISRAEL_DISPLAY,
@@ -13,9 +12,10 @@ import {
   YAPIO_WHATSAPP_PHONE,
   YAPIO_LINKEDIN_URL,
 } from '@/lib/contact';
+import { translations } from '@/lib/translations';
 
 export default function Footer() {
-  const { t, isLoading } = useLanguage();
+  const { t, isLoading, language } = useLanguage();
   const [currentYear, setCurrentYear] = useState<number | null>(null);
 
   useEffect(() => {
@@ -28,13 +28,12 @@ export default function Footer() {
   if (isLoading || !t?.footer) {
     return (
       <footer className="relative py-8 overflow-hidden">
-        <ModernBackground />
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
               <Logo variant="full" size="sm" theme="white" />
               <span className="text-gray-400 text-sm">
-                © {currentYear || new Date().getFullYear()} YAPIO. Tous droits réservés
+                © {currentYear || new Date().getFullYear()} YAPIO. {translations[language].footer.rights}
               </span>
             </div>
             <div className="flex space-x-6">
@@ -49,8 +48,7 @@ export default function Footer() {
 
   return (
     <footer className="relative py-14 overflow-hidden">
-      <ModernBackground />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
 
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         <motion.div

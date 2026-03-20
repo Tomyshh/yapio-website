@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowUpRight, ZoomIn, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { TiltCard } from './MagneticButton';
 import { OptimizedImage } from './OptimizedImage';
 
@@ -37,6 +38,7 @@ export const ProjectCard = React.memo(function ProjectCard({
   onImageClick,
 }: ProjectCardProps) {
   const router = useRouter();
+  const { t } = useLanguage();
   
   const allImages = React.useMemo(() => [
     ...project.images.desktop.map(url => ({ url, type: 'desktop' as const })),
@@ -62,7 +64,7 @@ export const ProjectCard = React.memo(function ProjectCard({
           `}
           role="link"
           tabIndex={0}
-          aria-label={`Voir le projet ${project.name}`}
+          aria-label={`${t.projects.viewProject} — ${project.name}`}
           onClick={() => router.push(`/projects/${project.id}`)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -101,7 +103,7 @@ export const ProjectCard = React.memo(function ProjectCard({
                 <div className="relative w-10 h-10 flex-shrink-0">
                   <OptimizedImage
                     src={project.logo}
-                    alt={`Logo ${project.name}`}
+                    alt={t.projects.logoAlt.replace('{name}', project.name)}
                     fill
                     className="object-contain"
                     sizes="40px"
@@ -125,7 +127,15 @@ export const ProjectCard = React.memo(function ProjectCard({
                     key={idx}
                     onClick={(e) => {
                       e.stopPropagation();
-                      onImageClick(img.url, `${project.name} - ${img.type}`, img.type);
+                      onImageClick(
+                        img.url,
+                        `${project.name} — ${
+                          img.type === 'mobile'
+                            ? t.projects.lightboxMobile
+                            : t.projects.lightboxDesktop
+                        }`,
+                        img.type,
+                      );
                     }}
                     className={`relative overflow-hidden rounded-lg border border-white/12 hover:border-white/20 transition-all ${img.type === 'mobile' ? 'w-8 h-12' : 'w-16 h-10'
                       }`}
@@ -134,7 +144,7 @@ export const ProjectCard = React.memo(function ProjectCard({
                   >
                     <OptimizedImage
                       src={img.url}
-                      alt={`${project.name} preview`}
+                      alt={t.projects.imagePreviewAlt.replace('{name}', project.name)}
                       fill
                       className="object-cover"
                       sizes="64px"
@@ -168,7 +178,7 @@ export const ProjectCard = React.memo(function ProjectCard({
                   group/btn
                 `}
               >
-                <span>Voir le projet</span>
+                <span>{t.projects.viewProject}</span>
                 <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
               </Link>
 
@@ -186,8 +196,8 @@ export const ProjectCard = React.memo(function ProjectCard({
                     flex items-center justify-center
                     transition-all duration-300
                   `}
-                  aria-label={`Ouvrir ${project.name} (lien externe)`}
-                  title="Ouvrir le lien externe"
+                  aria-label={t.projects.externalSiteAria.replace('{name}', project.name)}
+                  title={t.projects.externalLinkTitle}
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>
@@ -197,13 +207,5 @@ export const ProjectCard = React.memo(function ProjectCard({
         </div>
       </TiltCard>
     </motion.div>
-  );
-}, (prevProps, nextProps) => {
-  // Comparaison personnalisée pour éviter les re-renders inutiles
-  return (
-    prevProps.project.id === nextProps.project.id &&
-    prevProps.index === nextProps.index &&
-    prevProps.project.logo === nextProps.project.logo &&
-    prevProps.project.name === nextProps.project.name
   );
 });

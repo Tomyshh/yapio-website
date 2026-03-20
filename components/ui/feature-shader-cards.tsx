@@ -123,12 +123,12 @@ export default function FeatureShaderCards({
   sectionSubtitle,
   badge,
   features,
-  learnMoreLabel = "Learn more",
+  learnMoreLabel = "",
 }: FeatureShaderCardsProps) {
   return (
     <section
       id={id}
-      className="min-h-screen py-20 px-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-background dark:to-background"
+      className="relative min-h-screen py-20 px-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:bg-none dark:bg-transparent"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">

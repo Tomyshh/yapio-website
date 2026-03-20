@@ -5,6 +5,12 @@ import Image from 'next/image';
 import { X, Globe, ChevronDown, Phone } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Language } from '@/lib/translations';
+
+const LANG_FLAGS: Record<Language, string> = {
+  fr: '🇫🇷',
+  en: '🇬🇧',
+  he: '🇮🇱',
+};
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -154,11 +160,13 @@ export default function Navigation() {
     }
   }, [isOpen]);
 
-  const languages: { code: Language; name: string; flag: string }[] = [
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
-    { code: 'he', name: 'עברית', flag: '🇮🇱' },
-  ];
+  const languages: { code: Language; name: string; flag: string }[] = (['fr', 'en', 'he'] as const).map(
+    (code) => ({
+      code,
+      name: t.nav.langPicker[code],
+      flag: LANG_FLAGS[code],
+    }),
+  );
 
   // Navigation items — sur la home, l’actif suit la section visible (scroll + hash)
   const navItems = [
@@ -278,7 +286,7 @@ export default function Navigation() {
                 className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                aria-label={t.nav.callPhoneWithNumber.replace('{n}', YAPIO_PHONE_DISPLAY)}
               >
                 <Phone size={16} />
                 <span className="text-sm font-medium" dir="ltr">{YAPIO_PHONE_DISPLAY}</span>
@@ -355,7 +363,7 @@ export default function Navigation() {
           }`}
           whileTap={{ scale: 0.95 }}
           whileHover={!isOpen ? { scale: 1.05 } : {}}
-          aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-label={isOpen ? t.nav.ariaCloseMenu : t.nav.ariaOpenMenu}
           aria-expanded={isOpen}
         >
           <div className="relative w-6 h-5 flex flex-col justify-between">
@@ -445,7 +453,7 @@ export default function Navigation() {
                     onClick={() => setIsOpen(false)}
                     className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
                     whileTap={{ scale: 0.9 }}
-                    aria-label="Fermer le menu"
+                    aria-label={t.nav.ariaCloseMenu}
                   >
                     <X size={20} />
                   </motion.button>
@@ -536,7 +544,7 @@ export default function Navigation() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                    aria-label={t.nav.callPhoneWithNumber.replace('{n}', YAPIO_PHONE_DISPLAY)}
                   >
                     <span className="inline-flex items-center justify-center gap-2" dir="ltr">
                       <Phone size={18} />

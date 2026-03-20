@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
+import ContinuousPageBackdrop from '@/components/ContinuousPageBackdrop';
 
 /* Sections sous la ligne de flottaison : chunks JS séparés — HTML SSG inchangé, LCP sur Hero + nav */
 const Services = dynamic(() => import('@/components/Services'));
@@ -15,16 +16,19 @@ const Footer = dynamic(() => import('@/components/Footer'));
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-dark">
-      <Navigation />
-      <Hero />
-      <Services />
-      <Portfolio />
-      <About />
-      <Expertise />
-      <Testimonials />
-      <Contact />
-      <Footer />
+    <main className="relative min-h-screen bg-[#050508] text-foreground">
+      <ContinuousPageBackdrop />
+      <div className="relative z-[1]">
+        <Navigation />
+        <Hero />
+        <Services />
+        <Portfolio />
+        <About />
+        <Expertise />
+        <Testimonials />
+        <Contact />
+        <Footer />
+      </div>
     </main>
   );
 }

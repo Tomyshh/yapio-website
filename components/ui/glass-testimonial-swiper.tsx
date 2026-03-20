@@ -1,20 +1,27 @@
 import React, { useState, useRef, useEffect, useCallback, CSSProperties } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { Language } from '@/lib/translations';
+
+export type LocalizedText = Record<Language, string>;
+
+export function pickLocalized(loc: LocalizedText, lang: Language): string {
+  return loc[lang] ?? loc.en ?? loc.fr;
+}
 
 // --- Component Interfaces ---
 export interface Testimonial {
   id: string | number;
   initials: string;
   name: string;
-  role: string;
+  role: LocalizedText;
   quote: {
     fr: string;
     en: string;
     he: string;
   };
   originalLanguage: 'fr' | 'en' | 'he';
-  tags: { text: string; type: 'featured' | 'default' }[];
-  stats: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; text: string; }[];
+  tags: { text: LocalizedText; type: 'featured' | 'default' }[];
+  stats: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; text: LocalizedText }[];
   avatarGradient: string;
 }
 
@@ -22,6 +29,10 @@ export interface TestimonialStackProps {
   testimonials: Testimonial[];
   /** How many cards to show behind the main card */
   visibleBehind?: number;
+}
+
+function dirForQuoteLang(lang: 'fr' | 'en' | 'he'): 'ltr' | 'rtl' {
+  return lang === 'he' ? 'rtl' : 'ltr';
 }
 
 // --- The Component ---
@@ -82,7 +93,6 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
   return (
     <section className="testimonials-stack relative">
       {testimonials.map((testimonial, index) => {
-        const isActive = index === activeIndex;
         // Calculate the card's position in the display order
         const displayOrder = (index - activeIndex + totalCards) % totalCards;
 
@@ -128,16 +138,26 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
                   </div>
                   <div>
                     <h3 className="text-foreground font-medium text-lg">{testimonial.name}</h3>
-                    <p className="text-sm text-muted mt-1">{testimonial.role}</p>
+                    <p className="text-sm text-muted mt-1">{pickLocalized(testimonial.role, language)}</p>
                   </div>
                 </div>
               </div>
               
               <blockquote className="text-foreground/90 leading-relaxed text-lg mb-4">
-                &ldquo;{testimonial.quote[testimonial.originalLanguage]}&rdquo;
+                <p
+                  className="not-italic"
+                  dir={dirForQuoteLang(testimonial.originalLanguage)}
+                  lang={testimonial.originalLanguage}
+                >
+                  &ldquo;{testimonial.quote[testimonial.originalLanguage]}&rdquo;
+                </p>
                 {testimonial.originalLanguage !== language && (
-                  <div className="mt-3 text-sm text-muted italic border-t border-border/30 pt-3">
-                    <span className="text-primary/70 font-medium">{t.testimonials?.translationLabel || 'Traduction:'}</span>{' '}
+                  <div
+                    className="mt-3 text-sm text-muted italic border-t border-border/30 pt-3"
+                    dir={dirForQuoteLang(language)}
+                    lang={language}
+                  >
+                    <span className="text-primary/70 font-medium not-italic">{t.testimonials.translationLabel}</span>{' '}
                     &ldquo;{testimonial.quote[language]}&rdquo;
                   </div>
                 )}
@@ -147,7 +167,7 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
                 <div className="flex flex-wrap gap-2">
                   {testimonial.tags.map((tag, i) => (
                     <span key={i} className={['text-xs', 'px-2', 'py-1', 'rounded-md', tagClasses(tag.type)].join(' ')}>
-                      {tag.text}
+                      {pickLocalized(tag.text, language)}
                     </span>
                   ))}
                 </div>
@@ -157,7 +177,7 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
                     return (
                       <span key={i} className="flex items-center">
                         <IconComponent className="mr-1.5 h-3.5 w-3.5" />
-                        {stat.text}
+                        {pickLocalized(stat.text, language)}
                       </span>
                     );
                   })}
@@ -170,7 +190,13 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
       
       <div className="pagination flex gap-2 justify-center absolute bottom-0 left-0 right-0">
         {testimonials.map((_, index) => (
-          <button key={index} aria-label={`Go to testimonial ${index + 1}`} onClick={() => navigate(index)} className={`pagination-dot ${activeIndex === index ? 'active' : ''}`} />
+          <button
+            key={index}
+            type="button"
+            aria-label={t.testimonials.goToTestimonial.replace('{n}', String(index + 1))}
+            onClick={() => navigate(index)}
+            className={`pagination-dot ${activeIndex === index ? 'active' : ''}`}
+          />
         ))}
       </div>
     </section>

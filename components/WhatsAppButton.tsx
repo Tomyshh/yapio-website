@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { YAPIO_WHATSAPP_PHONE } from '@/lib/contact';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 function WhatsAppButtonContent() {
+  const { t } = useLanguage();
   return (
     <div
       className="whatsapp-fab-wrap"
@@ -40,7 +42,7 @@ function WhatsAppButtonContent() {
           e.currentTarget.style.backgroundColor = '#22c55e';
           e.currentTarget.style.transform = 'scale(1)';
         }}
-        aria-label="Contacter sur WhatsApp"
+        aria-label={t.footer.whatsappFabAria}
       >
         <svg
           width="32"

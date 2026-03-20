@@ -33,8 +33,18 @@ function ModernBackgroundComponent() {
         }}
       />
 
-      {/* Vignette finale */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(0,0,0,0.82)_100%)]" />
+      {/* Vignette : profondeur au centre, masquée en haut/bas pour éviter le double assombrissement entre sections */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 90% 72% at 50% 50%, transparent 44%, rgba(0,0,0,0.72) 100%)',
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, black clamp(72px, 12vh, 200px), black calc(100% - clamp(72px, 12vh, 200px)), transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, black clamp(72px, 12vh, 200px), black calc(100% - clamp(72px, 12vh, 200px)), transparent 100%)',
+        }}
+      />
     </div>
   );
 }

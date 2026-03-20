@@ -34,10 +34,20 @@ export interface ContactFormData {
   user_agent?: string;
 }
 
+export type ContactFormErrorCode =
+  | 'SUPABASE_NOT_CONFIGURED'
+  | 'VALIDATION_REQUIRED_FIELDS'
+  | 'VALIDATION_EMAIL'
+  | 'DB_PERMISSION'
+  | 'SUBMIT_FAILED'
+  | 'UNEXPECTED';
+
 // Interface pour la réponse de l'API
 export interface ContactSubmissionResponse {
   success: boolean;
-  message: string;
+  /** @deprecated Préférer errorCode + traductions côté UI */
+  message?: string;
+  errorCode?: ContactFormErrorCode;
   data?: ContactFormData;
   error?: string;
 }
@@ -50,7 +60,7 @@ export async function submitContactForm(formData: Omit<ContactFormData, 'id' | '
     if (!supabase) {
       return {
         success: false,
-        message: 'Le service de contact n\'est pas configuré. Veuillez contacter l\'administrateur.',
+        errorCode: 'SUPABASE_NOT_CONFIGURED',
         error: 'Supabase not configured',
       };
     }
@@ -59,7 +69,7 @@ export async function submitContactForm(formData: Omit<ContactFormData, 'id' | '
     if (!formData.name || !formData.email || !formData.message) {
       return {
         success: false,
-        message: 'Les champs nom, email et message sont obligatoires.',
+        errorCode: 'VALIDATION_REQUIRED_FIELDS',
       };
     }
 
@@ -68,7 +78,7 @@ export async function submitContactForm(formData: Omit<ContactFormData, 'id' | '
     if (!emailRegex.test(formData.email)) {
       return {
         success: false,
-        message: 'Veuillez saisir une adresse email valide.',
+        errorCode: 'VALIDATION_EMAIL',
       };
     }
 
@@ -111,14 +121,14 @@ export async function submitContactForm(formData: Omit<ContactFormData, 'id' | '
       if (error.code === '42501') {
         return {
           success: false,
-          message: 'Problème de permissions dans la base de données. Contactez l\'administrateur.',
+          errorCode: 'DB_PERMISSION',
           error: `RLS Error: ${error.message}`,
         };
       }
       
       return {
         success: false,
-        message: 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.',
+        errorCode: 'SUBMIT_FAILED',
         error: error.message,
       };
     }
@@ -127,15 +137,14 @@ export async function submitContactForm(formData: Omit<ContactFormData, 'id' | '
 
     return {
       success: true,
-      message: 'Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.',
       data: data as unknown as ContactFormData,
     };
   } catch (error) {
     console.error('Erreur lors de la soumission du formulaire:', error);
     return {
       success: false,
-      message: 'Une erreur inattendue est survenue. Veuillez réessayer.',
-      error: error instanceof Error ? error.message : 'Erreur inconnue',
+      errorCode: 'UNEXPECTED',
+      error: error instanceof Error ? error.message : 'unknown',
     };
   }
 }

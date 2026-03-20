@@ -50,7 +50,11 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
   const { t, isLoading: languageLoading } = useLanguage();
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [lightboxImage, setLightboxImage] = useState<{ url: string; alt: string } | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<{
+    url: string;
+    alt: string;
+    kind: 'desktop' | 'mobile';
+  } | null>(null);
 
   const projectsFromConfig = useMemo<Project[]>(() => {
     if (!t?.clients?.projects) return [];
@@ -78,7 +82,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         image_url: url,
         image_type: 'desktop' as const,
         display_order: imgIndex,
-        alt_text: `${config.name} - Interface desktop`,
+        alt_text: `${config.name} — ${t.projects.lightboxDesktop} ${imgIndex + 1}`,
         created_at: new Date().toISOString(),
       }));
 
@@ -88,7 +92,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         image_url: url,
         image_type: 'mobile' as const,
         display_order: imgIndex,
-        alt_text: `${config.name} - Interface mobile`,
+        alt_text: `${config.name} — ${t.projects.lightboxMobile} ${imgIndex + 1}`,
         created_at: new Date().toISOString(),
       }));
 
@@ -125,8 +129,8 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
     setIsLoading(false);
   }, [slug, t?.clients?.projects, languageLoading, projectsFromConfig]);
 
-  const openLightbox = (url: string, alt: string) => {
-    setLightboxImage({ url, alt });
+  const openLightbox = (url: string, alt: string, kind: 'desktop' | 'mobile') => {
+    setLightboxImage({ url, alt, kind });
     document.body.style.overflow = 'hidden';
   };
 
@@ -167,13 +171,13 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         <Navigation />
         <ModernBackground />
         <div className="max-w-7xl mx-auto section-padding py-32 relative z-10 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Projet non trouvé</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">{t.projects.notFoundTitle}</h1>
           <Link 
             href="/#portfolio"
             className="inline-flex items-center gap-2 text-primary hover:text-primary-600 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            Retour au portfolio
+            {t.projects.backToPortfolio}
           </Link>
         </div>
         <Footer />
@@ -200,10 +204,10 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
               <Link 
                 href="/#portfolio"
                 className="inline-flex items-center gap-3 px-4 py-2.5 rounded-full glass border border-white/15 text-white/90 hover:text-white hover:bg-white/10 transition-all duration-300 group"
-                aria-label={t.projects?.backToPortfolio || 'Retour au portfolio'}
+                aria-label={t.projects.backToPortfolio}
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                <span className="text-sm font-medium">{t.projects?.backToPortfolio || 'Portfolio'}</span>
+                <span className="text-sm font-medium">{t.nav.portfolio}</span>
               </Link>
             </motion.div>
 
@@ -229,7 +233,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                         <div className={`relative w-full h-full rounded-full bg-black/40 backdrop-blur-sm border ${otherProject.border_color} overflow-hidden group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-2`}>
                           <OptimizedImage
                             src={otherProject.logo_url}
-                            alt={`Logo ${otherProject.name}`}
+                            alt={t.projects.logoAlt.replace('{name}', otherProject.name)}
                             width={32}
                             height={32}
                             className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
@@ -276,7 +280,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                   <div className="relative w-44 h-44 md:w-52 md:h-52">
                     <OptimizedImage
                       src={project.logo_url}
-                      alt={`Logo ${project.name}`}
+                      alt={t.projects.logoAlt.replace('{name}', project.name)}
                       fill
                       className="object-contain drop-shadow-xl"
                       sizes="(max-width: 768px) 176px, 208px"
@@ -381,10 +385,10 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3">
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm text-primary font-medium">{t.projects?.gallery || 'Galerie'}</span>
+              <span className="text-sm text-primary font-medium">{t.projects.gallery}</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white font-overcame-bold">
-              <span className="gradient-text">Captures d&apos;écran</span>
+              <span className="gradient-text">{t.clients.capturesLabel}</span>
             </h2>
           </motion.div>
 
@@ -401,7 +405,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                   <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
                     <Monitor className="w-4 h-4 text-gray-200" />
                   </div>
-                  <h3 className="text-lg font-semibold">{t.projects?.desktopVersion || 'Version Desktop'}</h3>
+                  <h3 className="text-lg font-semibold">{t.projects.desktopVersion}</h3>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -409,13 +413,23 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                     <motion.div
                       key={img.id}
                       className="relative aspect-video rounded-xl overflow-hidden group cursor-pointer glass border border-white/10"
-                      onClick={() => openLightbox(img.image_url, img.alt_text || `${project.name} - Desktop ${imgIndex + 1}`)}
+                      onClick={() =>
+                        openLightbox(
+                          img.image_url,
+                          img.alt_text ||
+                            `${project.name} — ${t.projects.lightboxDesktop} ${imgIndex + 1}`,
+                          'desktop',
+                        )
+                      }
                       whileHover={{ scale: 1.01 }}
                       transition={{ duration: 0.3 }}
                     >
                       <OptimizedImage
                         src={img.image_url}
-                        alt={img.alt_text || `${project.name} - Desktop ${imgIndex + 1}`}
+                        alt={
+                          img.alt_text ||
+                          `${project.name} — ${t.projects.lightboxDesktop} ${imgIndex + 1}`
+                        }
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, 50vw"
@@ -423,7 +437,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="text-white text-xs font-medium">Agrandir</span>
+                        <span className="text-white text-xs font-medium">{t.projects.enlargePreview}</span>
                         <div className="w-9 h-9 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center">
                           <ZoomIn className="w-4 h-4 text-white" />
                         </div>
@@ -446,7 +460,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                   <div className="p-2.5 rounded-lg bg-white/5 border border-white/10">
                     <Smartphone className="w-4 h-4 text-gray-200" />
                   </div>
-                  <h3 className="text-lg font-semibold">{t.projects?.mobileVersion || 'Version Mobile'}</h3>
+                  <h3 className="text-lg font-semibold">{t.projects.mobileVersion}</h3>
                 </div>
                 
                 <div className="flex flex-wrap gap-5 justify-center">
@@ -454,13 +468,23 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                     <motion.div
                       key={img.id}
                       className="relative w-40 md:w-44 aspect-[9/16] rounded-2xl overflow-hidden group cursor-pointer glass border border-white/10"
-                      onClick={() => openLightbox(img.image_url, img.alt_text || `${project.name} - Mobile ${imgIndex + 1}`)}
+                      onClick={() =>
+                        openLightbox(
+                          img.image_url,
+                          img.alt_text ||
+                            `${project.name} — ${t.projects.lightboxMobile} ${imgIndex + 1}`,
+                          'mobile',
+                        )
+                      }
                       whileHover={{ scale: 1.03, y: -3 }}
                       transition={{ duration: 0.3 }}
                     >
                       <OptimizedImage
                         src={img.image_url}
-                        alt={img.alt_text || `${project.name} - Mobile ${imgIndex + 1}`}
+                        alt={
+                          img.alt_text ||
+                          `${project.name} — ${t.projects.lightboxMobile} ${imgIndex + 1}`
+                        }
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 768px) 176px, 208px"
@@ -490,7 +514,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <p className="text-lg text-gray-400">{t.projects?.noImages || 'Visuels à venir prochainement'}</p>
+                <p className="text-lg text-gray-400">{t.projects.noImages}</p>
               </motion.div>
             )}
           </div>
@@ -500,9 +524,9 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
         <div className="max-w-7xl mx-auto section-padding py-12">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 font-overcame-bold">
-              <span className="gradient-text">{t.projects?.exploreOtherProjects || 'Découvrez nos autres projets'}</span>
+              <span className="gradient-text">{t.projects.exploreOtherProjects}</span>
             </h2>
-            <p className="text-gray-400 text-base md:text-lg">{t.projects?.exploreDescription || 'Explorez notre portfolio et découvrez nos réalisations'}</p>
+            <p className="text-gray-400 text-base md:text-lg">{t.projects.exploreDescription}</p>
           </div>
 
           <div className="relative">
@@ -524,7 +548,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                           <div className="relative aspect-square w-[52%] max-w-[7.5rem] shrink-0">
                             <OptimizedImage
                               src={otherProject.logo_url}
-                              alt={`Logo ${otherProject.name}`}
+                              alt={t.projects.logoAlt.replace('{name}', otherProject.name)}
                               fill
                               className="object-contain object-center drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.04]"
                               sizes="(max-width: 768px) 26vw, 7.5rem"
@@ -539,7 +563,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                         {/* Indicateur "Voir le projet" — sous la bulle pour éviter le chevauchement */}
                         <div className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 translate-y-1">
                           <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${otherProject.color} text-black text-xs font-bold whitespace-nowrap shadow-lg`}>
-                            {t.projects?.viewProject || 'Voir le projet'}
+                            {t.projects.viewProject}
                           </div>
                         </div>
                       </div>
@@ -564,7 +588,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
                 href="/#portfolio"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass border border-white/20 text-white hover:bg-white/10 transition-all duration-300 group"
               >
-                <span className="text-sm font-semibold">{t.projects?.viewAllProjects || 'Voir tous nos projets'}</span>
+                <span className="text-sm font-semibold">{t.projects.viewAllProjects}</span>
                 <svg 
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" 
                   fill="none" 
@@ -592,17 +616,17 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
             
             <div className="relative">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-3">
-                {t.projects?.interestedTitle || 'Intéressé par un projet similaire ?'}
+                {t.projects.interestedTitle}
               </h2>
               <p className="text-base md:text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
-                {t.projects?.interestedDescription || 'Contactez-nous pour discuter de votre projet.'}
+                {t.projects.interestedDescription}
               </p>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/#contact"
                   className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold hover:shadow-xl hover:shadow-primary/20 transition-all duration-300"
                 >
-                  {t.projects?.contactUs || 'Nous contacter'}
+                  {t.projects.contactUs}
                   <ExternalLink className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -623,13 +647,13 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
             <button
               onClick={closeLightbox}
               className="absolute -top-12 right-0 md:-top-10 md:-right-12 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors duration-300 group"
-              aria-label="Fermer l'image"
+              aria-label={t.projects.closeImageAria}
             >
               <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
             </button>
             
             <div className="relative rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
-              {lightboxImage.alt.toLowerCase().includes('mobile') ? (
+              {lightboxImage.kind === 'mobile' ? (
                 <div className="relative flex items-center justify-center">
                   <Image
                     src={lightboxImage.url}
@@ -653,7 +677,7 @@ export default function ProjectDetailPage({ slug }: ProjectDetailPageProps) {
             </div>
             
             <p className="text-white/70 text-sm mt-4 text-center">
-              {t.projects?.closeLightbox || 'Appuyez sur Échap ou cliquez à l\'extérieur pour fermer'}
+              {t.projects.closeLightbox}
             </p>
           </div>
         </div>

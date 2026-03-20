@@ -1,27 +1,22 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { Users, Trophy, Clock, Heart, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ModernBackground from './ModernBackground';
 import { motion } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { TiltCard } from './MagneticButton';
 import MagneticButton from './MagneticButton';
-import ParallaxBackground from './ParallaxBackground';
-import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 
 export default function About() {
-  const { t, isLoading } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const performanceMode = usePerformanceMode();
+  const { t, language, isLoading } = useLanguage();
+  const founderTextDir = language === 'he' ? 'rtl' : 'ltr';
   
   // Vérification de sécurité pour éviter les erreurs pendant l'hydratation
   if (isLoading || !t?.about?.stats) {
     return (
       <section id="about" className="py-20 relative overflow-hidden cv-auto">
-        <ModernBackground />
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="text-center">
             <div className="animate-pulse">
@@ -64,18 +59,7 @@ export default function About() {
   };
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden cv-auto">
-      {/* Arrière-plan moderne avec parallax */}
-      {performanceMode ? (
-        <div className="absolute -inset-[30%]">
-          <ModernBackground />
-        </div>
-      ) : (
-        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '20%']}>
-          <ModernBackground />
-        </ParallaxBackground>
-      )}
-
+    <section id="about" className="py-24 lg:py-32 relative overflow-hidden cv-auto">
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Header */}
         <AnimatedSection animation="fadeUp" className="text-center mb-16 lg:mb-20">
@@ -144,12 +128,12 @@ export default function About() {
                         priority
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2" dir={founderTextDir} lang={language}>
                       <p className="text-white/90 text-base leading-relaxed italic">
-                        « Démo gratuite, sans engagement. Chez YAPIO, chaque projet est mené avec exigence, transparence et sens du détail — pour livrer une solution claire, performante et durable. Notre priorité : votre satisfaction, du premier échange jusqu’à la mise en ligne. »
+                        {t.about.founderQuote}
                       </p>
-                      <p className="text-sm text-gray-400">
-                        — Tom Jami, fondateur de YAPIO
+                      <p className="text-sm text-gray-400 not-italic">
+                        {t.about.founderAttribution}
                       </p>
                     </div>
                   </div>

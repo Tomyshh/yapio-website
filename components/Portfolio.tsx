@@ -5,18 +5,14 @@ import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
-import ModernBackground from './ModernBackground';
 import AnimatedSection from './AnimatedSection';
 import MagneticButton from './MagneticButton';
 import { getLocalizedProjects } from '@/lib/projects';
-import ParallaxBackground from './ParallaxBackground';
-import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 import { OptimizedImage } from './OptimizedImage';
 
 export default function Portfolio() {
   const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
-  const performanceMode = usePerformanceMode();
   useInView(sectionRef, { once: false, amount: 0.3 });
 
   const projects = useMemo(() => {
@@ -32,16 +28,6 @@ export default function Portfolio() {
       ref={sectionRef}
       className="py-24 lg:py-32 relative overflow-hidden min-h-screen cv-auto"
     >
-      {performanceMode ? (
-        <div className="absolute -inset-[30%]">
-          <ModernBackground />
-        </div>
-      ) : (
-        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '30%']}>
-          <ModernBackground />
-        </ParallaxBackground>
-      )}
-
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         <AnimatedSection animation="fadeUp" className="text-center mb-12 lg:mb-16">
           {t.clients?.trustSection?.title && (
@@ -49,7 +35,7 @@ export default function Portfolio() {
           )}
 
           <h2 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-6">
-            {t.clients?.title || 'Nos Projets'}
+            {t.clients.title}
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
             {t.clients?.subtitle}
@@ -72,7 +58,7 @@ export default function Portfolio() {
                 <Link
                   href={`/projects/${project.slug}`}
                   className="group block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-dark"
-                  aria-label={`${t.projects?.viewProject || 'Voir le projet'} — ${project.name}`}
+                  aria-label={`${t.projects.viewProject} — ${project.name}`}
                 >
                   <div
                     className="relative w-[4.5rem] h-[4.5rem] md:w-[5.25rem] md:h-[5.25rem] rounded-full overflow-hidden
@@ -103,7 +89,7 @@ export default function Portfolio() {
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary-600 text-white font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 border border-primary/30"
               strength={0.15}
             >
-              <span>{t.clients?.viewOtherProjects || 'Voir d\'autres projets'}</span>
+              <span>{t.clients.viewOtherProjects}</span>
               <ArrowUpRight className="w-5 h-5" />
             </MagneticButton>
           </div>

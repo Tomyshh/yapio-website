@@ -18,9 +18,15 @@ export default function Hero() {
 
   return (
     <section id="home" className="min-h-screen relative overflow-hidden">
-      <div className="absolute -inset-[30%]">
+      <div className="absolute -inset-[30%] z-[1]">
         <GlowyWavesHeroBackground />
       </div>
+
+      {/* Léger fondu bas : le fond fixe de la page prend le relais sans cassure nette */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-24 sm:h-32 md:h-40 bg-gradient-to-t from-[#050508] via-[#050508]/40 to-transparent"
+        aria-hidden
+      />
 
       <div className="max-w-7xl mx-auto section-padding relative z-10 pt-[max(7rem,calc(env(safe-area-inset-top,0px)+5.5rem))] md:pt-32 pb-24 max-md:pb-32 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-14 items-center">
@@ -51,17 +57,17 @@ export default function Hero() {
 
             <div className="mt-6">
               <h1 className="text-[1.65rem] sm:text-3xl md:text-6xl lg:text-7xl font-overcame-bold leading-[1.08] sm:leading-[1.05] text-white text-balance">
-                <span className="block">{t.hero?.title || 'Services Numériques sur Mesure'}</span>
+                <span className="block">{t.hero.title}</span>
               </h1>
               <div className="mt-6 h-px hairline" />
             </div>
 
             <div className="mt-6">
               <p className="text-base sm:text-lg md:text-2xl text-gray-300 leading-relaxed text-pretty">
-                {t.hero?.subtitle || 'Applications • IA • Logiciels'}
+                {t.hero.subtitle}
               </p>
               <p className="mt-4 text-sm sm:text-base md:text-lg text-gray-400 max-w-2xl leading-relaxed text-pretty">
-                {t.hero?.description || 'Nous transformons vos idées en solutions digitales performantes.'}
+                {t.hero.description}
               </p>
             </div>
 
@@ -72,7 +78,7 @@ export default function Hero() {
                 className="bg-primary hover:bg-primary-600 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-base md:text-lg font-semibold shadow-lg shadow-primary/25 w-full md:w-auto inline-flex items-center justify-center gap-3 group border border-primary/30 min-h-[48px]"
                 strength={0.22}
               >
-                <span>{t.hero?.cta || 'Démarrer votre projet'}</span>
+                <span>{t.hero.cta}</span>
                 <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1 transition-transform duration-200" />
               </MagneticButton>
 
@@ -91,9 +97,9 @@ export default function Hero() {
                   href={`tel:${YAPIO_PHONE_E164}`}
                   className="glass text-white px-4 sm:px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base md:text-lg font-semibold hover:bg-white/10 flex items-center justify-center border border-white/10 min-h-[48px] w-full"
                   strength={0.22}
-                  aria-label={`Appeler ${YAPIO_PHONE_DISPLAY}`}
+                  aria-label={t.nav.callPhoneWithNumber.replace('{n}', YAPIO_PHONE_DISPLAY)}
                 >
-                  <span>{t.hero.callCta || 'Appeler'}</span>
+                  <span>{t.hero.callCta}</span>
                 </MagneticButton>
               </div>
             </div>

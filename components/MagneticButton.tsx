@@ -187,10 +187,11 @@ export function TiltCard({
       `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.3) 0%, transparent 60%)`
   );
 
+  /* overflow-visible : évite de couper le haut des cartes au survol (scale + tilt sortent du cadre aligné aux axes). */
   return (
     <motion.div
       ref={ref}
-      className={`relative overflow-hidden ${className}`}
+      className={`relative overflow-visible ${className}`}
       style={{
         perspective,
         rotateX: rotateXSpring,
@@ -205,7 +206,7 @@ export function TiltCard({
       {children}
       {glareEnable && (
         <motion.div
-          className="absolute inset-0 pointer-events-none"
+          className="pointer-events-none absolute inset-0"
           style={{
             background: glareBackground,
             opacity: glareOpacity,

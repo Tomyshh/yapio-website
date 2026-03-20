@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import {
   Brain,
   Cpu,
@@ -13,11 +13,8 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ModernBackground from './ModernBackground';
 import { motion } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
-import ParallaxBackground from './ParallaxBackground';
-import { usePerformanceMode } from '@/hooks/usePerformanceMode';
 import MagneticButton from './MagneticButton';
 
 const ROLE_ICONS = [
@@ -32,8 +29,6 @@ const ROLE_ICONS = [
 
 export default function Expertise() {
   const { t, isLoading } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const performanceMode = usePerformanceMode();
 
   const roles = t?.expertise?.roles;
 
@@ -45,7 +40,6 @@ export default function Expertise() {
   if (isLoading || !t?.expertise || !roles?.length) {
     return (
       <section id="expertise" className="py-20 relative overflow-hidden cv-auto">
-        <ModernBackground />
         <div className="max-w-7xl mx-auto section-padding relative z-10">
           <div className="text-center">
             <div className="animate-pulse">
@@ -60,17 +54,7 @@ export default function Expertise() {
   const [rowA, rowB] = roleRows;
 
   return (
-    <section id="expertise" ref={sectionRef} className="py-24 lg:py-32 relative overflow-hidden cv-auto">
-      {performanceMode ? (
-        <div className="absolute -inset-[30%]">
-          <ModernBackground />
-        </div>
-      ) : (
-        <ParallaxBackground targetRef={sectionRef} className="absolute -inset-[30%]" yRange={['0%', '20%']}>
-          <ModernBackground />
-        </ParallaxBackground>
-      )}
-
+    <section id="expertise" className="py-24 lg:py-32 relative overflow-hidden cv-auto">
       <div className="max-w-7xl mx-auto section-padding relative z-10">
         {/* Header — même style que « À propos » */}
         <AnimatedSection animation="fadeUp" className="text-center mb-12 lg:mb-14">
