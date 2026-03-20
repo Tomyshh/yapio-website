@@ -140,10 +140,10 @@ export default function RootLayout({
               <ClientWrapper>
                 {children}
               </ClientWrapper>
+              <WhatsAppButton />
             </LanguageProvider>
           </Suspense>
           <FirebaseAnalytics />
-          <WhatsAppButton />
           <SEODebuggerLazy />
         </SEOOptimizer>
       </body>
