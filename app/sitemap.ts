@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { PROJECTS } from '@/lib/projects'
 import { BLOG_ARTICLES } from '@/lib/blog-articles'
+import { SERVICE_SLUGS } from '@/lib/services'
 
 export const dynamic = 'force-static'
 
@@ -49,6 +50,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
       priority: 0.85,
     },
+    /** Pages services : même source que generateStaticParams — une URL par slug. */
+    ...SERVICE_SLUGS.map((slug) => ({
+      url: `${baseUrl}/services/${slug}/`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.82 as const,
+    })),
     {
       url: `${baseUrl}/privacy-policy/`,
       lastModified: now,
