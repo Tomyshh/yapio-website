@@ -1,0 +1,14 @@
+---
+description: Pousser systématiquement les changements sur Git après une tâche terminée
+alwaysApply: true
+---
+
+# Git — push après modifications
+
+Lorsqu’une demande implique des changements dans le dépôt et que le travail est terminé :
+
+1. Vérifier `git status`.
+2. S’il y a des fichiers modifiés pertinents : `git add`, `git commit` avec un message clair (en français si c’est la convention du projet).
+3. Exécuter `git push` vers la branche suivie (souvent `origin master` ou la branche courante).
+
+Ne pas se contenter d’indiquer à l’utilisateur de le faire : exécuter les commandes, sauf si l’utilisateur demande explicitement de ne pas committer / pousser ou s’il n’y a rien à committer.
