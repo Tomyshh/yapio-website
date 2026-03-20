@@ -110,25 +110,48 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [isClient, setIsClient] = useState(false);
   const [hasUserChosenLanguage, setHasUserChosenLanguage] = useState(false);
 
-  // Hydratation côté client
+  // Hydratation côté client — cleanup + filet de sécurité pour ne jamais bloquer l’UI
   useEffect(() => {
-    setIsClient(true);
-    
-    // Récupérer la vraie langue côté client
-    const clientLanguage = getInitialLanguage();
-    
-    // Toujours faire une transition, même si c'est la même langue
-    // Cela évite les problèmes d'hydratation
-    setTimeout(() => {
+    let cancelled = false;
+    let finished = false;
+
+    const finish = () => {
+      if (cancelled || finished) return;
+      finished = true;
+
+      let clientLanguage: Language = 'fr';
+      try {
+        clientLanguage = getInitialLanguage();
+      } catch {
+        // navigateur / stockage atypique : rester sur fr
+      }
+
+      setIsClient(true);
       setLanguage(clientLanguage);
       setIsLoading(false);
-      
-      // Configuration de la direction après le changement de langue
+
       if (typeof document !== 'undefined') {
         document.documentElement.dir = clientLanguage === 'he' ? 'rtl' : 'ltr';
         document.documentElement.style.transition = 'all 0.3s ease-in-out';
       }
-    }, 100); // Délai légèrement plus long pour assurer une hydratation propre
+    };
+
+    // Deux frames : après peinture pour limiter les mismatches d’hydratation
+    let raf2Id: number | undefined;
+    const raf1Id = requestAnimationFrame(() => {
+      raf2Id = requestAnimationFrame(finish);
+    });
+
+    const tMain = window.setTimeout(finish, 120);
+    const tFailsafe = window.setTimeout(finish, 4000);
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf1Id);
+      if (raf2Id !== undefined) cancelAnimationFrame(raf2Id);
+      clearTimeout(tMain);
+      clearTimeout(tFailsafe);
+    };
   }, []);
 
   // Best-effort IP geoloc: uniquement si aucun choix utilisateur ni paramètre d'URL
