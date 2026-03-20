@@ -132,7 +132,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
       if (typeof document !== 'undefined') {
         document.documentElement.dir = clientLanguage === 'he' ? 'rtl' : 'ltr';
-        document.documentElement.style.transition = 'all 0.3s ease-in-out';
+        /* Ne pas mettre transition sur <html> : « all » anime des propriétés de layout → micro-shifts gauche/droite */
       }
     };
 

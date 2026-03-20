@@ -210,7 +210,7 @@ export default function Navigation() {
   return (
     <header
       role="banner"
-      className={`main-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
+      className={`main-header fixed top-0 left-0 right-0 z-50 ${
         isScrolled ? 'header-scrolled py-2' : 'py-3'
       }`}
     >
@@ -223,9 +223,9 @@ export default function Navigation() {
         {/* Logo (design: .logo) — icononly_transparent_nobuffer.png */}
         <motion.div
           className="logo"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.35 }}
         >
           <Link href="/" className="flex items-center group">
             <motion.div
@@ -252,9 +252,9 @@ export default function Navigation() {
             {navItems.map((item, index) => (
               <motion.div
                 key={item.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: index * 0.04, duration: 0.3 }}
               >
                 <Link
                   href={item.href}
@@ -339,9 +339,9 @@ export default function Navigation() {
 
               {/* CTA Button */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.15, duration: 0.35 }}
               >
                 <Link
                   href={isHomePage ? "#contact" : "/#contact"}

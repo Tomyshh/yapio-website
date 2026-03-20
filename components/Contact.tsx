@@ -197,8 +197,8 @@ export default function Contact() {
                       const row = (
                         <motion.div
                           className="group flex items-center gap-4 sm:gap-5 md:gap-6"
-                          initial={{ opacity: 0, x: -12 }}
-                          whileInView={{ opacity: 1, x: 0 }}
+                          initial={{ opacity: 0, y: 8 }}
+                          whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ delay: index * 0.06, duration: 0.35 }}
                         >

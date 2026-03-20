@@ -66,6 +66,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
+  /* Réserve l’emplacement de la scrollbar : évite le shift horizontal quand on toggle overflow (loader, modales) */
+  scrollbar-gutter: stable;
   /* IMPORTANT:
      Ne pas appliquer de transform sur html/body.
      Sinon `position: fixed` (ex: navbar) peut ne plus être fixé au viewport. */

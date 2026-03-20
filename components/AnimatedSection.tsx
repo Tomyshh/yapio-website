@@ -33,13 +33,14 @@ const animationVariants: Record<AnimationType, Variants> = {
     hidden: { opacity: 0, y: -60 },
     visible: { opacity: 1, y: 0 },
   },
+  /* Vertical uniquement : évite les shifts gauche/droite (scrollbar / viewport) */
   fadeLeft: {
-    hidden: { opacity: 0, x: -60 },
-    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, y: 28 },
+    visible: { opacity: 1, y: 0 },
   },
   fadeRight: {
-    hidden: { opacity: 0, x: 60 },
-    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, y: 28 },
+    visible: { opacity: 1, y: 0 },
   },
   scale: {
     hidden: { opacity: 0, scale: 0.8 },
