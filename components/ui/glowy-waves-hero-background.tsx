@@ -34,38 +34,50 @@ function isLowPerformanceMode(): boolean {
 }
 
 export function GlowyWavesHeroBackground() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const mouseRef = useRef<Point>({ x: 0, y: 0 });
   const targetMouseRef = useRef<Point>({ x: 0, y: 0 });
 
   useEffect(() => {
+    const container = containerRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return undefined;
+    if (!container || !canvas) return undefined;
 
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return undefined;
 
     let animationId: number;
     let time = 0;
-    let logicalW = window.innerWidth;
-    let logicalH = window.innerHeight;
+    let logicalW = 1;
+    let logicalH = 1;
     let lowPerf = isLowPerformanceMode();
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const mouseInfluence = prefersReducedMotion || lowPerf ? 0 : 70;
+    let mouseInfluence = prefersReducedMotion || lowPerf ? 0 : 70;
     const influenceRadius = prefersReducedMotion ? 160 : 320;
-    const smoothing = prefersReducedMotion || lowPerf ? 0 : 0.1;
+    let smoothing = prefersReducedMotion || lowPerf ? 0 : 0.1;
 
+    /**
+     * Taille du canvas = conteneur réel (pas la fenêtre).
+     * Avant : innerWidth/innerHeight forçaient un petit canvas dans un parent élargi (-inset 30%) → fond « coupé », surtout en RTL.
+     */
     const resizeCanvas = () => {
-      logicalW = window.innerWidth;
-      logicalH = window.innerHeight;
       lowPerf = isLowPerformanceMode();
+      mouseInfluence = prefersReducedMotion || lowPerf ? 0 : 70;
+      smoothing = prefersReducedMotion || lowPerf ? 0 : 0.1;
+
+      const w = Math.max(1, Math.floor(container.clientWidth));
+      const h = Math.max(1, Math.floor(container.clientHeight));
+      logicalW = w;
+      logicalH = h;
+
       const dprCap = lowPerf ? 1.25 : 2;
       const dpr = Math.min(window.devicePixelRatio || 1, dprCap);
-      canvas.width = Math.floor(logicalW * dpr);
-      canvas.height = Math.floor(logicalH * dpr);
-      canvas.style.width = `${logicalW}px`;
-      canvas.style.height = `${logicalH}px`;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
@@ -82,7 +94,13 @@ export function GlowyWavesHeroBackground() {
 
     const handleMouseMove = (e: MouseEvent) => {
       if (lowPerf || mouseInfluence === 0) return;
-      targetMouseRef.current = { x: e.clientX, y: e.clientY };
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = logicalW / rect.width;
+      const scaleY = logicalH / rect.height;
+      targetMouseRef.current = {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+      };
     };
 
     const handleMouseLeave = () => recenterMouse();
@@ -118,7 +136,6 @@ export function GlowyWavesHeroBackground() {
       ctx.lineWidth = lowPerf ? 1.5 : 2.5;
       ctx.strokeStyle = wave.color;
       ctx.globalAlpha = wave.opacity;
-      /* shadowBlur sur canvas = très coût sur mobile GPU */
       if (!lowPerf) {
         ctx.shadowBlur = 35;
         ctx.shadowColor = wave.color;
@@ -138,7 +155,6 @@ export function GlowyWavesHeroBackground() {
       mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * smoothing;
       mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * smoothing;
 
-      /* Mobile : ne repeint qu’un frame sur deux (moins de charge GPU) */
       if (lowPerf && time % 2 !== 0) {
         animationId = window.requestAnimationFrame(animate);
         return;
@@ -176,9 +192,13 @@ export function GlowyWavesHeroBackground() {
       }
     };
 
-    resizeCanvas();
-    recenterMouse();
-    window.addEventListener('resize', handleResize);
+    const ro = new ResizeObserver(() => {
+      handleResize();
+    });
+    ro.observe(container);
+
+    handleResize();
+    window.addEventListener('resize', handleResize, { passive: true });
     if (!lowPerf && mouseInfluence > 0) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseleave', handleMouseLeave);
@@ -191,6 +211,7 @@ export function GlowyWavesHeroBackground() {
     }
 
     return () => {
+      ro.disconnect();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
@@ -200,13 +221,15 @@ export function GlowyWavesHeroBackground() {
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div
+      ref={containerRef}
+      className="absolute inset-0 min-h-full min-w-full overflow-hidden pointer-events-none"
+    >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 block h-full w-full max-h-none max-w-none"
         aria-hidden="true"
       />
-      {/* Orbes : blur CSS très lourd sur mobile — desktop uniquement */}
       <div className="absolute inset-0 hidden md:block overflow-hidden" aria-hidden="true">
         <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#7737E9]/[0.06] blur-[140px]" />
         <div className="absolute bottom-0 right-0 h-[360px] w-[360px] rounded-full bg-[#7737E9]/[0.04] blur-[120px]" />
