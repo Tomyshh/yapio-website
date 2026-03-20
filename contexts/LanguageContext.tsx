@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Language, translations } from '@/lib/translations';
+import GlobalAppLoader from '@/components/GlobalAppLoader';
 
 interface LanguageContextType {
   language: Language;
@@ -185,6 +186,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   return (
     <LanguageContext.Provider value={value}>
       {children}
+      <GlobalAppLoader visible={isLoading} />
     </LanguageContext.Provider>
   );
 }
